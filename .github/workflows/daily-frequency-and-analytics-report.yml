@@ -22,6 +22,7 @@ on:
           - all
           - frequency_only
           - frequency_email_only
+          - reports_only
           - analytics_only
       report_date:
         description: Optional analytics report date in Jordan (YYYY-MM-DD). Defaults to yesterday.
@@ -41,7 +42,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     env:
-      MODE: ${{ github.event_name == 'push' && 'reports_only' || inputs.run_mode || 'all' }}
+      MODE: ${{ github.event_name == 'push' && 'dry_run' || inputs.run_mode || 'all' }}
       ANALYTICS_TIMEZONE: ${{ secrets.ANALYTICS_TIMEZONE || 'Asia/Amman' }}
       PUBLIC_BASE_URL: ${{ secrets.PUBLIC_BASE_URL || 'https://maensat.pages.dev' }}
       FREQUENCY_SOURCE_CONCURRENCY: ${{ secrets.FREQUENCY_SOURCE_CONCURRENCY || '12' }}
