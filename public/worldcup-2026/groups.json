@@ -1,0 +1,132 @@
+{
+  "metadata": {
+    "status": "final",
+    "status_ar": "نهائي",
+    "archive_mode": true,
+    "updated_at": "2026-07-20T00:30:00+03:00"
+  },
+  "groups": {
+    "A": [
+      "Mexico",
+      "South Africa",
+      "South Korea",
+      "Czech Republic"
+    ],
+    "B": [
+      "Canada",
+      "Bosnia & Herzegovina",
+      "Qatar",
+      "Switzerland"
+    ],
+    "D": [
+      "USA",
+      "Paraguay",
+      "Australia",
+      "Turkey"
+    ],
+    "C": [
+      "Brazil",
+      "Morocco",
+      "Haiti",
+      "Scotland"
+    ],
+    "E": [
+      "Germany",
+      "Curaçao",
+      "Ivory Coast",
+      "Ecuador"
+    ],
+    "F": [
+      "Netherlands",
+      "Japan",
+      "Sweden",
+      "Tunisia"
+    ],
+    "H": [
+      "Spain",
+      "Cape Verde",
+      "Saudi Arabia",
+      "Uruguay"
+    ],
+    "G": [
+      "Belgium",
+      "Egypt",
+      "Iran",
+      "New Zealand"
+    ],
+    "I": [
+      "France",
+      "Senegal",
+      "Iraq",
+      "Norway"
+    ],
+    "J": [
+      "Argentina",
+      "Algeria",
+      "Austria",
+      "Jordan"
+    ],
+    "K": [
+      "Portugal",
+      "DR Congo",
+      "Uzbekistan",
+      "Colombia"
+    ],
+    "L": [
+      "England",
+      "Croatia",
+      "Ghana",
+      "Panama"
+    ]
+  },
+  "team_ar": {
+    "Mexico": "المكسيك",
+    "South Africa": "جنوب أفريقيا",
+    "South Korea": "كوريا الجنوبية",
+    "Czech Republic": "التشيك",
+    "Canada": "كندا",
+    "Bosnia & Herzegovina": "البوسنة والهرسك",
+    "Qatar": "قطر",
+    "Switzerland": "سويسرا",
+    "Brazil": "البرازيل",
+    "Morocco": "المغرب",
+    "Haiti": "هايتي",
+    "Scotland": "اسكتلندا",
+    "USA": "الولايات المتحدة",
+    "Paraguay": "باراغواي",
+    "Australia": "أستراليا",
+    "Turkey": "تركيا",
+    "Germany": "ألمانيا",
+    "Curaçao": "كوراساو",
+    "Ivory Coast": "ساحل العاج",
+    "Ecuador": "الإكوادور",
+    "Netherlands": "هولندا",
+    "Japan": "اليابان",
+    "Sweden": "السويد",
+    "Tunisia": "تونس",
+    "Belgium": "بلجيكا",
+    "Egypt": "مصر",
+    "Iran": "إيران",
+    "New Zealand": "نيوزيلندا",
+    "Spain": "إسبانيا",
+    "Cape Verde": "الرأس الأخضر",
+    "Saudi Arabia": "السعودية",
+    "Uruguay": "أوروغواي",
+    "France": "فرنسا",
+    "Senegal": "السنغال",
+    "Iraq": "العراق",
+    "Norway": "النرويج",
+    "Argentina": "الأرجنتين",
+    "Algeria": "الجزائر",
+    "Austria": "النمسا",
+    "Jordan": "الأردن",
+    "Portugal": "البرتغال",
+    "DR Congo": "الكونغو الديمقراطية",
+    "Uzbekistan": "أوزبكستان",
+    "Colombia": "كولومبيا",
+    "England": "إنجلترا",
+    "Croatia": "كرواتيا",
+    "Ghana": "غانا",
+    "Panama": "بنما"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "ok": true,
+  "version": "2026-07-20-complete-knockout-canonical-lock-v3",
+  "checked_at": "2026-07-20T01:00:00+03:00",
+  "final": {
+    "id": "M104",
+    "team1": "Spain",
+    "team2": "Argentina",
+    "score": [
+      1,
+      0
+    ],
+    "status": "finished"
+  },
+  "errors": []
+}

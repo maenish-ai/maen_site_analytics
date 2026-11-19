@@ -1,0 +1,1083 @@
+{
+  "metadata": {
+    "name": "World Cup 2026 broadcasters for Jordan / MENA",
+    "name_ar": "القنوات الناقلة لكأس العالم 2026 - الأردن / الشرق الأوسط وشمال أفريقيا",
+    "region": "Jordan / MENA",
+    "language_focus": [
+      "Arabic"
+    ],
+    "frequencies_included": false,
+    "policy": "No frequencies and no streaming links. Free-to-air match status must remain pending until officially confirmed.",
+    "last_updated": "2026-06-19T15:30:18+03:00",
+    "update_policy": "Broadcaster data can be merged from WORLD_CUP_2026_BROADCAST_SOURCE_URL when a trusted JSON source is configured; otherwise pending statuses are preserved. Match scores use a separate 15-minute smart match-window update.",
+    "broadcast_source_url": "",
+    "broadcast_source_file": "public/worldcup-2026/broadcast-source.json",
+    "bein_official_last_checked_at": "2026-06-17T18:45:54.897+03:00",
+    "bein_official_auto_check": true,
+    "observed_broadcast_last_checked_at": "2026-06-12T07:35:00+03:00",
+    "observed_broadcast_file": "public/worldcup-2026/broadcast-observed.json",
+    "observed_broadcast_note_ar": "تأكيدات مشاهدة يدوية من صاحب الموقع؛ تُدمج فوق المصادر التلقائية ولا تمس ملفات المباريات/الترتيب/القوس.",
+    "core_bein_channel_filter": true,
+    "core_bein_channel_filter_ar": "يعرض الموقع فقط beIN SPORTS المفتوحة، وbeIN SPORTS MAX 1، وbeIN SPORTS MAX 2، وbeIN SPORTS 4K. يتم إخفاء MAX 3-6 وNEWS وCONNECT والباقات. عند وجود مباريات بنفس التوقيت تُربط القناة بمقطع المباراة نفسها فقط لمنع خلط MAX 1 وMAX 2.",
+    "last_checked_at": "2026-06-19T15:30:18+03:00",
+    "stable_live_broadcast_patch": true,
+    "stable_live_broadcast_patch_ar": "يدمج المصادر المحلية دائماً، ويفحص beIN الرسمي في أيام المباريات، ويفصل كل ظهور للمباراة حتى لا تختلط قنوات MAX 1/MAX 2 بين مباريات متزامنة.",
+    "multi_source_broadcast_update": true,
+    "policy_ar": "لا ينشر الموقع ترددات أو روابط بث. يتم عرض القنوات الناقلة فقط، والقناة المفتوحة تبقى pending إلى أن يوجد تأكيد رسمي/يدوي للمباراة.",
+    "bein_coverage_article_checked_at": "2026-06-17T18:46:03+03:00",
+    "bein_coverage_article_summary_ar": "beIN تؤكد تغطية كأس العالم 2026 في MENA عبر قنوات MAX و4K مع تغطية يومية مطولة؛ رقم القناة لكل مباراة يؤخذ من جدول beIN أو التأكيد اليدوي.",
+    "exact_channel_matches_updated": 0,
+    "last_data_change_at": "2026-06-15T00:48:48.118+03:00",
+    "automation_heartbeat": true,
+    "automation_heartbeat_at": "2026-06-19T15:30:18+03:00",
+    "automation_heartbeat_note_ar": "تم فحص بيانات كأس العالم تلقائيا. قد لا تتغير النتائج إذا لم يرسل المصدر نتيجة جديدة.",
+    "cloudflare_deploy_trigger": true,
+    "github_run_id": "27825778981",
+    "github_run_number": "204",
+    "github_sha": "e011d16a5531145fe3a433bdabbf33cef6bfaef8",
+    "note_ar": "تم فحص بيانات كأس العالم والقنوات تلقائياً. هذا الوقت يتغير كل ربع ساعة لإجبار GitHub وCloudflare Pages على نشر نسخة حديثة.",
+    "force_quarter_hour_update": true,
+    "refresh_interval_minutes": 15,
+    "cache_buster": "9205195953872ecf",
+    "github_event_name": "workflow_dispatch",
+    "quarter_hour_broadcast_check": true,
+    "quarter_hour_broadcast_check_at": "2026-06-19T15:30:18+03:00",
+    "external_broadcast_source_configured": false,
+    "external_broadcast_source_ok": false,
+    "broadcast_source_items_seen": 0,
+    "broadcast_items_updated": 0,
+    "broadcast_note_ar": "تم فحص مصادر القنوات كل ربع ساعة. إذا لم يوجد مصدر خارجي مضبوط، يتم الحفاظ على القنوات اليدوية/المحلية وتحديث وقت الفحص فقط.",
+    "github_trigger_source": "manual",
+    "external_forced_at": ""
+  },
+  "default_channels": [
+    {
+      "name_ar": "beIN SPORTS المفتوحة",
+      "name_en": "beIN SPORTS Free-to-air",
+      "type": "free",
+      "status": "pending_official_announcement",
+      "note_ar": "لا تُعتبر المباراة مجانية إلا عند وجود إعلان رسمي أو تأكيد مشاهدة يدوي.",
+      "note_en": "Shown as free-to-air only after official confirmation for the match",
+      "source_name": "MaenSat channel policy",
+      "source_url": "https://www.beinsports.com/en-mena/football/fifa-world-cup-2026/articles-video/eight-channels-and-17-hours-daily-bein-sports-unveils-coverage-plans-for-fifa-world-cup-2026-2026-06-07"
+    },
+    {
+      "name_ar": "beIN SPORTS 4K",
+      "name_en": "beIN SPORTS 4K",
+      "type": "encrypted",
+      "status": "confirmed",
+      "source_name": "beIN SPORTS official coverage plan",
+      "source_url": "https://www.beinsports.com/en-mena/football/fifa-world-cup-2026/articles-video/eight-channels-and-17-hours-daily-bein-sports-unveils-coverage-plans-for-fifa-world-cup-2026-2026-06-07",
+      "note_ar": "تظهر كخيار تغطية رسمي من beIN، وليس تأكيدًا أن كل مباراة منفردة ستعرض على 4K.",
+      "evidence_ar": "Eight Channels and 17+ Hours Daily: beIN SPORTS Unveils Coverage Plans for FIFA World Cup 2026™ | beIN SPORTS | Home | Sports | Videos | Shorts | Live | Scores | TV Guide | ع | Subscribe to beIN | language | EN | ع | Edition | MENA | Manage Notifications | Joi"
+    },
+    {
+      "name_ar": "beIN SPORTS MAX 1",
+      "name_en": "beIN SPORTS MAX 1",
+      "type": "encrypted",
+      "status": "confirmed",
+      "source_name": "beIN SPORTS MENA coverage plan",
+      "source_url": "https://www.beinsports.com/en-mena/football/fifa-world-cup-2026/articles-video/eight-channels-and-17-hours-daily-bein-sports-unveils-coverage-plans-for-fifa-world-cup-2026-2026-06-07",
+      "evidence_ar": "Eight Channels and 17+ Hours Daily: beIN SPORTS Unveils Coverage Plans for FIFA World Cup 2026™ | beIN SPORTS | Home | Sports | Videos | Shorts | Live | Scores | TV Guide | ع | Subscribe to beIN | language | EN | ع | Edition | MENA | Manage Notifications | Joi"
+    },
+    {
+      "name_ar": "beIN SPORTS MAX",
+      "name_en": "beIN SPORTS MAX channels",
+      "type": "encrypted",
+      "status": "confirmed",
+      "source_name": "beIN SPORTS official coverage plan",
+      "source_url": "https://www.beinsports.com/en-mena/football/fifa-world-cup-2026/articles-video/eight-channels-and-17-hours-daily-bein-sports-unveils-coverage-plans-for-fifa-world-cup-2026-2026-06-07",
+      "note_ar": "beIN أعلنت تغطية كل مباريات كأس العالم 2026 عبر قنوات MAX في منطقة الشرق الأوسط وشمال أفريقيا. رقم القناة التفصيلي لكل مباراة يبقى حسب جدول beIN اليومي.",
+      "note_en": "Official beIN coverage umbrella; exact per-match MAX channel depends on the daily beIN TV guide."
+    },
+    {
+      "name_ar": "beIN SPORTS 4K HDR",
+      "name_en": "beIN SPORTS 4K HDR",
+      "type": "encrypted",
+      "status": "confirmed",
+      "source_name": "beIN SPORTS official coverage plan",
+      "source_url": "https://www.beinsports.com/en-mena/football/fifa-world-cup-2026/articles-video/eight-channels-and-17-hours-daily-bein-sports-unveils-coverage-plans-for-fifa-world-cup-2026-2026-06-07",
+      "note_ar": "تظهر كخيار تغطية رسمي من beIN، وليس تأكيدًا أن كل مباراة منفردة ستعرض على 4K."
+    }
+  ],
+  "matches": {
+    "M001": {
+      "channels": [
+        {
+          "name_ar": "beIN SPORTS MAX 1",
+          "name_en": "beIN SPORTS MAX 1",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "MaenSat observed confirmation",
+          "source_url": "",
+          "evidence_ar": "مباراة المكسيك × جنوب أفريقيا كانت ضمن القنوات المهمة التي يريد الموقع عرضها: MAX 1.",
+          "note_ar": "قناة مشفرة؛ تعرض فقط ضمن القنوات المختصرة المطلوبة.",
+          "match_confidence": 95,
+          "match_confidence_reasons": [
+            "both teams mentioned",
+            "date hint"
+          ],
+          "match_channel_context_method": "both-teams-nearby-match-block",
+          "match_channel_context_methods": [
+            "multi-occurrence-match-block"
+          ]
+        },
+        {
+          "name_ar": "beIN SPORTS 4K",
+          "name_en": "beIN SPORTS 4K",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "MaenSat observed confirmation",
+          "source_url": "",
+          "evidence_ar": "يُعرض خيار beIN SPORTS 4K ضمن القنوات المختصرة المطلوبة عندما يكون ضمن بيانات beIN أو التأكيد اليدوي.",
+          "note_ar": "قناة مشفرة؛ تعرض فقط ضمن القنوات المختصرة المطلوبة.",
+          "match_confidence": 95,
+          "match_confidence_reasons": [
+            "both teams mentioned",
+            "date hint"
+          ]
+        },
+        {
+          "name_ar": "beIN SPORTS المفتوحة",
+          "name_en": "beIN SPORTS Free-to-air",
+          "type": "free",
+          "status": "confirmed",
+          "source_name": "MaenSat observed confirmation",
+          "source_url": "",
+          "evidence_ar": "تمت مشاهدة مباراة المكسيك × جنوب أفريقيا فعلياً على beIN SPORTS المجانية في الأردن/الشرق الأوسط.",
+          "note_ar": "تأكيد مشاهدة من صاحب الموقع. لا يعني أن كل مباريات البطولة مجانية."
+        },
+        {
+          "name_ar": "beIN SPORTS MAX 2",
+          "name_en": "beIN SPORTS MAX 2",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "MaenSat observed confirmation",
+          "source_url": "",
+          "evidence_ar": "مباراة المكسيك × جنوب أفريقيا كانت ضمن القنوات المهمة التي يريد الموقع عرضها: MAX 2.",
+          "note_ar": "قناة مشفرة؛ تعرض فقط ضمن القنوات المختصرة المطلوبة."
+        }
+      ],
+      "observed": true,
+      "observed_region": "Jordan / MENA",
+      "observed_at": "2026-06-11T23:35:00+03:00"
+    },
+    "M031": {
+      "channels": [
+        {
+          "name_ar": "beIN SPORTS MAX 1",
+          "name_en": "beIN SPORTS MAX 1",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "beIN SPORTS",
+          "source_url": "https://www.beinsports.com/ar-mena/%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85/%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/bein-sports-%D8%AA%D9%83%D8%B4%D9%81-%D8%B9%D9%86-%D8%AE%D8%B7%D8%B7-%D8%AA%D8%BA%D8%B7%D9%8A%D8%A9-%D8%A7%D8%B3%D8%AA%D8%AB%D9%86%D8%A7%D8%A6%D9%8A%D8%A9-%D9%84%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026-%D8%B9%D8%A8%D8%B1-8-%D9%82%D9%86%D9%88%D8%A7%D8%AA-%D9%88%D8%A3%D9%83%D8%AB%D8%B1-%D9%85%D9%86-17-%D8%B3%D8%A7%D8%B9%D8%A9-%D9%85%D9%86-%D8%A7%D9%84%D8%A8%D8%AB-%D8%A7%D9%84%D9%85%D8%A8%D8%A7%D8%B4%D8%B1-%D9%8A%D9%88%D9%85%D9%8A%D8%A7-2026-06-07",
+          "evidence_ar": "مقر الرئيسي لـ beIN في الدوحة أحدث تقنيات الإنتاج، والرسومات الافتراضية والمعززة المتقدمة، والتكامل الرقمي السلس، لتقديم تجربة مشاهدة غامرة هي الأفضل على الإطلاق في تاريخ بث بطولات كأس العالم FIFA. وتوفر القنوات العربية beIN SPORTS MAX 1-4 تغطية مباشرة يومياً من الساعة 17:00 حتى 09:30 بتوقيت مكة المكرمة، تشمل المباريات، والاستوديوهات التحليلية، والبرامج اليومية، والتقارير الميدانية، والفقرات الخاصة قبل المباريات وبعدها. كما تقدم قناة be",
+          "note_ar": "تم التقاطها من مصدر beIN SPORTS الرسمي.",
+          "match_confidence": 95,
+          "match_confidence_reasons": [
+            "both teams mentioned",
+            "date hint"
+          ]
+        },
+        {
+          "name_ar": "beIN SPORTS 4K",
+          "name_en": "beIN SPORTS 4K",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "beIN SPORTS",
+          "source_url": "https://www.beinsports.com/ar-mena/%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85/%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/bein-sports-%D8%AA%D9%83%D8%B4%D9%81-%D8%B9%D9%86-%D8%AE%D8%B7%D8%B7-%D8%AA%D8%BA%D8%B7%D9%8A%D8%A9-%D8%A7%D8%B3%D8%AA%D8%AB%D9%86%D8%A7%D8%A6%D9%8A%D8%A9-%D9%84%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026-%D8%B9%D8%A8%D8%B1-8-%D9%82%D9%86%D9%88%D8%A7%D8%AA-%D9%88%D8%A3%D9%83%D8%AB%D8%B1-%D9%85%D9%86-17-%D8%B3%D8%A7%D8%B9%D8%A9-%D9%85%D9%86-%D8%A7%D9%84%D8%A8%D8%AB-%D8%A7%D9%84%D9%85%D8%A8%D8%A7%D8%B4%D8%B1-%D9%8A%D9%88%D9%85%D9%8A%D8%A7-2026-06-07",
+          "evidence_ar": "غطية كأس العالم FIFA 2026™، التي تنطلق في 11 يونيو من مكسيكو سيتي وتستمر حتى 19 يوليو في نيويورك، بمشاركة 48 منتخباً و104 مباريات تقام في كندا والمكسيك والولايات المتحدة. ست قنوات من باقة beIN SPORTS MAX، إلى جانب قناتي beIN SPORTS 4K HDR وbeIN SPORTS الإخبارية، ستنقل جميع مباريات البطولة الـ104 مباشرةً وحصرياً في منطقة الشرق الأوسط وشمال أفريقيا تغطية بثلاث لغات، مع 18 مراسلاً ميدانياً في مختلف أنحاء أمريكا الشمالية واستوديوهات متطورة",
+          "note_ar": "تم التقاطها من مصدر beIN SPORTS الرسمي.",
+          "match_confidence": 95,
+          "match_confidence_reasons": [
+            "both teams mentioned",
+            "date hint"
+          ]
+        },
+        {
+          "name_ar": "beIN SPORTS MAX 2",
+          "name_en": "beIN SPORTS MAX 2",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "beIN SPORTS",
+          "source_url": "https://www.beinsports.com/ar-mena/%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85/%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/%D9%85%D9%86%D8%AA%D8%AE%D8%A8-%D9%87%D9%88%D9%84%D9%86%D8%AF%D8%A7-%D9%8A%D9%84%D8%A7%D9%82%D9%8A-%D9%85%D9%86%D8%AA%D8%AE%D8%A8-%D8%A7%D9%84%D9%8A%D8%A7%D8%A8%D8%A7%D9%86-%D9%81%D9%8A-%D9%85%D9%88%D8%A7%D8%AC%D9%87%D8%A9-%D9%88%D8%A7%D8%B9%D8%AF%D8%A9-2026-06-14",
+          "evidence_ar": "لاقه قويه امام احد ابرز المنتخبات الاوروبيه في البطوله مباراه هولندا واليابان بث مباشر علي قناه bein sports max 2 مساء الاحد الساعه 11 00 بتوقيت مكه المكرمه لمشاهده جميع المباريات والاحداث الرياضيه اضغط علي هذا الرابط للاشتراك كره القدم كاس العالم fifa 2026TM هولندا اليابان هولندا كاس العالم fifa 2026TM فان هيكه يط",
+          "note_ar": "تم التقاطها من مصدر beIN SPORTS الرسمي.",
+          "match_confidence": 80,
+          "match_confidence_reasons": [
+            "both teams mentioned"
+          ],
+          "match_channel_context_method": "both-teams-nearby-match-block"
+        }
+      ]
+    },
+    "M049": {
+      "channels": [
+        {
+          "name_ar": "beIN SPORTS MAX 1",
+          "name_en": "beIN SPORTS MAX 1",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "beIN SPORTS",
+          "source_url": "https://www.beinsports.com/ar-mena/%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85/%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/bein-sports-%D8%AA%D9%83%D8%B4%D9%81-%D8%B9%D9%86-%D8%AE%D8%B7%D8%B7-%D8%AA%D8%BA%D8%B7%D9%8A%D8%A9-%D8%A7%D8%B3%D8%AA%D8%AB%D9%86%D8%A7%D8%A6%D9%8A%D8%A9-%D9%84%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026-%D8%B9%D8%A8%D8%B1-8-%D9%82%D9%86%D9%88%D8%A7%D8%AA-%D9%88%D8%A3%D9%83%D8%AB%D8%B1-%D9%85%D9%86-17-%D8%B3%D8%A7%D8%B9%D8%A9-%D9%85%D9%86-%D8%A7%D9%84%D8%A8%D8%AB-%D8%A7%D9%84%D9%85%D8%A8%D8%A7%D8%B4%D8%B1-%D9%8A%D9%88%D9%85%D9%8A%D8%A7-2026-06-07",
+          "evidence_ar": "مقر الرئيسي لـ beIN في الدوحة أحدث تقنيات الإنتاج، والرسومات الافتراضية والمعززة المتقدمة، والتكامل الرقمي السلس، لتقديم تجربة مشاهدة غامرة هي الأفضل على الإطلاق في تاريخ بث بطولات كأس العالم FIFA. وتوفر القنوات العربية beIN SPORTS MAX 1-4 تغطية مباشرة يومياً من الساعة 17:00 حتى 09:30 بتوقيت مكة المكرمة، تشمل المباريات، والاستوديوهات التحليلية، والبرامج اليومية، والتقارير الميدانية، والفقرات الخاصة قبل المباريات وبعدها. كما تقدم قناة be",
+          "note_ar": "تم التقاطها من مصدر beIN SPORTS الرسمي.",
+          "match_confidence": 95,
+          "match_confidence_reasons": [
+            "both teams mentioned",
+            "date hint"
+          ]
+        },
+        {
+          "name_ar": "beIN SPORTS 4K",
+          "name_en": "beIN SPORTS 4K",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "beIN SPORTS",
+          "source_url": "https://www.beinsports.com/ar-mena/%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85/%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/bein-sports-%D8%AA%D9%83%D8%B4%D9%81-%D8%B9%D9%86-%D8%AE%D8%B7%D8%B7-%D8%AA%D8%BA%D8%B7%D9%8A%D8%A9-%D8%A7%D8%B3%D8%AA%D8%AB%D9%86%D8%A7%D8%A6%D9%8A%D8%A9-%D9%84%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026-%D8%B9%D8%A8%D8%B1-8-%D9%82%D9%86%D9%88%D8%A7%D8%AA-%D9%88%D8%A3%D9%83%D8%AB%D8%B1-%D9%85%D9%86-17-%D8%B3%D8%A7%D8%B9%D8%A9-%D9%85%D9%86-%D8%A7%D9%84%D8%A8%D8%AB-%D8%A7%D9%84%D9%85%D8%A8%D8%A7%D8%B4%D8%B1-%D9%8A%D9%88%D9%85%D9%8A%D8%A7-2026-06-07",
+          "evidence_ar": "غطية كأس العالم FIFA 2026™، التي تنطلق في 11 يونيو من مكسيكو سيتي وتستمر حتى 19 يوليو في نيويورك، بمشاركة 48 منتخباً و104 مباريات تقام في كندا والمكسيك والولايات المتحدة. ست قنوات من باقة beIN SPORTS MAX، إلى جانب قناتي beIN SPORTS 4K HDR وbeIN SPORTS الإخبارية، ستنقل جميع مباريات البطولة الـ104 مباشرةً وحصرياً في منطقة الشرق الأوسط وشمال أفريقيا تغطية بثلاث لغات، مع 18 مراسلاً ميدانياً في مختلف أنحاء أمريكا الشمالية واستوديوهات متطورة",
+          "note_ar": "تم التقاطها من مصدر beIN SPORTS الرسمي.",
+          "match_confidence": 95,
+          "match_confidence_reasons": [
+            "both teams mentioned",
+            "date hint"
+          ]
+        }
+      ]
+    },
+    "M010": {
+      "channels": [
+        {
+          "name_ar": "beIN SPORTS MAX 1",
+          "name_en": "beIN SPORTS MAX 1",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "beIN SPORTS",
+          "source_url": "https://www.beinsports.com/ar-mena/%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85/%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/%D9%85%D9%88%D8%A7%D8%AC%D9%87%D8%A9-%D9%85%D8%B1%D8%AA%D9%82%D8%A8%D8%A9-%D8%A8%D9%8A%D9%86-%D9%85%D9%86%D8%AA%D8%AE%D8%A8-%D9%83%D9%86%D8%AF%D8%A7-%D9%88%D9%86%D8%B8%D9%8A%D8%B1%D9%87-%D9%85%D9%86%D8%AA%D8%AE%D8%A8-%D8%A7%D9%84%D8%A8%D9%88%D8%B3%D9%86%D8%A9-%D9%88%D8%A7%D9%84%D9%87%D8%B1%D8%B3%D9%83-2026-06-12",
+          "evidence_ar": "لكندي و نظيره البوسني لحساب المجموعه الثانيه ضمن منافسات كاس العالم fifa 2026TM ويطمح الطرفان الي البصم علي بدايه جيده قبل مباراتيهما القادمتين امام كل من قطر و سويسرا شاهد مواجهه كندا والبوسنه والهرسك مباشره وحصريا عبر bein sports max 1 اليوم الجمعه علي الساعه 22 00 بتوقيت مكه المكرمه",
+          "note_ar": "تم التقاطها من مصدر beIN SPORTS الرسمي.",
+          "match_confidence": 80,
+          "match_confidence_reasons": [
+            "both teams mentioned"
+          ],
+          "match_channel_context_method": "both-teams-nearby-match-block"
+        },
+        {
+          "name_ar": "beIN SPORTS 4K",
+          "name_en": "beIN SPORTS 4K",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "beIN SPORTS",
+          "source_url": "https://www.beinsports.com/ar-mena/%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85/%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/bein-sports-%D8%AA%D9%83%D8%B4%D9%81-%D8%B9%D9%86-%D8%AE%D8%B7%D8%B7-%D8%AA%D8%BA%D8%B7%D9%8A%D8%A9-%D8%A7%D8%B3%D8%AA%D8%AB%D9%86%D8%A7%D8%A6%D9%8A%D8%A9-%D9%84%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026-%D8%B9%D8%A8%D8%B1-8-%D9%82%D9%86%D9%88%D8%A7%D8%AA-%D9%88%D8%A3%D9%83%D8%AB%D8%B1-%D9%85%D9%86-17-%D8%B3%D8%A7%D8%B9%D8%A9-%D9%85%D9%86-%D8%A7%D9%84%D8%A8%D8%AB-%D8%A7%D9%84%D9%85%D8%A8%D8%A7%D8%B4%D8%B1-%D9%8A%D9%88%D9%85%D9%8A%D8%A7-2026-06-07",
+          "evidence_ar": "في الدوحة، ترسي معياراً جديداً في نقل كأس العالمFIFA ™ وتقدم beIN SPORTS تغطية حية ومتكاملة لجميع مباريات البطولة حصرياً في 24 دولة في منطقة الشرق الأوسط وشمال أفريقيا، عبر ست قنوات من باقة beIN SPORTS MAX، إلى جانب قناةbeIN SPORTS 4K HDR ، مع بث يومي مباشر يتجاوز 17 ساعة باللغات العربية والإنجليزية والفرنسية، مصحوبة بتحليلات فنية يقدمها أبرز الخبراء والمتخصصين في عالم كرة القدم. وتنطلق النسخة الثالثة والعشرون الأضخم في تاريخ البطولة ال",
+          "note_ar": "تم التقاطها من مصدر beIN SPORTS الرسمي.",
+          "match_confidence": 95,
+          "match_confidence_reasons": [
+            "both teams mentioned",
+            "date hint"
+          ]
+        }
+      ]
+    },
+    "M021": {
+      "channels": [
+        {
+          "name_ar": "beIN SPORTS MAX 1",
+          "name_en": "beIN SPORTS MAX 1",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "beIN SPORTS",
+          "source_url": "https://www.beinsports.com/ar-mena/%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85/%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/bein-sports-%D8%AA%D9%83%D8%B4%D9%81-%D8%B9%D9%86-%D8%AE%D8%B7%D8%B7-%D8%AA%D8%BA%D8%B7%D9%8A%D8%A9-%D8%A7%D8%B3%D8%AA%D8%AB%D9%86%D8%A7%D8%A6%D9%8A%D8%A9-%D9%84%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026-%D8%B9%D8%A8%D8%B1-8-%D9%82%D9%86%D9%88%D8%A7%D8%AA-%D9%88%D8%A3%D9%83%D8%AB%D8%B1-%D9%85%D9%86-17-%D8%B3%D8%A7%D8%B9%D8%A9-%D9%85%D9%86-%D8%A7%D9%84%D8%A8%D8%AB-%D8%A7%D9%84%D9%85%D8%A8%D8%A7%D8%B4%D8%B1-%D9%8A%D9%88%D9%85%D9%8A%D8%A7-2026-06-07",
+          "evidence_ar": "مقر الرئيسي لـ beIN في الدوحة أحدث تقنيات الإنتاج، والرسومات الافتراضية والمعززة المتقدمة، والتكامل الرقمي السلس، لتقديم تجربة مشاهدة غامرة هي الأفضل على الإطلاق في تاريخ بث بطولات كأس العالم FIFA. وتوفر القنوات العربية beIN SPORTS MAX 1-4 تغطية مباشرة يومياً من الساعة 17:00 حتى 09:30 بتوقيت مكة المكرمة، تشمل المباريات، والاستوديوهات التحليلية، والبرامج اليومية، والتقارير الميدانية، والفقرات الخاصة قبل المباريات وبعدها. كما تقدم قناة be",
+          "note_ar": "تم التقاطها من مصدر beIN SPORTS الرسمي.",
+          "match_confidence": 95,
+          "match_confidence_reasons": [
+            "both teams mentioned",
+            "date hint"
+          ]
+        },
+        {
+          "name_ar": "beIN SPORTS 4K",
+          "name_en": "beIN SPORTS 4K",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "beIN SPORTS",
+          "source_url": "https://www.beinsports.com/ar-mena/%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85/%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/bein-sports-%D8%AA%D9%83%D8%B4%D9%81-%D8%B9%D9%86-%D8%AE%D8%B7%D8%B7-%D8%AA%D8%BA%D8%B7%D9%8A%D8%A9-%D8%A7%D8%B3%D8%AA%D8%AB%D9%86%D8%A7%D8%A6%D9%8A%D8%A9-%D9%84%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026-%D8%B9%D8%A8%D8%B1-8-%D9%82%D9%86%D9%88%D8%A7%D8%AA-%D9%88%D8%A3%D9%83%D8%AB%D8%B1-%D9%85%D9%86-17-%D8%B3%D8%A7%D8%B9%D8%A9-%D9%85%D9%86-%D8%A7%D9%84%D8%A8%D8%AB-%D8%A7%D9%84%D9%85%D8%A8%D8%A7%D8%B4%D8%B1-%D9%8A%D9%88%D9%85%D9%8A%D8%A7-2026-06-07",
+          "evidence_ar": "في الدوحة، ترسي معياراً جديداً في نقل كأس العالمFIFA ™ وتقدم beIN SPORTS تغطية حية ومتكاملة لجميع مباريات البطولة حصرياً في 24 دولة في منطقة الشرق الأوسط وشمال أفريقيا، عبر ست قنوات من باقة beIN SPORTS MAX، إلى جانب قناةbeIN SPORTS 4K HDR ، مع بث يومي مباشر يتجاوز 17 ساعة باللغات العربية والإنجليزية والفرنسية، مصحوبة بتحليلات فنية يقدمها أبرز الخبراء والمتخصصين في عالم كرة القدم. وتنطلق النسخة الثالثة والعشرون الأضخم في تاريخ البطولة ال",
+          "note_ar": "تم التقاطها من مصدر beIN SPORTS الرسمي.",
+          "match_confidence": 95,
+          "match_confidence_reasons": [
+            "both teams mentioned",
+            "date hint"
+          ]
+        }
+      ]
+    },
+    "M034": {
+      "channels": [
+        {
+          "name_ar": "beIN SPORTS MAX 1",
+          "name_en": "beIN SPORTS MAX 1",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "beIN SPORTS",
+          "source_url": "https://www.beinsports.com/ar-mena/%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85/%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/bein-sports-%D8%AA%D9%83%D8%B4%D9%81-%D8%B9%D9%86-%D8%AE%D8%B7%D8%B7-%D8%AA%D8%BA%D8%B7%D9%8A%D8%A9-%D8%A7%D8%B3%D8%AA%D8%AB%D9%86%D8%A7%D8%A6%D9%8A%D8%A9-%D9%84%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026-%D8%B9%D8%A8%D8%B1-8-%D9%82%D9%86%D9%88%D8%A7%D8%AA-%D9%88%D8%A3%D9%83%D8%AB%D8%B1-%D9%85%D9%86-17-%D8%B3%D8%A7%D8%B9%D8%A9-%D9%85%D9%86-%D8%A7%D9%84%D8%A8%D8%AB-%D8%A7%D9%84%D9%85%D8%A8%D8%A7%D8%B4%D8%B1-%D9%8A%D9%88%D9%85%D9%8A%D8%A7-2026-06-07",
+          "evidence_ar": "مقر الرئيسي لـ beIN في الدوحة أحدث تقنيات الإنتاج، والرسومات الافتراضية والمعززة المتقدمة، والتكامل الرقمي السلس، لتقديم تجربة مشاهدة غامرة هي الأفضل على الإطلاق في تاريخ بث بطولات كأس العالم FIFA. وتوفر القنوات العربية beIN SPORTS MAX 1-4 تغطية مباشرة يومياً من الساعة 17:00 حتى 09:30 بتوقيت مكة المكرمة، تشمل المباريات، والاستوديوهات التحليلية، والبرامج اليومية، والتقارير الميدانية، والفقرات الخاصة قبل المباريات وبعدها. كما تقدم قناة be",
+          "note_ar": "تم التقاطها من مصدر beIN SPORTS الرسمي.",
+          "match_confidence": 95,
+          "match_confidence_reasons": [
+            "both teams mentioned",
+            "date hint"
+          ]
+        },
+        {
+          "name_ar": "beIN SPORTS 4K",
+          "name_en": "beIN SPORTS 4K",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "beIN SPORTS",
+          "source_url": "https://www.beinsports.com/ar-mena/%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85/%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/bein-sports-%D8%AA%D9%83%D8%B4%D9%81-%D8%B9%D9%86-%D8%AE%D8%B7%D8%B7-%D8%AA%D8%BA%D8%B7%D9%8A%D8%A9-%D8%A7%D8%B3%D8%AA%D8%AB%D9%86%D8%A7%D8%A6%D9%8A%D8%A9-%D9%84%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026-%D8%B9%D8%A8%D8%B1-8-%D9%82%D9%86%D9%88%D8%A7%D8%AA-%D9%88%D8%A3%D9%83%D8%AB%D8%B1-%D9%85%D9%86-17-%D8%B3%D8%A7%D8%B9%D8%A9-%D9%85%D9%86-%D8%A7%D9%84%D8%A8%D8%AB-%D8%A7%D9%84%D9%85%D8%A8%D8%A7%D8%B4%D8%B1-%D9%8A%D9%88%D9%85%D9%8A%D8%A7-2026-06-07",
+          "evidence_ar": "غطية كأس العالم FIFA 2026™، التي تنطلق في 11 يونيو من مكسيكو سيتي وتستمر حتى 19 يوليو في نيويورك، بمشاركة 48 منتخباً و104 مباريات تقام في كندا والمكسيك والولايات المتحدة. ست قنوات من باقة beIN SPORTS MAX، إلى جانب قناتي beIN SPORTS 4K HDR وbeIN SPORTS الإخبارية، ستنقل جميع مباريات البطولة الـ104 مباشرةً وحصرياً في منطقة الشرق الأوسط وشمال أفريقيا تغطية بثلاث لغات، مع 18 مراسلاً ميدانياً في مختلف أنحاء أمريكا الشمالية واستوديوهات متطورة",
+          "note_ar": "تم التقاطها من مصدر beIN SPORTS الرسمي.",
+          "match_confidence": 95,
+          "match_confidence_reasons": [
+            "both teams mentioned",
+            "date hint"
+          ]
+        }
+      ]
+    },
+    "M036": {
+      "channels": [
+        {
+          "name_ar": "beIN SPORTS MAX 1",
+          "name_en": "beIN SPORTS MAX 1",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "beIN SPORTS",
+          "source_url": "https://www.beinsports.com/ar-mena/%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85/%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/bein-sports-%D8%AA%D9%83%D8%B4%D9%81-%D8%B9%D9%86-%D8%AE%D8%B7%D8%B7-%D8%AA%D8%BA%D8%B7%D9%8A%D8%A9-%D8%A7%D8%B3%D8%AA%D8%AB%D9%86%D8%A7%D8%A6%D9%8A%D8%A9-%D9%84%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026-%D8%B9%D8%A8%D8%B1-8-%D9%82%D9%86%D9%88%D8%A7%D8%AA-%D9%88%D8%A3%D9%83%D8%AB%D8%B1-%D9%85%D9%86-17-%D8%B3%D8%A7%D8%B9%D8%A9-%D9%85%D9%86-%D8%A7%D9%84%D8%A8%D8%AB-%D8%A7%D9%84%D9%85%D8%A8%D8%A7%D8%B4%D8%B1-%D9%8A%D9%88%D9%85%D9%8A%D8%A7-2026-06-07",
+          "evidence_ar": "مقر الرئيسي لـ beIN في الدوحة أحدث تقنيات الإنتاج، والرسومات الافتراضية والمعززة المتقدمة، والتكامل الرقمي السلس، لتقديم تجربة مشاهدة غامرة هي الأفضل على الإطلاق في تاريخ بث بطولات كأس العالم FIFA. وتوفر القنوات العربية beIN SPORTS MAX 1-4 تغطية مباشرة يومياً من الساعة 17:00 حتى 09:30 بتوقيت مكة المكرمة، تشمل المباريات، والاستوديوهات التحليلية، والبرامج اليومية، والتقارير الميدانية، والفقرات الخاصة قبل المباريات وبعدها. كما تقدم قناة be",
+          "note_ar": "تم التقاطها من مصدر beIN SPORTS الرسمي.",
+          "match_confidence": 80,
+          "match_confidence_reasons": [
+            "both teams mentioned"
+          ]
+        },
+        {
+          "name_ar": "beIN SPORTS 4K",
+          "name_en": "beIN SPORTS 4K",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "beIN SPORTS",
+          "source_url": "https://www.beinsports.com/ar-mena/%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85/%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/bein-sports-%D8%AA%D9%83%D8%B4%D9%81-%D8%B9%D9%86-%D8%AE%D8%B7%D8%B7-%D8%AA%D8%BA%D8%B7%D9%8A%D8%A9-%D8%A7%D8%B3%D8%AA%D8%AB%D9%86%D8%A7%D8%A6%D9%8A%D8%A9-%D9%84%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026-%D8%B9%D8%A8%D8%B1-8-%D9%82%D9%86%D9%88%D8%A7%D8%AA-%D9%88%D8%A3%D9%83%D8%AB%D8%B1-%D9%85%D9%86-17-%D8%B3%D8%A7%D8%B9%D8%A9-%D9%85%D9%86-%D8%A7%D9%84%D8%A8%D8%AB-%D8%A7%D9%84%D9%85%D8%A8%D8%A7%D8%B4%D8%B1-%D9%8A%D9%88%D9%85%D9%8A%D8%A7-2026-06-07",
+          "evidence_ar": "غطية كأس العالم FIFA 2026™، التي تنطلق في 11 يونيو من مكسيكو سيتي وتستمر حتى 19 يوليو في نيويورك، بمشاركة 48 منتخباً و104 مباريات تقام في كندا والمكسيك والولايات المتحدة. ست قنوات من باقة beIN SPORTS MAX، إلى جانب قناتي beIN SPORTS 4K HDR وbeIN SPORTS الإخبارية، ستنقل جميع مباريات البطولة الـ104 مباشرةً وحصرياً في منطقة الشرق الأوسط وشمال أفريقيا تغطية بثلاث لغات، مع 18 مراسلاً ميدانياً في مختلف أنحاء أمريكا الشمالية واستوديوهات متطورة",
+          "note_ar": "تم التقاطها من مصدر beIN SPORTS الرسمي.",
+          "match_confidence": 80,
+          "match_confidence_reasons": [
+            "both teams mentioned"
+          ]
+        }
+      ]
+    },
+    "M051": {
+      "channels": [
+        {
+          "name_ar": "beIN SPORTS MAX 1",
+          "name_en": "beIN SPORTS MAX 1",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "beIN SPORTS",
+          "source_url": "https://www.beinsports.com/ar-mena/%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85/%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/%D9%85%D9%88%D8%A7%D8%AC%D9%87%D8%A9-%D9%85%D8%B1%D8%AA%D9%82%D8%A8%D8%A9-%D8%A8%D9%8A%D9%86-%D9%81%D8%B1%D9%86%D8%B3%D8%A7-%D9%88%D8%A7%D9%84%D8%B3%D9%86%D8%BA%D8%A7%D9%84-2026-06-16",
+          "evidence_ar": "سعه ضمن منافسات كاس العالم fifa 2026TM وتضم المجموعه الي جانب فرنسا والسنغال منتخبي النرويج والعراق ما يجعل الصراع علي بطاقتي التاهل الي الدور التالي مفتوحا علي كل الاحتمالات شاهد مواجهه فرنسا والسنغال مباشره وحصريا عبر bein sports max 1 اليوم ا",
+          "note_ar": "تم التقاطها من مصدر beIN SPORTS الرسمي.",
+          "match_confidence": 95,
+          "match_confidence_reasons": [
+            "both teams mentioned",
+            "date hint"
+          ],
+          "match_channel_context_method": "both-teams-nearby-match-block"
+        },
+        {
+          "name_ar": "beIN SPORTS 4K",
+          "name_en": "beIN SPORTS 4K",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "beIN SPORTS",
+          "source_url": "https://www.beinsports.com/ar-mena/%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85/%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/bein-sports-%D8%AA%D9%83%D8%B4%D9%81-%D8%B9%D9%86-%D8%AE%D8%B7%D8%B7-%D8%AA%D8%BA%D8%B7%D9%8A%D8%A9-%D8%A7%D8%B3%D8%AA%D8%AB%D9%86%D8%A7%D8%A6%D9%8A%D8%A9-%D9%84%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026-%D8%B9%D8%A8%D8%B1-8-%D9%82%D9%86%D9%88%D8%A7%D8%AA-%D9%88%D8%A3%D9%83%D8%AB%D8%B1-%D9%85%D9%86-17-%D8%B3%D8%A7%D8%B9%D8%A9-%D9%85%D9%86-%D8%A7%D9%84%D8%A8%D8%AB-%D8%A7%D9%84%D9%85%D8%A8%D8%A7%D8%B4%D8%B1-%D9%8A%D9%88%D9%85%D9%8A%D8%A7-2026-06-07",
+          "evidence_ar": "غطية كأس العالم FIFA 2026™، التي تنطلق في 11 يونيو من مكسيكو سيتي وتستمر حتى 19 يوليو في نيويورك، بمشاركة 48 منتخباً و104 مباريات تقام في كندا والمكسيك والولايات المتحدة. ست قنوات من باقة beIN SPORTS MAX، إلى جانب قناتي beIN SPORTS 4K HDR وbeIN SPORTS الإخبارية، ستنقل جميع مباريات البطولة الـ104 مباشرةً وحصرياً في منطقة الشرق الأوسط وشمال أفريقيا تغطية بثلاث لغات، مع 18 مراسلاً ميدانياً في مختلف أنحاء أمريكا الشمالية واستوديوهات متطورة",
+          "note_ar": "تم التقاطها من مصدر beIN SPORTS الرسمي.",
+          "match_confidence": 95,
+          "match_confidence_reasons": [
+            "both teams mentioned",
+            "date hint"
+          ]
+        }
+      ]
+    },
+    "M018": {
+      "channels": [
+        {
+          "name_ar": "beIN SPORTS MAX 1",
+          "name_en": "beIN SPORTS MAX 1",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "beIN SPORTS",
+          "source_url": "https://www.beinsports.com/ar-mena/%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85/%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/bein-sports-%D8%AA%D9%83%D8%B4%D9%81-%D8%B9%D9%86-%D8%AE%D8%B7%D8%B7-%D8%AA%D8%BA%D8%B7%D9%8A%D8%A9-%D8%A7%D8%B3%D8%AA%D8%AB%D9%86%D8%A7%D8%A6%D9%8A%D8%A9-%D9%84%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026-%D8%B9%D8%A8%D8%B1-8-%D9%82%D9%86%D9%88%D8%A7%D8%AA-%D9%88%D8%A3%D9%83%D8%AB%D8%B1-%D9%85%D9%86-17-%D8%B3%D8%A7%D8%B9%D8%A9-%D9%85%D9%86-%D8%A7%D9%84%D8%A8%D8%AB-%D8%A7%D9%84%D9%85%D8%A8%D8%A7%D8%B4%D8%B1-%D9%8A%D9%88%D9%85%D9%8A%D8%A7-2026-06-07",
+          "evidence_ar": "مقر الرئيسي لـ beIN في الدوحة أحدث تقنيات الإنتاج، والرسومات الافتراضية والمعززة المتقدمة، والتكامل الرقمي السلس، لتقديم تجربة مشاهدة غامرة هي الأفضل على الإطلاق في تاريخ بث بطولات كأس العالم FIFA. وتوفر القنوات العربية beIN SPORTS MAX 1-4 تغطية مباشرة يومياً من الساعة 17:00 حتى 09:30 بتوقيت مكة المكرمة، تشمل المباريات، والاستوديوهات التحليلية، والبرامج اليومية، والتقارير الميدانية، والفقرات الخاصة قبل المباريات وبعدها. كما تقدم قناة be",
+          "note_ar": "تم التقاطها من مصدر beIN SPORTS الرسمي.",
+          "match_confidence": 95,
+          "match_confidence_reasons": [
+            "both teams mentioned",
+            "date hint"
+          ]
+        },
+        {
+          "name_ar": "beIN SPORTS 4K",
+          "name_en": "beIN SPORTS 4K",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "beIN SPORTS",
+          "source_url": "https://www.beinsports.com/ar-mena/%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85/%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/bein-sports-%D8%AA%D9%83%D8%B4%D9%81-%D8%B9%D9%86-%D8%AE%D8%B7%D8%B7-%D8%AA%D8%BA%D8%B7%D9%8A%D8%A9-%D8%A7%D8%B3%D8%AA%D8%AB%D9%86%D8%A7%D8%A6%D9%8A%D8%A9-%D9%84%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026-%D8%B9%D8%A8%D8%B1-8-%D9%82%D9%86%D9%88%D8%A7%D8%AA-%D9%88%D8%A3%D9%83%D8%AB%D8%B1-%D9%85%D9%86-17-%D8%B3%D8%A7%D8%B9%D8%A9-%D9%85%D9%86-%D8%A7%D9%84%D8%A8%D8%AB-%D8%A7%D9%84%D9%85%D8%A8%D8%A7%D8%B4%D8%B1-%D9%8A%D9%88%D9%85%D9%8A%D8%A7-2026-06-07",
+          "evidence_ar": "في الدوحة، ترسي معياراً جديداً في نقل كأس العالمFIFA ™ وتقدم beIN SPORTS تغطية حية ومتكاملة لجميع مباريات البطولة حصرياً في 24 دولة في منطقة الشرق الأوسط وشمال أفريقيا، عبر ست قنوات من باقة beIN SPORTS MAX، إلى جانب قناةbeIN SPORTS 4K HDR ، مع بث يومي مباشر يتجاوز 17 ساعة باللغات العربية والإنجليزية والفرنسية، مصحوبة بتحليلات فنية يقدمها أبرز الخبراء والمتخصصين في عالم كرة القدم. وتنطلق النسخة الثالثة والعشرون الأضخم في تاريخ البطولة ال",
+          "note_ar": "تم التقاطها من مصدر beIN SPORTS الرسمي.",
+          "match_confidence": 95,
+          "match_confidence_reasons": [
+            "both teams mentioned",
+            "date hint"
+          ]
+        }
+      ]
+    },
+    "M002": {
+      "status": "confirmed",
+      "note_ar": "كوريا الجنوبية × التشيك: جدول القنوات المتاح للجمهور ذكر beIN SPORTS MAX 1 وbeIN SPORTS MAX 2. لا يتم نشر المفتوحة إلا بتأكيد مشاهدة أو إذا ظهرت beIN Sport / FTA كقناة للمباراة.",
+      "channels": [
+        {
+          "name_ar": "beIN SPORTS MAX 1",
+          "name_en": "beIN SPORTS MAX 1",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "MaenSat verified schedule",
+          "source_url": "https://www.kooora.com/كرة-قدم/أخبار/جدول-مباريات-اليوم-الجمعة-12-يونيو-2026-في-كأس-العالم--القنوات-الناقلة-والمعلقين/blt07025fc2b907377a",
+          "evidence_ar": "جدول القنوات ذكر كوريا الجنوبية - التشيك على beIN SPORTS MAX 1.",
+          "note_ar": "قناة مشفرة؛ تعرض ضمن القنوات الأساسية المطلوبة فقط."
+        },
+        {
+          "name_ar": "beIN SPORTS MAX 2",
+          "name_en": "beIN SPORTS MAX 2",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "MaenSat verified schedule",
+          "source_url": "https://www.kooora.com/كرة-قدم/أخبار/جدول-مباريات-اليوم-الجمعة-12-يونيو-2026-في-كأس-العالم--القنوات-الناقلة-والمعلقين/blt07025fc2b907377a",
+          "evidence_ar": "جدول القنوات ذكر كوريا الجنوبية - التشيك على beIN SPORTS MAX 2.",
+          "note_ar": "قناة مشفرة؛ تعرض ضمن القنوات الأساسية المطلوبة فقط."
+        },
+        {
+          "name_ar": "beIN SPORTS المفتوحة",
+          "name_en": "beIN SPORTS Free-to-air",
+          "type": "free",
+          "status": "confirmed",
+          "source_name": "MaenSat observed confirmation",
+          "source_url": "",
+          "evidence_ar": "تمت مشاهدة مباراة كوريا الجنوبية × التشيك فعلياً على beIN SPORTS المجانية على نايل سات في الأردن/الشرق الأوسط.",
+          "note_ar": "تأكيد مشاهدة من صاحب الموقع. لا يعني أن كل مباريات البطولة مجانية."
+        }
+      ],
+      "observed": true,
+      "observed_region": "Jordan / MENA",
+      "observed_at": "2026-06-12T07:35:00+03:00",
+      "team1_ar": "كوريا الجنوبية",
+      "team2_ar": "التشيك"
+    },
+    "M003": {
+      "status": "confirmed",
+      "note_ar": "كندا × البوسنة والهرسك: جدول القنوات المتاح للجمهور ذكر beIN SPORTS MAX 1 وbeIN SPORTS MAX 2. لا يتم نشر المفتوحة إلا بتأكيد مشاهدة أو إذا ظهرت beIN Sport / FTA كقناة للمباراة.",
+      "channels": [
+        {
+          "name_ar": "beIN SPORTS MAX 1",
+          "name_en": "beIN SPORTS MAX 1",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "MaenSat verified schedule",
+          "source_url": "https://www.kooora.com/كرة-قدم/أخبار/جدول-مباريات-اليوم-الجمعة-12-يونيو-2026-في-كأس-العالم--القنوات-الناقلة-والمعلقين/blt07025fc2b907377a",
+          "evidence_ar": "جدول القنوات ذكر كندا - البوسنة على beIN SPORTS MAX 1.",
+          "note_ar": "قناة مشفرة؛ تعرض ضمن القنوات الأساسية المطلوبة فقط."
+        },
+        {
+          "name_ar": "beIN SPORTS MAX 2",
+          "name_en": "beIN SPORTS MAX 2",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "MaenSat verified schedule",
+          "source_url": "https://www.kooora.com/كرة-قدم/أخبار/جدول-مباريات-اليوم-الجمعة-12-يونيو-2026-في-كأس-العالم--القنوات-الناقلة-والمعلقين/blt07025fc2b907377a",
+          "evidence_ar": "جدول القنوات ذكر كندا - البوسنة على beIN SPORTS MAX 2.",
+          "note_ar": "قناة مشفرة؛ تعرض ضمن القنوات الأساسية المطلوبة فقط."
+        }
+      ]
+    },
+    "M008": {
+      "channels": [
+        {
+          "name_ar": "beIN SPORTS MAX 1",
+          "name_en": "beIN SPORTS MAX 1",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "beIN SPORTS",
+          "source_url": "https://www.beinsports.com/ar-mena/%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85/%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/%D9%82%D8%B7%D8%B1-%D8%B3%D9%88%D9%8A%D8%B3%D8%B1%D8%A7-%D8%A7%D9%84%D8%AA%D8%BA%D8%B7%D9%8A%D8%A9-%D8%A7%D9%84%D8%AE%D8%A7%D8%B5%D8%A9-2026-06-13",
+          "evidence_ar": "لبوعلام خوخي تشكيله المنتخبين مباراه منتخب قطر ومنتخب سويسرا تاتيكم اليوم السبت الساعه 10 00 ليلا بتوقيت مكه المكرمه في بث مباشر علي قناه bein sports max 1 لمشاهده جميع المباريات والاحداث الرياضيه اضغط علي هذا الرابط للاشتراك كره القدم كاس العالم fifa 2026TM قطر سويسرا قطر 01 02 كاس العالم fifa 2026TM ابو ندي منتخبنا قوي وقادر علي التاهل كاس العالم fifa 20",
+          "note_ar": "تم التقاطها من مصدر beIN SPORTS الرسمي.",
+          "match_confidence": 95,
+          "match_confidence_reasons": [
+            "both teams mentioned",
+            "date hint"
+          ],
+          "match_channel_context_method": "both-teams-nearby-match-block"
+        }
+      ]
+    },
+    "M009": {
+      "channels": [
+        {
+          "name_ar": "beIN SPORTS MAX 1",
+          "name_en": "beIN SPORTS MAX 1",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "beIN SPORTS",
+          "source_url": "https://www.beinsports.com/ar-mena/%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85/%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/%D9%85%D9%88%D8%A7%D8%AC%D9%87%D8%A9-%D9%85%D8%B1%D8%AA%D9%82%D8%A8%D8%A9-%D8%A8%D9%8A%D9%86-%D9%85%D9%86%D8%AA%D8%AE%D8%A8-%D9%83%D9%86%D8%AF%D8%A7-%D9%88%D9%86%D8%B8%D9%8A%D8%B1%D9%87-%D9%85%D9%86%D8%AA%D8%AE%D8%A8-%D8%A7%D9%84%D8%A8%D9%88%D8%B3%D9%86%D8%A9-%D9%88%D8%A7%D9%84%D9%87%D8%B1%D8%B3%D9%83-2026-06-12",
+          "evidence_ar": "لكندي و نظيره البوسني لحساب المجموعه الثانيه ضمن منافسات كاس العالم fifa 2026TM ويطمح الطرفان الي البصم علي بدايه جيده قبل مباراتيهما القادمتين امام كل من قطر و سويسرا شاهد مواجهه كندا والبوسنه والهرسك مباشره وحصريا عبر bein sports max 1 اليوم الجمعه علي الساعه 22 00 بتوقيت مكه المكرمه لمشاهده",
+          "note_ar": "تم التقاطها من مصدر beIN SPORTS الرسمي.",
+          "match_confidence": 80,
+          "match_confidence_reasons": [
+            "both teams mentioned"
+          ],
+          "match_channel_context_method": "both-teams-nearby-match-block"
+        }
+      ]
+    },
+    "M011": {
+      "channels": [
+        {
+          "name_ar": "beIN SPORTS MAX 1",
+          "name_en": "beIN SPORTS MAX 1",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "beIN SPORTS",
+          "source_url": "https://www.beinsports.com/ar-mena/%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85/%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/%D9%85%D9%88%D8%A7%D8%AC%D9%87%D8%A9-%D9%85%D8%B1%D8%AA%D9%82%D8%A8%D8%A9-%D8%A8%D9%8A%D9%86-%D9%85%D9%86%D8%AA%D8%AE%D8%A8-%D9%83%D9%86%D8%AF%D8%A7-%D9%88%D9%86%D8%B8%D9%8A%D8%B1%D9%87-%D9%85%D9%86%D8%AA%D8%AE%D8%A8-%D8%A7%D9%84%D8%A8%D9%88%D8%B3%D9%86%D8%A9-%D9%88%D8%A7%D9%84%D9%87%D8%B1%D8%B3%D9%83-2026-06-12",
+          "evidence_ar": "لكندي و نظيره البوسني لحساب المجموعه الثانيه ضمن منافسات كاس العالم fifa 2026TM ويطمح الطرفان الي البصم علي بدايه جيده قبل مباراتيهما القادمتين امام كل من قطر و سويسرا شاهد مواجهه كندا والبوسنه والهرسك مباشره وحصريا عبر bein sports max 1 اليوم الجمعه علي الساعه 22 00 بتوقيت مكه المكرمه",
+          "note_ar": "تم التقاطها من مصدر beIN SPORTS الرسمي.",
+          "match_confidence": 80,
+          "match_confidence_reasons": [
+            "both teams mentioned"
+          ],
+          "match_channel_context_method": "both-teams-nearby-simultaneous-safe-block"
+        }
+      ]
+    },
+    "M012": {
+      "channels": [
+        {
+          "name_ar": "beIN SPORTS MAX 1",
+          "name_en": "beIN SPORTS MAX 1",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "beIN SPORTS",
+          "source_url": "https://www.beinsports.com/ar-mena/%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85/%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/%D9%85%D9%88%D8%A7%D8%AC%D9%87%D8%A9-%D9%85%D8%B1%D8%AA%D9%82%D8%A8%D8%A9-%D8%A8%D9%8A%D9%86-%D9%85%D9%86%D8%AA%D8%AE%D8%A8-%D9%83%D9%86%D8%AF%D8%A7-%D9%88%D9%86%D8%B8%D9%8A%D8%B1%D9%87-%D9%85%D9%86%D8%AA%D8%AE%D8%A8-%D8%A7%D9%84%D8%A8%D9%88%D8%B3%D9%86%D8%A9-%D9%88%D8%A7%D9%84%D9%87%D8%B1%D8%B3%D9%83-2026-06-12",
+          "evidence_ar": "لكندي و نظيره البوسني لحساب المجموعه الثانيه ضمن منافسات كاس العالم fifa 2026TM ويطمح الطرفان الي البصم علي بدايه جيده قبل مباراتيهما القادمتين امام كل من قطر و سويسرا شاهد مواجهه كندا والبوسنه والهرسك مباشره وحصريا عبر bein sports max 1 اليوم الجمعه علي الساعه 22 00 بتوقيت مكه المكرمه لمشاهده",
+          "note_ar": "تم التقاطها من مصدر beIN SPORTS الرسمي.",
+          "match_confidence": 80,
+          "match_confidence_reasons": [
+            "both teams mentioned"
+          ],
+          "match_channel_context_method": "both-teams-nearby-simultaneous-safe-block"
+        }
+      ]
+    },
+    "M004": {
+      "status": "confirmed",
+      "team1_ar": "أمريكا",
+      "team2_ar": "باراغواي",
+      "note_ar": "أمريكا × باراغواي: يتم عرض MAX 1 وMAX 2 فقط من القنوات الأساسية المختصرة.",
+      "channels": [
+        {
+          "name_ar": "beIN SPORTS MAX 1",
+          "name_en": "beIN SPORTS MAX 1",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "Kooora / MaenSat verified schedule",
+          "source_url": "https://www.kooora.com/كرة-قدم/أخبار/جدول-مباريات-اليوم-السبت-13-يونيو-2026-في-كأس-العالم--القنوات-الناقلة-والمعلقين/blt5b0ae1b0e144a295",
+          "evidence_ar": "جدول كووورة ليوم 13 يونيو 2026 ذكر أمريكا - باراغواي على beIN SPORTS MAX 1.",
+          "note_ar": "قناة مشفرة؛ تعرض ضمن القنوات الأساسية المطلوبة فقط."
+        },
+        {
+          "name_ar": "beIN SPORTS MAX 2",
+          "name_en": "beIN SPORTS MAX 2",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "Kooora / MaenSat verified schedule",
+          "source_url": "https://www.kooora.com/كرة-قدم/أخبار/جدول-مباريات-اليوم-السبت-13-يونيو-2026-في-كأس-العالم--القنوات-الناقلة-والمعلقين/blt5b0ae1b0e144a295",
+          "evidence_ar": "جدول كووورة ليوم 13 يونيو 2026 ذكر أمريكا - باراغواي على beIN SPORTS MAX 2.",
+          "note_ar": "قناة مشفرة؛ تعرض ضمن القنوات الأساسية المطلوبة فقط."
+        }
+      ]
+    },
+    "M005": {
+      "status": "confirmed",
+      "team1_ar": "قطر",
+      "team2_ar": "سويسرا",
+      "note_ar": "قطر × سويسرا: يتم عرض MAX 1 وMAX 2 فقط من القنوات الأساسية المختصرة. MAX 3/5/6 مخفية حسب سياسة الموقع.",
+      "channels": [
+        {
+          "name_ar": "beIN SPORTS MAX 1",
+          "name_en": "beIN SPORTS MAX 1",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "Kooora / 365Scores / MaenSat verified schedule",
+          "source_url": "https://www.kooora.com/كرة-قدم/أخبار/ما-القنوات-الناقلة-لمباراة-قطر-وسويسرا-في-كأس-العالم-2026--وكيف-تشاهدها-عبر-الإنترنت/blt9019ba9cc68998b5",
+          "evidence_ar": "مصدر مباراة قطر - سويسرا ذكر beIN SPORTS MAX 1.",
+          "note_ar": "قناة مشفرة؛ تعرض ضمن القنوات الأساسية المطلوبة فقط."
+        },
+        {
+          "name_ar": "beIN SPORTS MAX 2",
+          "name_en": "beIN SPORTS MAX 2",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "Kooora / MaenSat verified schedule",
+          "source_url": "https://www.kooora.com/كرة-قدم/أخبار/ما-القنوات-الناقلة-لمباراة-قطر-وسويسرا-في-كأس-العالم-2026--وكيف-تشاهدها-عبر-الإنترنت/blt9019ba9cc68998b5",
+          "evidence_ar": "مصدر مباراة قطر - سويسرا ذكر beIN SPORTS MAX 2 ضمن القنوات الناقلة.",
+          "note_ar": "قناة مشفرة؛ تعرض ضمن القنوات الأساسية المطلوبة فقط."
+        }
+      ]
+    },
+    "M006": {
+      "status": "confirmed",
+      "team1_ar": "البرازيل",
+      "team2_ar": "المغرب",
+      "note_ar": "البرازيل × المغرب: يتم عرض 4K وMAX 2 فقط من القنوات الأساسية المختصرة. MAX 4/5/6 مخفية حسب سياسة الموقع.",
+      "channels": [
+        {
+          "name_ar": "beIN SPORTS 4K",
+          "name_en": "beIN SPORTS 4K",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "Goal / MaenSat verified schedule",
+          "source_url": "https://www.goal.com/ar/أخبار/ما-القنوات-الناقلة-لمباراة-المغرب-والبرازيل-في-كأس-العالم-2026/blt06febe9caec85ef1",
+          "evidence_ar": "Goal ذكر beIN 4K HDR ضمن قنوات مباراة المغرب والبرازيل.",
+          "note_ar": "قناة مشفرة؛ تعرض ضمن القنوات الأساسية المطلوبة فقط."
+        },
+        {
+          "name_ar": "beIN SPORTS MAX 2",
+          "name_en": "beIN SPORTS MAX 2",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "Goal / Kooora / MaenSat verified schedule",
+          "source_url": "https://www.kooora.com/كرة-قدم/أخبار/ما-القنوات-الناقلة-لمباراة-البرازيل-والمغرب-في-كأس-العالم-2026--وكيف-تشاهدها-عبر-الإنترنت/bltd9e4e6a2bca56cc3",
+          "evidence_ar": "كووورة وGoal ذكرا beIN SPORTS MAX 2 ضمن قنوات مباراة البرازيل والمغرب.",
+          "note_ar": "قناة مشفرة؛ تعرض ضمن القنوات الأساسية المطلوبة فقط."
+        }
+      ]
+    },
+    "M013": {
+      "channels": [
+        {
+          "name_ar": "beIN SPORTS MAX 1",
+          "name_en": "beIN SPORTS MAX 1",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "beIN SPORTS",
+          "source_url": "https://www.beinsports.com/ar-mena/%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85/%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/%D9%85%D8%A7%D8%B0%D8%A7-%D9%82%D8%A7%D9%84-%D9%81%D9%8A%D9%86%D8%B3%D9%8A%D9%88%D8%B3-%D8%B9%D9%86-%D9%85%D9%88%D8%A7%D8%AC%D9%87%D8%A9-%D8%A7%D9%84%D9%85%D9%86%D8%AA%D8%AE%D8%A8-%D8%A7%D9%84%D9%85%D8%BA%D8%B1%D8%A8%D9%8A-2026-06-13",
+          "evidence_ar": "رايعين وان المباراه ستكون قويه جدا مباراه المغرب والبرازيل المنتظره بث مباشر علي قناه bein sports max 1 فجر الاثنين الساعه 1 00 بتوقيت مكه المكرمه لمشاهده جميع المباريات والاحداث الرياضيه اضغط علي هذا الرابط للاشتراك كره القدم كاس العالم fifa 2026TM البرازيل المغرب البرازيل كاس العالم fifa 2026TM البرازيل",
+          "note_ar": "تم التقاطها من مصدر beIN SPORTS الرسمي.",
+          "match_confidence": 80,
+          "match_confidence_reasons": [
+            "both teams mentioned"
+          ],
+          "match_channel_context_method": "both-teams-nearby-match-block"
+        }
+      ]
+    },
+    "M025": {
+      "channels": [
+        {
+          "name_ar": "beIN SPORTS MAX 1",
+          "name_en": "beIN SPORTS MAX 1",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "beIN SPORTS",
+          "source_url": "https://www.beinsports.com/ar-mena/%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85/%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/%D8%A7%D9%84%D9%85%D9%86%D8%AA%D8%AE%D8%A8-%D8%A7%D9%84%D8%A3%D9%84%D9%85%D8%A7%D9%86%D9%8A-%D9%8A%D8%A8%D8%AF%D8%A3-%D8%B1%D8%AD%D9%84%D8%AA%D9%87-%D8%A8%D9%85%D9%88%D8%A7%D8%AC%D9%87%D8%A9-%D9%83%D9%88%D8%B1%D8%A7%D8%B3%D8%A7%D9%88-2026-06-14",
+          "evidence_ar": "يسعي من خلاله لتقديم نفسه علي اكبر مسرح كروي في العالم باراه المانيا وكوراساو بث مباشر علي قناه bein sports max 1 مساء الاحد الساعه 8 00 بتوقيت مكه المكرمه لمشاهده جميع المباريات والاحداث الرياضيه اضغط علي هذا الرابط للاشتراك كره القدم كاس العالم fifa 2026TM المانيا كوراساو المانيا 01 21 كاس العالم fifa 2026TM المن",
+          "note_ar": "تم التقاطها من مصدر beIN SPORTS الرسمي.",
+          "match_confidence": 80,
+          "match_confidence_reasons": [
+            "both teams mentioned"
+          ],
+          "match_channel_context_method": "both-teams-nearby-match-block"
+        }
+      ]
+    },
+    "M014": {
+      "channels": [
+        {
+          "name_ar": "beIN SPORTS MAX 1",
+          "name_en": "beIN SPORTS MAX 1",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "beIN SPORTS",
+          "source_url": "https://www.beinsports.com/ar-mena/%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85/%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/%D9%87%D8%A7%D9%8A%D8%AA%D9%8A-0-0-%D8%A7%D8%B3%D9%83%D8%AA%D9%84%D9%86%D8%AF%D8%A7-%D8%A7%D9%84%D8%AA%D8%BA%D8%B7%D9%8A%D8%A9-%D8%A7%D9%84%D8%AE%D8%A7%D8%B5%D8%A9-%D9%88%D8%A3%D8%A8%D8%B1%D8%B2-%D8%A3%D8%AD%D8%AF%D8%A7%D8%AB-%D8%A7%D9%84%D9%85%D8%A8%D8%A7%D8%B1%D8%A7%D8%A9-2026-06-14",
+          "evidence_ar": "منذ اخر ظهور لها في 1998 تتطلع لخطف فوز يقربها من التاهل مباراه هايتي واسكتلندا بث مباشر علي قناه bein sports max 1 فجر الاحد الساعه 4 00 بتوقيت مكه المكرمه لمشاهده جميع المباريات والاحداث الرياضيه اضغط علي هذا الرابط للاشتراك كره القدم كاس العالم fifa 2026TM هايتي اسكتلندا هايتي كاس العالم fifa 2026TM المنتخب الاسكت",
+          "note_ar": "تم التقاطها من مصدر beIN SPORTS الرسمي.",
+          "match_confidence": 80,
+          "match_confidence_reasons": [
+            "both teams mentioned"
+          ],
+          "match_channel_context_method": "both-teams-nearby-match-block"
+        }
+      ]
+    },
+    "M032": {
+      "channels": [
+        {
+          "name_ar": "beIN SPORTS MAX 2",
+          "name_en": "beIN SPORTS MAX 2",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "beIN SPORTS",
+          "source_url": "https://www.beinsports.com/ar-mena/%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85/%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/%D8%A7%D9%84%D9%84%D9%85%D9%88%D8%B4%D9%8A-%D9%88%D8%A7%D8%AB%D9%82-%D9%85%D9%86-%D8%AA%D9%82%D8%AF%D9%8A%D9%85-%D9%85%D8%A8%D8%A7%D8%B1%D8%A7%D8%A9-%D8%AC%D9%8A-%D8%AF%D8%A9-%D8%A3%D9%85%D8%A7%D9%85-%D8%A7%D9%84%D8%B3%D9%88%D9%8A%D8%AF-2026-06-14",
+          "evidence_ar": "اهير التونسيه خلال هذه المشاركه مباراه السويد وتونس انطلاقا من الساعه الخامسه فجرا يوم الاثنين بتوقيت مكه المكرمه مباشره وحصريا علي bein sports max 2 لمشاهده جميع المباريات والاحداث الرياضيه اضغط علي هذا الرابط للاشتراك كره القدم كاس العالم fifa 2026TM السويد تونس السويد كاس العالم fifa 2026TM مواجهه مشوقه بين تونس والسويد 01 22 كاس العالم fifa 2026T",
+          "note_ar": "تم التقاطها من مصدر beIN SPORTS الرسمي.",
+          "match_confidence": 80,
+          "match_confidence_reasons": [
+            "both teams mentioned"
+          ],
+          "match_channel_context_method": "both-teams-nearby-match-block"
+        }
+      ]
+    },
+    "M026": {
+      "channels": [
+        {
+          "name_ar": "beIN SPORTS MAX 1",
+          "name_en": "beIN SPORTS MAX 1",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "beIN SPORTS",
+          "source_url": "https://www.beinsports.com/ar-mena/%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85/%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/%D9%85%D9%86%D8%AA%D8%AE%D8%A8-%D9%83%D9%88%D8%AA-%D8%AF%D9%8A%D9%81%D9%88%D8%A7%D8%B1-%D9%81%D9%8A-%D8%A7%D8%AE%D8%AA%D8%A8%D8%A7%D8%B1-%D9%85%D8%B1%D8%AA%D9%82%D8%A8-%D8%A3%D9%85%D8%A7%D9%85-%D8%A7%D9%84%D8%A5%D9%83%D9%88%D8%A7%D8%AF%D9%88%D8%B1-2026-06-14",
+          "evidence_ar": "في كاس العالم fifa 2026TM مباراه كوت ديفوار والاكوادور انطلاقا من الساعه 02 00 بتوقيت مكه المكرمه فجر الاثنين مباشره وحصريا علي bein sports max 1 لمشاهده جميع المباريات والاحداث الرياضيه اضغط علي هذا الرابط للاشتراك كره القدم كاس العالم fifa 2026TM كوت ديفوار الاكوادور كوت ديفوار كاس العالم fifa 2026TM الكشف عن قايمه لاعبي المنتخب الايفواري 03 00",
+          "note_ar": "تم التقاطها من مصدر beIN SPORTS الرسمي.",
+          "match_confidence": 80,
+          "match_confidence_reasons": [
+            "both teams mentioned"
+          ],
+          "match_channel_context_method": "both-teams-nearby-match-block"
+        }
+      ]
+    },
+    "M044": {
+      "channels": [
+        {
+          "name_ar": "beIN SPORTS MAX 1",
+          "name_en": "beIN SPORTS MAX 1",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "beIN SPORTS",
+          "source_url": "https://www.beinsports.com/ar-mena/%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85/%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/%D8%A7%D9%84%D8%A3%D8%AE%D8%B6%D8%B1-%D8%A7%D9%84%D8%B3%D8%B9%D9%88%D8%AF%D9%8A-%D9%8A%D9%82%D8%B5-%D8%B4%D8%B1%D9%8A%D8%B7-%D9%85%D8%B4%D8%A7%D8%B1%D9%83%D8%AA%D9%87-%D8%A8%D9%85%D9%88%D8%A7%D8%AC%D9%87%D8%A9-%D8%A7%D9%84%D8%A3%D9%88%D8%B1%D9%88%D8%BA%D9%88%D8%A7%D9%8A-2026-06-15",
+          "evidence_ar": "لاوروغواي البطوله بقياده المدرب الارجنتيني المخضرم مارسيلو بييلسا ويضم الفريق اسماء لامعه من بينهم لاعب ريال مدريد فيديريكو فالفيردي وخوسيه ماريا خيمينيز ورونالد اراوخو مباراه السعوديه واروغواي فجر الثلاثاء بث مباشر علي bein sports max 1 الساعه 1 00 فجرا بتوقيت مكه المكرمه لمشاهده جميع المباريات والاحداث الرياضيه اضغط علي هذا الرابط للاشتراك كره القدم كاس العالم fifa 2026TM السعوديه اوروغواي السعوديه كاس العالم fifa 2026TM تاخر سفر منتخ",
+          "note_ar": "تم التقاطها من مصدر beIN SPORTS الرسمي.",
+          "match_confidence": 80,
+          "match_confidence_reasons": [
+            "both teams mentioned"
+          ],
+          "match_channel_context_method": "both-teams-nearby-match-block"
+        }
+      ]
+    },
+    "M043": {
+      "channels": [
+        {
+          "name_ar": "beIN SPORTS MAX 1",
+          "name_en": "beIN SPORTS MAX 1",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "beIN SPORTS",
+          "source_url": "https://www.beinsports.com/ar-mena/%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85/%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/%D8%A5%D8%B3%D8%A8%D8%A7%D9%86%D9%8A%D8%A7-%D8%AA%D9%88%D8%A7%D8%AC%D9%87-%D9%85%D9%86%D8%AA%D8%AE%D8%A8-%D8%A7%D9%84%D8%B1%D8%A3%D8%B3-%D8%A7%D9%84%D8%A3%D8%AE%D8%B6%D8%B1-2026-06-15",
+          "evidence_ar": "د امجاد 2010 فيما يواصل منتخب القروش الزرقاء تحت قياده المدرب بوبيستا تحضيراته استعدادا يخوض اول مشاركه له في تاريخ كاس العالم بعدما نجح في تحقيق انجاز غير مسبوق ببلوغ النهاييات مباراه اسبانيا والراس الاخضر بث مباشر علي bein sports max 1 الساعه 7 00 مساء بتوقيت مكه المكرمه لمشاهده جميع المباريات والاحداث الرياضيه اضغط علي هذا الرابط للاشتراك كره القدم كاس العالم fifa 2026TM اسبانيا جزر الراس الاخضر اسبانيا كاس العالم fifa 2026TM اسبانيا",
+          "note_ar": "تم التقاطها من مصدر beIN SPORTS الرسمي.",
+          "match_confidence": 80,
+          "match_confidence_reasons": [
+            "both teams mentioned"
+          ],
+          "match_channel_context_method": "both-teams-nearby-match-block"
+        }
+      ]
+    },
+    "M037": {
+      "channels": [
+        {
+          "name_ar": "beIN SPORTS MAX 2",
+          "name_en": "beIN SPORTS MAX 2",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "beIN SPORTS",
+          "source_url": "https://www.beinsports.com/ar-mena/%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85/%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/%D9%85%D9%86%D8%AA%D8%AE%D8%A8-%D9%85%D8%B5%D8%B1-%D9%8A%D8%B3%D8%AA%D9%87%D9%84-%D9%85%D8%B4%D9%88%D8%A7%D8%B1%D9%87-%D8%A8%D9%85%D9%88%D8%A7%D8%AC%D9%87%D8%A9-%D8%A8%D9%84%D8%AC%D9%8A%D9%83%D8%A7-2026-06-15",
+          "evidence_ar": "علي خبره عدد من لاعبيه وقدرتهم علي المنافسه في المحافل الكبري مباراه مصر وبلجيكا بث مباشر علي bein sports max 2 الساعه 22 00 ليلا بتوقيت مكه المكرمه لمشاهده جميع المباريات والاحداث الرياضيه اضغط علي هذا الرابط للاشتراك كره القدم كاس العالم fifa 2026TM بلجيكا مصر بلجيكا تصفيات كاس العالم اوروبا منتخب بلجيكا يلحق ب",
+          "note_ar": "تم التقاطها من مصدر beIN SPORTS الرسمي.",
+          "match_confidence": 80,
+          "match_confidence_reasons": [
+            "both teams mentioned"
+          ],
+          "match_channel_context_method": "both-teams-nearby-match-block"
+        }
+      ]
+    },
+    "M038": {
+      "channels": [
+        {
+          "name_ar": "beIN SPORTS MAX 2",
+          "name_en": "beIN SPORTS MAX 2",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "beIN SPORTS",
+          "source_url": "https://www.beinsports.com/ar-mena/%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85/%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/%D8%A7%D9%84%D9%85%D9%86%D8%AA%D8%AE%D8%A8-%D8%A7%D9%84%D8%A5%D9%8A%D8%B1%D8%A7%D9%86%D9%8A-%D9%8A%D8%B5%D9%84-%D8%A5%D9%84%D9%89-%D8%A7%D9%84%D9%88%D9%84%D8%A7%D9%8A%D8%A7%D8%AA-%D8%A7%D9%84%D9%85%D8%AA%D8%AD%D8%AF%D8%A9-%D9%88%D9%8A%D8%AA%D8%A3%D9%87%D8%A8-%D9%84%D9%85%D9%88%D8%A7%D8%AC%D9%87%D8%A9-%D9%86%D9%8A%D9%88%D8%B2%D9%8A%D9%84%D9%86%D8%AF%D8%A7-2026-06-15",
+          "evidence_ar": "لمتحده استعدادا للمشاركه في كاس العالم fifa 2026TM ومواجهه منتخب نيوزيلندا في الجوله الاولي فجر الثلاثاء مباراه المنتخب الايراني ومنتخب نيوزيلندا فجر الثلاثاء انطلاقا من الساعه 04 00 بتوقيت مكه المكرمه مباشره وحصريا علي bein sports max 2 لمشاهده جميع المباريات والاحداث الرياضيه اضغط علي هذا الرابط للاشتراك كره القدم كاس العالم fifa 2026TM جمهوريه ايران الاسلاميه نيوزيلندا جمهوريه ايران الاسلاميه كاس العالم fifa 2026TM حجب حصه المنتخب ال",
+          "note_ar": "تم التقاطها من مصدر beIN SPORTS الرسمي.",
+          "match_confidence": 80,
+          "match_confidence_reasons": [
+            "both teams mentioned"
+          ],
+          "match_channel_context_method": "both-teams-nearby-match-block"
+        }
+      ]
+    },
+    "M056": {
+      "channels": [
+        {
+          "name_ar": "beIN SPORTS MAX 2",
+          "name_en": "beIN SPORTS MAX 2",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "beIN SPORTS",
+          "source_url": "https://www.beinsports.com/ar-mena/%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85/%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/%D8%A7%D9%84%D8%A3%D8%B1%D8%AF%D9%86-0-%D8%A7%D9%84%D9%86%D9%85%D8%B3%D8%A7-0-%D8%A7%D9%84%D8%AA%D8%BA%D8%B7%D9%8A%D8%A9-%D8%A7%D9%84%D8%AE%D8%A7%D8%B5%D8%A9-%D9%88%D8%A3%D8%A8%D8%B1%D8%B2-%D8%A3%D8%AD%D8%AF%D8%A7%D8%AB-%D8%A7%D9%84%D9%85%D8%A8%D8%A7%D8%B1%D8%A7%D8%A9-2026-06-17",
+          "evidence_ar": "لمكرمه مباراه الاردن والنمسا ستكون منقوله حصريا علي bein sports max 2 مشاهده مباراه الاردن والنمسا في بث مباشر عبر الانترنت كما البث التلفزيوني تبث bein sports المباراه بنقل حي بتقنيه فايقه الجوده علي الانترنت عبر bein connect كره القدم كاس العالم fifa 2026TM النمسا الارد",
+          "note_ar": "تم التقاطها من مصدر beIN SPORTS الرسمي.",
+          "match_confidence": 80,
+          "match_confidence_reasons": [
+            "both teams mentioned"
+          ],
+          "match_channel_context_method": "both-teams-nearby-match-block"
+        }
+      ]
+    },
+    "M050": {
+      "channels": [
+        {
+          "name_ar": "beIN SPORTS MAX 2",
+          "name_en": "beIN SPORTS MAX 2",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "beIN SPORTS",
+          "source_url": "https://www.beinsports.com/ar-mena/%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85/%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/%D8%A7%D9%84%D8%B9%D8%B1%D8%A7%D9%82-%D9%8A%D8%B3%D8%AA%D9%87%D9%84-%D9%85%D8%B4%D9%88%D8%A7%D8%B1%D9%87-%D8%A7%D9%84%D9%85%D9%88%D9%86%D8%AF%D9%8A%D8%A7%D9%84%D9%8A-%D8%A8%D9%84%D9%82%D8%A7%D8%A1-%D8%A7%D9%84%D9%86%D8%B1%D9%88%D9%8A%D8%AC-2026-06-16",
+          "evidence_ar": "في سعيه لحصد اول ثلاث نقاط في مشواره بالمونديال شاهد مواجهه العراق والنرويج مباشره وحصريا عبر bein sports max 2 الاربعاء علي الساعه 1 00 بتوقيت مكه المكرمه لمشاهده جميع المباريات والاحداث الرياضيه اضغط علي هذا الرابط للاشتراك كره القدم كاس العالم fifa 2026TM العراق النرويج العراق كاس العالم fifa 2026TM العراق 1 2",
+          "note_ar": "تم التقاطها من مصدر beIN SPORTS الرسمي.",
+          "match_confidence": 95,
+          "match_confidence_reasons": [
+            "both teams mentioned",
+            "date hint"
+          ],
+          "match_channel_context_method": "both-teams-nearby-match-block"
+        },
+        {
+          "name_ar": "beIN SPORTS MAX 1",
+          "name_en": "beIN SPORTS MAX 1",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "beIN SPORTS",
+          "source_url": "https://www.beinsports.com/ar-mena/%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85/%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/%D9%85%D9%88%D8%A7%D8%AC%D9%87%D8%A9-%D9%85%D8%B1%D8%AA%D9%82%D8%A8%D8%A9-%D8%A8%D9%8A%D9%86-%D9%81%D8%B1%D9%86%D8%B3%D8%A7-%D9%88%D8%A7%D9%84%D8%B3%D9%86%D8%BA%D8%A7%D9%84-2026-06-16",
+          "evidence_ar": "سعه ضمن منافسات كاس العالم fifa 2026TM وتضم المجموعه الي جانب فرنسا والسنغال منتخبي النرويج والعراق ما يجعل الصراع علي بطاقتي التاهل الي الدور التالي مفتوحا علي كل الاحتمالات شاهد مواجهه فرنسا والسنغال مباشره وحصريا عبر bein sports max 1 اليوم ا",
+          "note_ar": "تم التقاطها من مصدر beIN SPORTS الرسمي.",
+          "match_confidence": 80,
+          "match_confidence_reasons": [
+            "both teams mentioned"
+          ],
+          "match_channel_context_method": "both-teams-nearby-match-block"
+        }
+      ]
+    },
+    "M055": {
+      "channels": [
+        {
+          "name_ar": "beIN SPORTS MAX 1",
+          "name_en": "beIN SPORTS MAX 1",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "beIN SPORTS",
+          "source_url": "https://www.beinsports.com/ar-mena/%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85/%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/%D8%A7%D9%84%D8%AC%D8%B2%D8%A7%D8%A6%D8%B1-%D8%AA%D9%82%D8%B5-%D8%B4%D8%B1%D9%8A%D8%B7-%D9%85%D8%B4%D8%A7%D8%B1%D9%83%D8%AA%D9%87%D8%A7-%D9%81%D9%8A-%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026-%D8%A8%D9%85%D9%88%D8%A7%D8%AC%D9%87%D8%A9-%D8%A7%D9%84%D8%A3%D8%B1%D8%AC%D9%86%D8%AA%D9%8A%D9%86-2026-06-16",
+          "evidence_ar": "لظهور بوجه مشرف في العرس المونديالي شاهد مواجهه الارجنتين والجزاير مباشره وحصريا عبر bein sports max 1 الاربعاء علي الساعه 4 00 بتوقيت مكه المكرمه لمشاهده جميع المباريات والاحداث الرياضيه اضغط علي هذا الرابط للاشتراك كره القدم كاس العالم fifa 2026TM الارجنتين الجزاير الارجنتين كاس العالم fifa 2026TM الار",
+          "note_ar": "تم التقاطها من مصدر beIN SPORTS الرسمي.",
+          "match_confidence": 95,
+          "match_confidence_reasons": [
+            "both teams mentioned",
+            "date hint"
+          ],
+          "match_channel_context_method": "both-teams-nearby-match-block"
+        }
+      ]
+    },
+    "M052": {
+      "channels": [
+        {
+          "name_ar": "beIN SPORTS MAX 1",
+          "name_en": "beIN SPORTS MAX 1",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "beIN SPORTS",
+          "source_url": "https://www.beinsports.com/ar-mena/%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85/%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/%D9%85%D9%88%D8%A7%D8%AC%D9%87%D8%A9-%D9%85%D8%B1%D8%AA%D9%82%D8%A8%D8%A9-%D8%A8%D9%8A%D9%86-%D9%81%D8%B1%D9%86%D8%B3%D8%A7-%D9%88%D8%A7%D9%84%D8%B3%D9%86%D8%BA%D8%A7%D9%84-2026-06-16",
+          "evidence_ar": "سعه ضمن منافسات كاس العالم fifa 2026TM وتضم المجموعه الي جانب فرنسا والسنغال منتخبي النرويج والعراق ما يجعل الصراع علي بطاقتي التاهل الي الدور التالي مفتوحا علي كل الاحتمالات شاهد مواجهه فرنسا والسنغال مباشره وحصريا عبر bein sports max 1 الي",
+          "note_ar": "تم التقاطها من مصدر beIN SPORTS الرسمي.",
+          "match_confidence": 95,
+          "match_confidence_reasons": [
+            "both teams mentioned",
+            "date hint"
+          ],
+          "match_channel_context_method": "both-teams-nearby-match-block"
+        }
+      ]
+    },
+    "M053": {
+      "channels": [
+        {
+          "name_ar": "beIN SPORTS MAX 1",
+          "name_en": "beIN SPORTS MAX 1",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "beIN SPORTS",
+          "source_url": "https://www.beinsports.com/ar-mena/%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85/%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/%D9%85%D9%88%D8%A7%D8%AC%D9%87%D8%A9-%D9%85%D8%B1%D8%AA%D9%82%D8%A8%D8%A9-%D8%A8%D9%8A%D9%86-%D9%81%D8%B1%D9%86%D8%B3%D8%A7-%D9%88%D8%A7%D9%84%D8%B3%D9%86%D8%BA%D8%A7%D9%84-2026-06-16",
+          "evidence_ar": "سعه ضمن منافسات كاس العالم fifa 2026TM وتضم المجموعه الي جانب فرنسا والسنغال منتخبي النرويج والعراق ما يجعل الصراع علي بطاقتي التاهل الي الدور التالي مفتوحا علي كل الاحتمالات شاهد مواجهه فرنسا والسنغال مباشره وحصريا عبر bein sports max 1 الي",
+          "note_ar": "تم التقاطها من مصدر beIN SPORTS الرسمي.",
+          "match_confidence": 95,
+          "match_confidence_reasons": [
+            "both teams mentioned",
+            "date hint"
+          ],
+          "match_channel_context_method": "both-teams-nearby-simultaneous-safe-block"
+        }
+      ]
+    },
+    "M054": {
+      "channels": [
+        {
+          "name_ar": "beIN SPORTS MAX 1",
+          "name_en": "beIN SPORTS MAX 1",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "beIN SPORTS",
+          "source_url": "https://www.beinsports.com/ar-mena/%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85/%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/%D9%85%D9%88%D8%A7%D8%AC%D9%87%D8%A9-%D9%85%D8%B1%D8%AA%D9%82%D8%A8%D8%A9-%D8%A8%D9%8A%D9%86-%D9%81%D8%B1%D9%86%D8%B3%D8%A7-%D9%88%D8%A7%D9%84%D8%B3%D9%86%D8%BA%D8%A7%D9%84-2026-06-16",
+          "evidence_ar": "سعه ضمن منافسات كاس العالم fifa 2026TM وتضم المجموعه الي جانب فرنسا والسنغال منتخبي النرويج والعراق ما يجعل الصراع علي بطاقتي التاهل الي الدور التالي مفتوحا علي كل الاحتمالات شاهد مواجهه فرنسا والسنغال مباشره وحصريا عبر bein sports max 1 اليوم ا",
+          "note_ar": "تم التقاطها من مصدر beIN SPORTS الرسمي.",
+          "match_confidence": 95,
+          "match_confidence_reasons": [
+            "both teams mentioned",
+            "date hint"
+          ],
+          "match_channel_context_method": "both-teams-nearby-simultaneous-safe-block"
+        }
+      ]
+    },
+    "M061": {
+      "channels": [
+        {
+          "name_ar": "beIN SPORTS MAX 1",
+          "name_en": "beIN SPORTS MAX 1",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "beIN SPORTS",
+          "source_url": "https://www.beinsports.com/ar-mena/%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85/%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/%D8%A7%D9%84%D8%A8%D8%B1%D8%AA%D8%BA%D8%A7%D9%84-%D8%AA%D8%B3%D8%AA%D9%87%D9%84-%D9%85%D8%B4%D9%88%D8%A7%D8%B1%D9%87%D8%A7-%D8%A7%D9%84%D9%85%D9%88%D9%86%D8%AF%D9%8A%D8%A7%D9%84%D9%8A-%D8%A8%D9%85%D9%84%D8%A7%D9%82%D8%A7%D8%A9-%D8%A7%D9%84%D9%83%D9%88%D9%86%D8%BA%D9%88-%D8%A7%D9%84%D8%AF%D9%8A%D9%85%D9%82%D8%B1%D8%A7%D8%B7%D9%8A%D8%A9-2026-06-17",
+          "evidence_ar": "باللقب لاول مره في تاريخهم شاهد مواجهه البرتغال والكونغو الديمقراطيه مباشره وحصريا عبر bein sports max 1 اليوم الاربعاء علي الساعه 20 00 بتوقيت مكه المكرمه لمشاهده جميع المباريات والاحداث الرياضيه اضغط علي هذا الرابط للاشتراك كره القدم كاس العالم fifa 2026TM البرتغال الكونغو الديمقراطيه البرتغال 00 40 كاس",
+          "note_ar": "تم التقاطها من مصدر beIN SPORTS الرسمي.",
+          "match_confidence": 95,
+          "match_confidence_reasons": [
+            "both teams mentioned",
+            "date hint"
+          ],
+          "match_channel_context_method": "both-teams-nearby-match-block"
+        }
+      ]
+    },
+    "M067": {
+      "channels": [
+        {
+          "name_ar": "beIN SPORTS MAX 2",
+          "name_en": "beIN SPORTS MAX 2",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "beIN SPORTS",
+          "source_url": "https://www.beinsports.com/ar-mena/%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85/%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/%D9%82%D9%85-%D8%A9-%D8%A5%D9%86%D8%AC%D9%84%D8%AA%D8%B1%D8%A7-%D9%88%D9%83%D8%B1%D9%88%D8%A7%D8%AA%D9%8A%D8%A7-%D9%85%D8%AD%D8%B7-%D8%A7%D9%84%D8%A3%D9%86%D8%B8%D8%A7%D8%B1-2026-06-17",
+          "evidence_ar": "تنده الي خبره لاعبيها في البطولات الكبري شاهد مواجهه انجلترا وكرواتيا مباشره وحصريا عبر bein sports max 2 اليوم الاربعاء علي الساعه 23 00 بتوقيت مكه المكرمه لمشاهده جميع المباريات والاحداث الرياضيه اضغط علي هذا الرابط للاشتراك كره القدم كاس العالم fifa 2026TM انجلترا كرواتيا انجلترا 01 25 كاس العالم fifa 20",
+          "note_ar": "تم التقاطها من مصدر beIN SPORTS الرسمي.",
+          "match_confidence": 80,
+          "match_confidence_reasons": [
+            "both teams mentioned"
+          ],
+          "match_channel_context_method": "both-teams-nearby-match-block"
+        },
+        {
+          "name_ar": "beIN SPORTS MAX 1",
+          "name_en": "beIN SPORTS MAX 1",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "beIN SPORTS",
+          "source_url": "https://www.beinsports.com/ar-mena/%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85/%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/%D9%85%D9%88%D8%A7%D8%AC%D9%87%D8%A9-%D9%82%D9%88%D9%8A%D8%A9-%D9%88%D9%88%D8%A7%D8%B9%D8%AF%D8%A9-%D8%A8%D9%8A%D9%86-%D8%A5%D9%86%D8%AC%D9%84%D8%AA%D8%B1%D8%A7-%D9%88%D9%83%D8%B1%D9%88%D8%A7%D8%AA%D9%8A%D8%A7-2026-06-17",
+          "evidence_ar": "مل ذاكره خاصه منذ نصف نهايي مونديال 2018 مباراه انجلترا وكرواتيا اليوم الاربعاء في بث مباشر علي قناه bein sports max 1 الساعه 23 00 بتوقيت مكه المكرمه لمشاهده جميع المباريات والاحداث الرياضيه اضغط علي هذا الرابط للاشتراك كره القدم كاس العالم fifa 2026TM انجلترا كرواتيا انجلترا كاس العالم fifa 2026TM قمه انجلترا وكرواتيا",
+          "note_ar": "تم التقاطها من مصدر beIN SPORTS الرسمي.",
+          "match_confidence": 80,
+          "match_confidence_reasons": [
+            "both teams mentioned"
+          ],
+          "match_channel_context_method": "both-teams-nearby-match-block"
+        }
+      ]
+    },
+    "M068": {
+      "channels": [
+        {
+          "name_ar": "beIN SPORTS MAX 1",
+          "name_en": "beIN SPORTS MAX 1",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "beIN SPORTS",
+          "source_url": "https://www.beinsports.com/ar-mena/%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85/%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/%D9%85%D9%88%D8%A7%D8%AC%D9%87%D8%A9-%D9%85%D8%B1%D8%AA%D9%82%D8%A8%D8%A9-%D8%A8%D9%8A%D9%86-%D8%BA%D8%A7%D9%86%D8%A7-%D9%88%D8%A8%D9%86%D9%85%D8%A7-2026-06-17",
+          "evidence_ar": "رتقبه امام منتخب بنما ضمن منافسات المجموعه الثانيه عشره شاهد مواجهه غانا وبنما مباشره وحصريا عبر bein sports max 1 الخميس علي الساعه 2 00 بتوقيت مكه المكرمه لمشاهده جميع المباريات والاحداث الرياضيه اضغط علي هذا الرابط للاشتراك كره القدم كاس العالم fifa 2026TM غانا بنما غانا كاس العالم fifa 2026TM احتجاج غاني رسمي كا",
+          "note_ar": "تم التقاطها من مصدر beIN SPORTS الرسمي.",
+          "match_confidence": 80,
+          "match_confidence_reasons": [
+            "both teams mentioned"
+          ],
+          "match_channel_context_method": "both-teams-nearby-match-block"
+        }
+      ]
+    },
+    "M062": {
+      "channels": [
+        {
+          "name_ar": "beIN SPORTS MAX 2",
+          "name_en": "beIN SPORTS MAX 2",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "beIN SPORTS",
+          "source_url": "https://www.beinsports.com/ar-mena/%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85/%D9%83%D8%A3%D8%B3-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-fifa-2026/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88/%D9%85%D8%A8%D8%A7%D8%B1%D8%A7%D8%A9-%D9%85%D9%86%D8%AA%D8%B8%D8%B1%D8%A9-%D8%A8%D9%8A%D9%86-%D8%A3%D9%88%D8%B2%D8%A8%D9%83%D8%B3%D8%AA%D8%A7%D9%86-%D9%88%D9%83%D9%88%D9%84%D9%88%D9%85%D8%A8%D9%8A%D8%A7-2026-06-17",
+          "evidence_ar": "حاديه عشره في كاس العالم fifa 2026TM شاهد مواجهه اوزبكستان وكولومبيا مباشره وحصريا عبر bein sports max 2 الخميس علي الساعه 5 00 بتوقيت مكه المكرمه لمشاهده جميع المباريات والاحداث الرياضيه اضغط علي هذا الرابط للاشتراك كره القدم كاس العالم fifa 2026TM اوزبكستان كولومبيا اوزبكستان كاس العالم fifa 2026TM كاناف",
+          "note_ar": "تم التقاطها من مصدر beIN SPORTS الرسمي.",
+          "match_confidence": 80,
+          "match_confidence_reasons": [
+            "both teams mentioned"
+          ],
+          "match_channel_context_method": "both-teams-nearby-match-block"
+        }
+      ]
+    }
+  },
+  "status_values": {
+    "confirmed": "Confirmed channel for the match",
+    "to_be_confirmed": "Encrypted channel group known, exact channel pending",
+    "pending_official_announcement": "Free-to-air status pending official announcement",
+    "not_available": "No broadcaster information available"
+  }
+}

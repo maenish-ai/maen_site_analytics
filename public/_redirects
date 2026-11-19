@@ -1,0 +1,15 @@
+# Compatibility redirects after moving daily automation to GitHub Actions.
+# Frequency data is now static JSON updated by GitHub Actions.
+/api/frequency-data /frequencies/frequency-data.json 200
+/.netlify/functions/frequency-data /frequencies/frequency-data.json 200
+
+# Cloudflare Pages still exposes only the lightweight visitor tracking endpoint.
+/.netlify/functions/track-visit /api/track-visit 200
+
+/api/search-feedback https://maensat.pages.dev/api/search-feedback 200
+
+# Social/in-app browser compatibility: normalize old/shared development URLs.
+/public / 301
+/public/ / 301
+/public/index.html / 301
+/public/index_phone.html / 301

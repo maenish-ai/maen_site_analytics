@@ -1,0 +1,12 @@
+الإصدار المصحح: 20260719-score-display-guard-v2
+
+استبدل الملف التالي فقط لإصلاح خطأ GitHub Actions الحالي:
+
+scripts/worldcup-score-display-guard.mjs
+
+ملف الـ Workflow مرفق أيضاً كما هو للمشروع الكامل:
+
+.github/workflows/update-worldcup-2026.yml
+
+بعد الرفع شغّل:
+Actions > Update World Cup 2026 every 15 minutes > Run workflow

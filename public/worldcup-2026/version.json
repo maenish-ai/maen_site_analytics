@@ -1,0 +1,256 @@
+{
+  "version": "41f7ac420f3d",
+  "generated_at": "2026-07-20T00:15:47+03:00",
+  "next_expected_check_at": "2026-07-20T00:30:48+03:00",
+  "refresh_interval_minutes": 15,
+  "checks": {
+    "espn_scoreboard": {
+      "ok": true,
+      "urls_checked": 10,
+      "events_seen": 104,
+      "matched": 104,
+      "bracket_matched": 32,
+      "score_changed": 103,
+      "future_openfootball_zero_scores_cleared": 0,
+      "time_fallback_status_applied": 0,
+      "bracket_time_fallback_status_applied": 0
+    },
+    "knockout": {
+      "changed": 2,
+      "directResolved": 48,
+      "thirdResolved": 16,
+      "winnerResolved": 64,
+      "unresolved": [],
+      "third_assignment_count": 8,
+      "third_assignments": [
+        {
+          "key": "M077:2",
+          "group": "D",
+          "team": "Paraguay",
+          "team_ar": "باراغواي",
+          "fallback": false
+        },
+        {
+          "key": "M074:2",
+          "group": "B",
+          "team": "Bosnia & Herzegovina",
+          "team_ar": "البوسنة والهرسك",
+          "fallback": false
+        },
+        {
+          "key": "M079:2",
+          "group": "F",
+          "team": "Sweden",
+          "team_ar": "السويد",
+          "fallback": false
+        },
+        {
+          "key": "M082:2",
+          "group": "J",
+          "team": "Algeria",
+          "team_ar": "الجزائر",
+          "fallback": false
+        },
+        {
+          "key": "M080:2",
+          "group": "K",
+          "team": "DR Congo",
+          "team_ar": "الكونغو الديمقراطية",
+          "fallback": false
+        },
+        {
+          "key": "M085:2",
+          "group": "I",
+          "team": "Senegal",
+          "team_ar": "السنغال",
+          "fallback": false
+        },
+        {
+          "key": "M081:2",
+          "group": "E",
+          "team": "Ecuador",
+          "team_ar": "الإكوادور",
+          "fallback": false
+        },
+        {
+          "key": "M087:2",
+          "group": "L",
+          "team": "Ghana",
+          "team_ar": "غانا",
+          "fallback": false
+        }
+      ]
+    },
+    "manual_overrides_applied": 16,
+    "files_written": [
+      "matches.json",
+      "standings.json",
+      "groups.json",
+      "bracket.json",
+      "heartbeat.json",
+      "update-check.json",
+      "version.json",
+      "deploy-marker.txt",
+      "update-errors.json"
+    ],
+    "errors": []
+  },
+  "r32_official_correction": {
+    "ok": true,
+    "name": "MaenSat World Cup 2026 Round of 32 official correction",
+    "corrected_at": "2026-07-20T00:15:48+03:00",
+    "timezone": "Asia/Amman",
+    "version": "2026-06-29-v1",
+    "matches_file": {
+      "changed": 16,
+      "checked": 16
+    },
+    "bracket_file": {
+      "changed": 16,
+      "checked": 16
+    },
+    "knockout_live_file": {
+      "changed": 32,
+      "checked": 32
+    },
+    "corrected_pairings": [
+      {
+        "match": "M073",
+        "team1": "South Africa",
+        "team1_ar": "جنوب أفريقيا",
+        "team2": "Canada",
+        "team2_ar": "كندا",
+        "result": [
+          0,
+          1
+        ]
+      },
+      {
+        "match": "M074",
+        "team1": "Germany",
+        "team1_ar": "ألمانيا",
+        "team2": "Paraguay",
+        "team2_ar": "باراغواي",
+        "result": null
+      },
+      {
+        "match": "M075",
+        "team1": "Netherlands",
+        "team1_ar": "هولندا",
+        "team2": "Morocco",
+        "team2_ar": "المغرب",
+        "result": null
+      },
+      {
+        "match": "M076",
+        "team1": "Brazil",
+        "team1_ar": "البرازيل",
+        "team2": "Japan",
+        "team2_ar": "اليابان",
+        "result": [
+          2,
+          1
+        ]
+      },
+      {
+        "match": "M077",
+        "team1": "France",
+        "team1_ar": "فرنسا",
+        "team2": "Sweden",
+        "team2_ar": "السويد",
+        "result": null
+      },
+      {
+        "match": "M078",
+        "team1": "Ivory Coast",
+        "team1_ar": "كوت ديفوار",
+        "team2": "Norway",
+        "team2_ar": "النرويج",
+        "result": null
+      },
+      {
+        "match": "M079",
+        "team1": "Mexico",
+        "team1_ar": "المكسيك",
+        "team2": "Ecuador",
+        "team2_ar": "الإكوادور",
+        "result": null
+      },
+      {
+        "match": "M080",
+        "team1": "England",
+        "team1_ar": "إنجلترا",
+        "team2": "DR Congo",
+        "team2_ar": "الكونغو الديمقراطية",
+        "result": null
+      },
+      {
+        "match": "M081",
+        "team1": "USA",
+        "team1_ar": "الولايات المتحدة",
+        "team2": "Bosnia & Herzegovina",
+        "team2_ar": "البوسنة والهرسك",
+        "result": null
+      },
+      {
+        "match": "M082",
+        "team1": "Belgium",
+        "team1_ar": "بلجيكا",
+        "team2": "Senegal",
+        "team2_ar": "السنغال",
+        "result": null
+      },
+      {
+        "match": "M083",
+        "team1": "Portugal",
+        "team1_ar": "البرتغال",
+        "team2": "Croatia",
+        "team2_ar": "كرواتيا",
+        "result": null
+      },
+      {
+        "match": "M084",
+        "team1": "Spain",
+        "team1_ar": "إسبانيا",
+        "team2": "Austria",
+        "team2_ar": "النمسا",
+        "result": null
+      },
+      {
+        "match": "M085",
+        "team1": "Switzerland",
+        "team1_ar": "سويسرا",
+        "team2": "Algeria",
+        "team2_ar": "الجزائر",
+        "result": null
+      },
+      {
+        "match": "M086",
+        "team1": "Argentina",
+        "team1_ar": "الأرجنتين",
+        "team2": "Cape Verde",
+        "team2_ar": "الرأس الأخضر",
+        "result": null
+      },
+      {
+        "match": "M087",
+        "team1": "Colombia",
+        "team1_ar": "كولومبيا",
+        "team2": "Ghana",
+        "team2_ar": "غانا",
+        "result": null
+      },
+      {
+        "match": "M088",
+        "team1": "Australia",
+        "team1_ar": "أستراليا",
+        "team2": "Egypt",
+        "team2_ar": "مصر",
+        "result": null
+      }
+    ],
+    "note_ar": "هذا التصحيح يركب بعد التحديث الأصلي كل ربع ساعة حتى لا ترجع أخطاء توزيع دور الـ32."
+  },
+  "cache_buster": "892a4d2cd7f9",
+  "last_updated": "2026-07-20T00:15:48+03:00"
+}

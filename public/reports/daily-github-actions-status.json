@@ -1,0 +1,8 @@
+{
+  "ok": true,
+  "generatedAt": "2026-08-08T05:57:08.991Z",
+  "mode": "github-actions-daily-reports-restored",
+  "timezone": "Asia/Amman",
+  "publicBaseUrl": "https://maensat.pages.dev",
+  "note": "GitHub Actions runs daily frequency update and Cloudflare D1 analytics report. Secrets are not written to this file."
+}

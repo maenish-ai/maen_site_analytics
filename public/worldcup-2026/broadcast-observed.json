@@ -1,0 +1,93 @@
+{
+  "metadata": {
+    "name": "Observed World Cup broadcaster confirmations",
+    "name_ar": "تأكيدات مشاهدة كأس العالم من صاحب الموقع",
+    "source_name": "MaenSat observed confirmation",
+    "last_checked_at": "2026-06-19T15:30:18+03:00",
+    "policy_ar": "هذا الملف مخصص للتأكيدات اليدوية عندما يشاهد صاحب الموقع المباراة فعلياً على قناة مفتوحة أو قناة محددة في الأردن/الشرق الأوسط. لا يحتوي روابط بث ولا ترددات.",
+    "display_policy_ar": "عرض beIN المختصر للموقع: beIN SPORTS المفتوحة فقط كقناة مجانية، وMAX 1 وMAX 2 و4K كمشفرة. يتم إخفاء MAX 3-6 وNEWS وCONNECT والباقات.",
+    "note_ar": "تم فحص بيانات كأس العالم والقنوات تلقائياً. هذا الوقت يتغير كل ربع ساعة لإجبار GitHub وCloudflare Pages على نشر نسخة حديثة.",
+    "last_updated": "2026-06-19T15:30:18+03:00",
+    "automation_heartbeat": true,
+    "automation_heartbeat_at": "2026-06-19T15:30:18+03:00",
+    "force_quarter_hour_update": true,
+    "refresh_interval_minutes": 15,
+    "cache_buster": "9205195953872ecf",
+    "github_run_id": "27825778981",
+    "github_run_number": "204",
+    "github_sha": "e011d16a5531145fe3a433bdabbf33cef6bfaef8",
+    "github_event_name": "workflow_dispatch",
+    "cloudflare_deploy_trigger": true,
+    "last_data_change_at": "2026-06-17T23:50:54+03:00",
+    "github_trigger_source": "manual",
+    "external_forced_at": ""
+  },
+  "matches": {
+    "M001": {
+      "observed": true,
+      "observed_region": "Jordan / MENA",
+      "observed_at": "2026-06-11T23:35:00+03:00",
+      "channels": [
+        {
+          "name_ar": "beIN SPORTS المفتوحة",
+          "name_en": "beIN SPORTS Free-to-air",
+          "type": "free",
+          "status": "confirmed",
+          "source_name": "MaenSat observed confirmation",
+          "source_url": "",
+          "evidence_ar": "تمت مشاهدة مباراة المكسيك × جنوب أفريقيا فعلياً على beIN SPORTS المجانية في الأردن/الشرق الأوسط.",
+          "note_ar": "تأكيد مشاهدة من صاحب الموقع. لا يعني أن كل مباريات البطولة مجانية."
+        },
+        {
+          "name_ar": "beIN SPORTS MAX 1",
+          "name_en": "beIN SPORTS MAX 1",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "MaenSat observed confirmation",
+          "source_url": "",
+          "evidence_ar": "مباراة المكسيك × جنوب أفريقيا كانت ضمن القنوات المهمة التي يريد الموقع عرضها: MAX 1.",
+          "note_ar": "قناة مشفرة؛ تعرض فقط ضمن القنوات المختصرة المطلوبة."
+        },
+        {
+          "name_ar": "beIN SPORTS MAX 2",
+          "name_en": "beIN SPORTS MAX 2",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "MaenSat observed confirmation",
+          "source_url": "",
+          "evidence_ar": "مباراة المكسيك × جنوب أفريقيا كانت ضمن القنوات المهمة التي يريد الموقع عرضها: MAX 2.",
+          "note_ar": "قناة مشفرة؛ تعرض فقط ضمن القنوات المختصرة المطلوبة."
+        },
+        {
+          "name_ar": "beIN SPORTS 4K",
+          "name_en": "beIN SPORTS 4K",
+          "type": "encrypted",
+          "status": "confirmed",
+          "source_name": "MaenSat observed confirmation",
+          "source_url": "",
+          "evidence_ar": "يُعرض خيار beIN SPORTS 4K ضمن القنوات المختصرة المطلوبة عندما يكون ضمن بيانات beIN أو التأكيد اليدوي.",
+          "note_ar": "قناة مشفرة؛ تعرض فقط ضمن القنوات المختصرة المطلوبة."
+        }
+      ]
+    },
+    "M002": {
+      "observed": true,
+      "observed_region": "Jordan / MENA",
+      "observed_at": "2026-06-12T07:35:00+03:00",
+      "team1_ar": "كوريا الجنوبية",
+      "team2_ar": "التشيك",
+      "channels": [
+        {
+          "name_ar": "beIN SPORTS المفتوحة",
+          "name_en": "beIN SPORTS Free-to-air",
+          "type": "free",
+          "status": "confirmed",
+          "source_name": "MaenSat observed confirmation",
+          "source_url": "",
+          "evidence_ar": "تمت مشاهدة مباراة كوريا الجنوبية × التشيك فعلياً على beIN SPORTS المجانية على نايل سات في الأردن/الشرق الأوسط.",
+          "note_ar": "تأكيد مشاهدة من صاحب الموقع. لا يعني أن كل مباريات البطولة مجانية."
+        }
+      ]
+    }
+  }
+}

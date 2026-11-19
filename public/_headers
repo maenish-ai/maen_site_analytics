@@ -1,0 +1,19 @@
+# Static archive for the completed World Cup 2026 section.
+/worldcup-2026/*
+  Cache-Control: public, max-age=3600, must-revalidate
+  Access-Control-Allow-Origin: *
+
+/api/*
+  Cache-Control: no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0
+  CDN-Cache-Control: no-store
+  Cloudflare-CDN-Cache-Control: no-store
+  Access-Control-Allow-Origin: *
+
+/
+  Cache-Control: no-cache, must-revalidate, max-age=0
+
+/index.html
+  Cache-Control: no-cache, must-revalidate, max-age=0
+
+/*.html
+  Cache-Control: no-cache, must-revalidate, max-age=0

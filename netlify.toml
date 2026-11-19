@@ -1,0 +1,27 @@
+[build]
+  publish = "public"
+
+# Netlify is now a static hosting target only.
+# Daily frequency updates and email reports run from GitHub Actions.
+# Visitor tracking is sent to Cloudflare Pages Function /api/track-visit.
+
+# Static API compatibility for the website's frequency data.
+[[redirects]]
+  from = "/api/frequency-data"
+  to = "/frequencies/frequency-data.json"
+  status = 200
+  force = true
+
+# Optional compatibility: if an older cached page posts to Netlify /api/track-visit,
+# proxy it to the Cloudflare tracking endpoint instead of running Netlify Functions.
+[[redirects]]
+  from = "/api/track-visit"
+  to = "https://maensat.pages.dev/api/track-visit"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/search-feedback"
+  to = "https://maensat.pages.dev/api/search-feedback"
+  status = 200
+  force = true
