@@ -993,7 +993,8 @@ export function mergeFrequencyData(baselineItems, sourceCandidates, sources, opt
         changes.incompleteExistingProtected += 1;
       }
       const before = channelSet(existing);
-      const current = [...new Set(group.flatMap(channelSet))].filter(Boolean);
+      const confirmed = group.flatMap(channelSet);
+      const current = [...new Set(options.preserveUnconfirmedChannels ? [...before, ...confirmed] : confirmed)].filter(Boolean);
       if (current.length) {
         const additions = current.filter(ch => !before.includes(ch));
         const removals = before.filter(ch => !current.includes(ch));

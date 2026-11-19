@@ -97,7 +97,7 @@ async function main() {
   if (sourceQuality.missingSystemModCount) {
     console.log(`[frequency] Missing system/mod sample: ${JSON.stringify(sourceQuality.sampleMissingSystemMod.slice(0, 8))}`);
   }
-  const merged = mergeFrequencyData(baseline.items || [], candidates, sources, { successfulSourceCount, closedCandidates, sourceQuality });
+  const merged = mergeFrequencyData(baseline.items || [], candidates, sources, { successfulSourceCount, closedCandidates, sourceQuality, preserveUnconfirmedChannels: true });
 
   validateCompleteProgrammingSystems(merged.items);
 
