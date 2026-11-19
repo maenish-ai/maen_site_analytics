@@ -54,7 +54,6 @@ jobs:
           node-version: '24'
 
       - name: Check report configuration
-        id: config
         env:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           REPORT_EMAIL: ${{ secrets.REPORT_EMAIL }}
@@ -64,7 +63,11 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: |
           node scripts/verify-daily-report-env.mjs || {
-            echo '::warning::One or more daily report settings are missing.'
+            for name in RESEND_API_KEY REPORT_EMAIL CLOUDFLARE_D1_DATABASE_ID CLOUDFLARE_API_TOKEN; do
+              if [[ -z "${!name}" ]]; then
+                echo "::warning::Missing GitHub Actions secret: $name"
+              fi
+            done
           }
 
       - name: Check proposed frequency changes
