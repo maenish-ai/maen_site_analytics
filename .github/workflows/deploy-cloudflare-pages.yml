@@ -1,6 +1,10 @@
 name: Deploy Maensat to Cloudflare Pages
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/deploy-cloudflare-pages.yml
   workflow_dispatch:
     inputs:
       target:
@@ -15,7 +19,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: maensat-pages-${{ inputs.target }}
+  group: maensat-pages-${{ inputs.target || 'preview' }}
   cancel-in-progress: false
 
 jobs:
