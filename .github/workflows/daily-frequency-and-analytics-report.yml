@@ -21,6 +21,7 @@ on:
           - dry_run
           - all
           - frequency_only
+          - frequency_email_only
           - analytics_only
       report_date:
         description: Optional analytics report date in Jordan (YYYY-MM-DD). Defaults to yesterday.
@@ -40,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     env:
-      MODE: ${{ github.event_name == 'push' && 'dry_run' || inputs.run_mode || 'all' }}
+      MODE: ${{ github.event_name == 'push' && 'frequency_email_only' || inputs.run_mode || 'all' }}
       ANALYTICS_TIMEZONE: ${{ secrets.ANALYTICS_TIMEZONE || 'Asia/Amman' }}
       PUBLIC_BASE_URL: ${{ secrets.PUBLIC_BASE_URL || 'https://maensat.pages.dev' }}
       FREQUENCY_SOURCE_CONCURRENCY: ${{ secrets.FREQUENCY_SOURCE_CONCURRENCY || '12' }}
@@ -108,7 +109,7 @@ jobs:
           npx --yes wrangler@4.165.0 pages deploy public --project-name maensat --branch main
 
       - name: Email the frequency report
-        if: env.MODE == 'all' || env.MODE == 'frequency_only'
+        if: env.MODE == 'all' || env.MODE == 'frequency_only' || env.MODE == 'frequency_email_only'
         env:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           REPORT_EMAIL: ${{ secrets.REPORT_EMAIL }}
@@ -122,9 +123,14 @@ jobs:
           const report = JSON.parse(await readFile('public/frequencies/latest-frequency-update-report.json', 'utf8'));
           const result = await sendFrequencyUpdateEmail(report);
           if (!result.sent) {
-            throw new Error(`Frequency email failed: ${result.reason || result.status}`);
+            let errorName;
+            try { errorName = JSON.parse(result.body || '{}').name; } catch {}
+            const detail = result.reason || [result.status, errorName].filter(Boolean).join(' ');
+            console.error(`::error::Frequency email failed: ${detail}`);
+            process.exitCode = 1;
+          } else {
+            console.log(`::notice::Resend accepted the frequency report (HTTP ${result.status}).`);
           }
-          console.log(`Resend accepted the frequency report (HTTP ${result.status}).`);
           NODE
 
       - name: Email the Cloudflare D1 analytics report
