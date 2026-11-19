@@ -251,7 +251,7 @@ async function main() {
   } catch (error) {
     const message = String(error && error.message || error).toLowerCase();
 
-    if (message.includes('no such table') || message.includes('analytics_events')) {
+    if (message.includes('no such table') && message.includes('analytics_events')) {
       console.warn('[analytics] analytics_events table is not ready yet; sending an empty report.');
       warnings.push('جدول analytics_events غير موجود أو لم يتم إنشاؤه بعد. أول زيارة ناجحة عبر track-visit تنشئ الجدول.');
       rows = [];
@@ -274,6 +274,9 @@ async function main() {
     html: reportHtml(summary)
   });
 
+  if (process.env.GITHUB_ACTIONS === 'true') {
+    console.log(`::notice::Resend accepted the analytics report (HTTP ${email.status}) for ${dateKey}. D1 returned ${rows.length} visit rows.`);
+  }
   console.log(`[analytics] Rows: ${rows.length}; email: ${JSON.stringify(email)}`);
   console.log(JSON.stringify({
     ok: true,
