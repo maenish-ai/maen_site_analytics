@@ -1,12 +1,12 @@
 {
   "ok": true,
   "strategy": "versioned-static-json",
-  "updatedAt": "2026-08-08T05:57:03.365Z",
-  "count": 842,
-  "version": "20260808",
-  "dataFile": "/frequencies/frequency-data.v20260808.json",
+  "updatedAt": "2026-11-19T20:02:51.683Z",
+  "count": 4003,
+  "version": "20261119",
+  "dataFile": "/frequencies/frequency-data.v20261119.json",
   "canonicalFile": "/frequencies/frequency-data.json",
   "searchIndexFile": "/frequencies/search-index.json",
-  "generatedAt": "2026-08-08T05:57:03.914Z",
+  "generatedAt": "2026-11-19T20:02:52.443Z",
   "cachePolicy": "HTML loads this tiny manifest with no-cache, then loads the versioned JSON with normal immutable cache behavior. This lowers repeated Netlify/Cloudflare bandwidth."
 }
