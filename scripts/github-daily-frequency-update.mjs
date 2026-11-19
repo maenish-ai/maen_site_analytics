@@ -140,10 +140,11 @@ async function main() {
   report.generatedBy = 'github-actions';
   report.staticDataPath = 'public/frequencies/frequency-data.json';
 
+  if (process.env.GITHUB_ACTIONS === 'true') {
+    console.log(`::notice::Frequency check: ${successfulSourceCount} sources responded, ${candidates.length} candidates, ${merged.changes.added} additions and ${merged.changes.removed} removals proposed.`);
+  }
+
   if (process.argv.includes('--dry-run')) {
-    if (process.env.GITHUB_ACTIONS === 'true') {
-      console.log(`::notice::Frequency check: ${successfulSourceCount} sources responded, ${candidates.length} candidates, ${merged.changes.added} additions and ${merged.changes.removed} removals proposed.`);
-    }
     console.log(JSON.stringify({
       baselineCount: baseline.items.length,
       candidateCount: candidates.length,

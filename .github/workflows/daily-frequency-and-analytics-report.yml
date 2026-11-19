@@ -72,7 +72,13 @@ jobs:
 
       - name: Check proposed frequency changes
         if: env.MODE == 'dry_run'
-        run: npm run github:update-frequencies -- --dry-run
+        run: |
+          candidate_dir=$(mktemp -d)
+          trap 'rm -rf "$candidate_dir"' EXIT
+          git archive HEAD | tar -x -C "$candidate_dir"
+          cd "$candidate_dir"
+          npm run github:update-frequencies -- --skip-email
+          node scripts/search-smoke-tests.mjs
 
       - name: Update frequencies
         if: env.MODE == 'all' || env.MODE == 'frequency_only'
