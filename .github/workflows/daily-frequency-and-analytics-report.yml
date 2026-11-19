@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     env:
-      MODE: ${{ github.event_name == 'push' && 'dry_run' || inputs.run_mode || 'all' }}
+      MODE: ${{ github.event_name == 'push' && 'reports_only' || inputs.run_mode || 'all' }}
       ANALYTICS_TIMEZONE: ${{ secrets.ANALYTICS_TIMEZONE || 'Asia/Amman' }}
       PUBLIC_BASE_URL: ${{ secrets.PUBLIC_BASE_URL || 'https://maensat.pages.dev' }}
       FREQUENCY_SOURCE_CONCURRENCY: ${{ secrets.FREQUENCY_SOURCE_CONCURRENCY || '12' }}
@@ -60,6 +60,7 @@ jobs:
         env:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           REPORT_EMAIL: ${{ secrets.REPORT_EMAIL }}
+          REPORT_EMAIL_EXTRA: ${{ secrets.REPORT_EMAIL_EXTRA }}
           REPORT_FROM: ${{ secrets.REPORT_FROM }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID || '218002bc26df57e7e750a6cf8107ef4a' }}
           CLOUDFLARE_D1_DATABASE_ID: ${{ secrets.CLOUDFLARE_D1_DATABASE_ID }}
@@ -109,10 +110,11 @@ jobs:
           npx --yes wrangler@4.165.0 pages deploy public --project-name maensat --branch main
 
       - name: Email the frequency report
-        if: env.MODE == 'all' || env.MODE == 'frequency_only' || env.MODE == 'frequency_email_only'
+        if: env.MODE == 'all' || env.MODE == 'frequency_only' || env.MODE == 'frequency_email_only' || env.MODE == 'reports_only'
         env:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           REPORT_EMAIL: ${{ secrets.REPORT_EMAIL }}
+          REPORT_EMAIL_EXTRA: ${{ secrets.REPORT_EMAIL_EXTRA }}
           REPORT_FROM: ${{ secrets.REPORT_FROM }}
         run: |
           node --input-type=module <<'NODE'
@@ -129,15 +131,16 @@ jobs:
             console.error(`::error::Frequency email failed: ${detail}`);
             process.exitCode = 1;
           } else {
-            console.log(`::notice::Resend accepted the frequency report (HTTP ${result.status}).`);
+            console.log(`::notice::Resend accepted the frequency report for ${result.recipientCount} recipient(s) (HTTP ${result.status}).`);
           }
           NODE
 
       - name: Email the Cloudflare D1 analytics report
-        if: ${{ !cancelled() && (env.MODE == 'all' || env.MODE == 'analytics_only') }}
+        if: ${{ !cancelled() && (env.MODE == 'all' || env.MODE == 'analytics_only' || env.MODE == 'reports_only') }}
         env:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           REPORT_EMAIL: ${{ secrets.REPORT_EMAIL }}
+          REPORT_EMAIL_EXTRA: ${{ secrets.REPORT_EMAIL_EXTRA }}
           REPORT_FROM: ${{ secrets.REPORT_FROM }}
           REPORT_DATE: ${{ inputs.report_date }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID || '218002bc26df57e7e750a6cf8107ef4a' }}

@@ -1428,7 +1428,9 @@ export function frequencyReportHtml(report) {
 
 export async function sendFrequencyUpdateEmail(report) {
   const apiKey = envValue("RESEND_API_KEY") || "";
-  const to = envValue("FREQUENCY_REPORT_EMAIL") || envValue("REPORT_EMAIL") || "";
+  const to = (envValue("FREQUENCY_REPORT_EMAIL") || envValue("REPORT_EMAIL") || "").trim();
+  const extra = (envValue("REPORT_EMAIL_EXTRA") || "").trim();
+  const bcc = extra && extra.toLowerCase() !== to.toLowerCase() ? [extra] : undefined;
   const from = envValue("REPORT_FROM") || "Maen Analytics <onboarding@resend.dev>";
   if (!apiKey || !to) return { sent: false, reason: "RESEND_API_KEY or REPORT_EMAIL is not configured" };
   const response = await fetch("https://api.resend.com/emails", {
@@ -1437,11 +1439,12 @@ export async function sendFrequencyUpdateEmail(report) {
     body: JSON.stringify({
       from,
       to,
+      bcc,
       subject: `تقرير تحديث الترددات - ${new Date().toISOString().slice(0,10)}`,
       text: frequencyReportText(report),
       html: frequencyReportHtml(report)
     })
   });
   const body = await response.text().catch(() => "");
-  return { sent: response.ok, status: response.status, body: body.slice(0, 500) };
+  return { sent: response.ok, status: response.status, body: body.slice(0, 500), recipientCount: bcc ? 2 : 1 };
 }

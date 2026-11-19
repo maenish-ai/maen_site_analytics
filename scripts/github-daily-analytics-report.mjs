@@ -22,7 +22,9 @@ function isUsingResendDevSender() {
 
 async function sendResendMessage({ subject, text, html }) {
   const apiKey = env('RESEND_API_KEY');
-  const to = env('REPORT_EMAIL');
+  const to = env('REPORT_EMAIL').trim();
+  const extra = env('REPORT_EMAIL_EXTRA').trim();
+  const bcc = extra && extra.toLowerCase() !== to.toLowerCase() ? [extra] : undefined;
   const from = fromAddress();
 
   const missingMail = missing(MAIL_REQUIRED);
@@ -33,7 +35,7 @@ async function sendResendMessage({ subject, text, html }) {
   const response = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { authorization: `Bearer ${apiKey}`, 'content-type': 'application/json' },
-    body: JSON.stringify({ from, to, subject, text, html })
+    body: JSON.stringify({ from, to, bcc, subject, text, html })
   });
 
   const body = await response.text().catch(() => '');
@@ -41,7 +43,7 @@ async function sendResendMessage({ subject, text, html }) {
     throw new Error(`Resend failed (${response.status}): ${body.slice(0, 1500)}`);
   }
 
-  return { sent: true, status: response.status, body: body.slice(0, 500) };
+  return { sent: true, status: response.status, body: body.slice(0, 500), recipientCount: bcc ? 2 : 1 };
 }
 
 async function sendFailureEmail(stage, error) {
@@ -275,7 +277,7 @@ async function main() {
   });
 
   if (process.env.GITHUB_ACTIONS === 'true') {
-    console.log(`::notice::Resend accepted the analytics report (HTTP ${email.status}) for ${dateKey}. D1 returned ${rows.length} visit rows.`);
+    console.log(`::notice::Resend accepted the analytics report for ${email.recipientCount} recipient(s) (HTTP ${email.status}) for ${dateKey}. D1 returned ${rows.length} visit rows.`);
   }
   console.log(`[analytics] Rows: ${rows.length}; email: ${JSON.stringify(email)}`);
   console.log(JSON.stringify({
