@@ -89,6 +89,9 @@ async function main() {
   const candidates = sourceResults.flatMap(r => r.candidates || []);
   const closedCandidates = sourceResults.flatMap(r => r.closedCandidates || []);
   const successfulSourceCount = sourceResults.filter(r => r.ok && !r.coverageOnly).length;
+  if (!candidates.length) {
+    throw new Error('No frequency candidates were collected from the configured sources.');
+  }
   const sourceQuality = frequencyCandidateQuality(candidates);
   console.log(`[frequency] Source quality: ${sourceQuality.missingSystemModCount}/${sourceQuality.totalCandidates} candidates missing system/mod (${sourceQuality.missingSystemModRatio}).`);
   if (sourceQuality.missingSystemModCount) {
@@ -137,6 +140,18 @@ async function main() {
   report.generatedBy = 'github-actions';
   report.staticDataPath = 'public/frequencies/frequency-data.json';
 
+  if (process.argv.includes('--dry-run')) {
+    console.log(JSON.stringify({
+      baselineCount: baseline.items.length,
+      candidateCount: candidates.length,
+      proposedCount: payload.count,
+      changes: payload.changes,
+      removals: payload.removedItems,
+      sources: payload.sourceResults
+    }, null, 2));
+    return;
+  }
+
   await writeJson(dataPath, payload);
   const assets = spawnSync(process.execPath, [path.join(root, 'scripts', 'generate-frequency-assets.mjs')], { stdio: 'inherit' });
   if (assets.status !== 0) throw new Error('Failed to generate versioned frequency assets');
@@ -144,7 +159,9 @@ async function main() {
   await writeJson(netlifyBaselinePath, payload);
   await writeJson(latestReportPath, report);
 
-  const email = await sendFrequencyUpdateEmail(report);
+  const email = process.argv.includes('--skip-email')
+    ? { sent: false, reason: 'Email is handled by the workflow after deployment' }
+    : await sendFrequencyUpdateEmail(report);
 
   console.log(`[frequency] Items after update: ${payload.count}`);
   console.log(`[frequency] Changes: ${JSON.stringify(payload.changes)}`);
