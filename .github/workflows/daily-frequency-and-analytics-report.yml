@@ -109,6 +109,25 @@ jobs:
         run: |
           npx --yes wrangler@4.165.0 pages deploy public --project-name maensat --branch main
 
+      - name: Validate report email addresses
+        if: env.MODE == 'reports_only'
+        env:
+          REPORT_EMAIL: ${{ secrets.REPORT_EMAIL }}
+          REPORT_EMAIL_EXTRA: ${{ secrets.REPORT_EMAIL_EXTRA }}
+          REPORT_FROM: ${{ secrets.REPORT_FROM }}
+        run: |
+          node --input-type=module <<'NODE'
+          const email = /^[^\s@<>,]+@(?:[a-z0-9-]+\.)+[a-z0-9-]+$/i;
+          for (const name of ['REPORT_EMAIL', 'REPORT_EMAIL_EXTRA', 'REPORT_FROM']) {
+            const value = (process.env[name] || '').trim();
+            const address = name === 'REPORT_FROM' ? value.match(/^[^<>]+<([^<>]+)>$/)?.[1] || value : value;
+            if (!email.test(address)) {
+              console.error(`::error::${name} is missing or is not a valid email address.`);
+              process.exitCode = 1;
+            }
+          }
+          NODE
+
       - name: Email the frequency report
         if: env.MODE == 'all' || env.MODE == 'frequency_only' || env.MODE == 'frequency_email_only' || env.MODE == 'reports_only'
         env:
@@ -125,9 +144,12 @@ jobs:
           const report = JSON.parse(await readFile('public/frequencies/latest-frequency-update-report.json', 'utf8'));
           const result = await sendFrequencyUpdateEmail(report);
           if (!result.sent) {
-            let errorName;
-            try { errorName = JSON.parse(result.body || '{}').name; } catch {}
-            const detail = result.reason || [result.status, errorName].filter(Boolean).join(' ');
+            let error = {};
+            try { error = JSON.parse(result.body || '{}'); } catch {}
+            const message = String(error.message || '').toLowerCase();
+            const field = /\bfrom\b|sender|domain/.test(message) ? 'sender'
+              : /\bbcc\b|recipient|\bto field\b/.test(message) ? 'recipient' : '';
+            const detail = result.reason || [result.status, error.name, field].filter(Boolean).join(' ');
             console.error(`::error::Frequency email failed: ${detail}`);
             process.exitCode = 1;
           } else {
@@ -136,7 +158,7 @@ jobs:
           NODE
 
       - name: Email the Cloudflare D1 analytics report
-        if: ${{ !cancelled() && (env.MODE == 'all' || env.MODE == 'analytics_only' || env.MODE == 'reports_only') }}
+        if: ${{ !cancelled() && (env.MODE == 'all' || env.MODE == 'analytics_only' || (env.MODE == 'reports_only' && success())) }}
         env:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           REPORT_EMAIL: ${{ secrets.REPORT_EMAIL }}
