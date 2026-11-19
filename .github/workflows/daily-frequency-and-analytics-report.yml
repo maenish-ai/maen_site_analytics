@@ -8,6 +8,8 @@ on:
     paths:
       - .github/workflows/daily-frequency-and-analytics-report.yml
       - scripts/github-daily-frequency-update.mjs
+      - scripts/search-smoke-tests.mjs
+      - functions/_lib/frequency-utils.js
   workflow_dispatch:
     inputs:
       run_mode:

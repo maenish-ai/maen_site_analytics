@@ -72,7 +72,10 @@ function isFree(channel, item) { return encryptionKey(channel, item) === 'free';
 function isEncrypted(channel, item) { return encryptionKey(channel, item) === 'encrypted'; }
 function isSports(channel, item) { return ((item.channelCategories || {})[channel] || []).includes('sports') || /sport/i.test(channel); }
 function assert(name, condition, detail = '') {
-  if (!condition) throw new Error(`Search smoke test failed: ${name}${detail ? ` — ${detail}` : ''}`);
+  if (!condition) {
+    if (process.env.GITHUB_ACTIONS === 'true') console.error(`::error::Search smoke test failed: ${name}`);
+    throw new Error(`Search smoke test failed: ${name}${detail ? ` — ${detail}` : ''}`);
+  }
   console.log(`✓ ${name}`);
 }
 
