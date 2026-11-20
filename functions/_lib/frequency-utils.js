@@ -665,17 +665,20 @@ export function extractKingOfSatListings(html, source) {
     if (/\bkos-frequency-header\b/i.test(attributes)) {
       tuning = null;
       const cells = satelliteTableCells(contents);
-      const frequencyIndex = cells.findIndex((value, index) =>
-        /^\d{4,5}(?:[.,]\d{1,3})?$/.test(value) && /^[HVLR]$/i.test(cells[index + 1] || ""));
-      const orbitalSlot = normalizeOrbitSlot(cells[0]?.replace(/&deg;|°/gi, "")).replace(/\.0+([EW])$/, "$1");
-      const satelliteName = cells[1];
-      const technical = cells.slice(frequencyIndex + 2).join(" ");
+      const combined = /^(\d{4,5}(?:[.,]\d{1,3})?)\s*([HVLR])$/i;
+      const frequencyIndex = cells.findIndex((value, index) => combined.test(value) ||
+        (/^\d{4,5}(?:[.,]\d{1,3})?$/.test(value) && /^[HVLR]$/i.test(cells[index + 1] || "")));
+      const orbitalSlot = normalizeOrbitSlot(cells[0]?.replace(/&deg;|°|deg/gi, "")).replace(/\.0+([EW])$/, "$1");
+      // The satellite cell can append a numeric transponder identifier.
+      const satelliteName = cells[1]?.replace(/(\b\d+[A-Z]?)\s+\d+$/i, "$1");
+      const rateStart = combined.test(cells[frequencyIndex] || "") ? frequencyIndex + 1 : frequencyIndex + 2;
+      const technical = cells.slice(rateStart).join(" ");
       const sr = technical.match(/(?:^|\s)(\d{3,5})\s+(?=[1-9]\s*\/\s*[1-9]\b|auto\b)/i)?.[1];
       const frequency = normalizeFrequency(cells[frequencyIndex]);
       if (frequencyIndex < 2 || !frequency || !orbitalSlot || !satelliteName || !sr || frequency === sr) continue;
       tuning = {
         ...candidateBase({ ...source, orbitalSlot, orbit: orbitalSlot, satelliteName }),
-        frequency, sr, pol: normalizePol(cells[frequencyIndex + 1]),
+        frequency, sr, pol: normalizePol(cells[frequencyIndex]) || normalizePol(cells[frequencyIndex + 1]),
         fec: normalizeFec(technical), system: normalizeSystem(technical), mod: normalizeMod(technical),
         dataQuality: "kingofsat-labeled-transponder"
       };
@@ -684,10 +687,13 @@ export function extractKingOfSatListings(html, source) {
     if (!tuning || !/\bkos-channel-table\b/i.test(attributes) || /\bkos-channel-header\b/i.test(attributes)) continue;
     for (const [, row] of contents.matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gi)) {
       const cells = satelliteTableCells(row);
-      const accessIndex = cells.findIndex((value, index) => index >= 4 && parseAccessStatus(value));
-      const channel = cells[accessIndex - 4];
+      const columns = [...row.matchAll(/<t[dh]\b([^>]*)>[\s\S]*?<\/t[dh]>/gi)];
+      const nameIndex = columns.findIndex(cell =>
+        (cell[1].match(/class=["']([^"']+)/i)?.[1] || "").split(/\s+/).includes("ch"));
+      if (nameIndex < 0) continue;
+      const channel = cells[nameIndex];
       if (!channel || isLikelyHeaderOrAd(channel)) continue;
-      const status = parseAccessStatus(cells[accessIndex]);
+      const status = parseAccessStatus(cells[nameIndex + 4]);
       candidates.push({
         ...tuning, channel, channels: [channel], source: source.name, sourceUrl: source.url,
         sourceAuditUrl: source.url, authority: source.authority || "reference",

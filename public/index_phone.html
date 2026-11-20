@@ -1823,7 +1823,9 @@ async function loadLiveFrequencyData(){
     } catch (manifestError) {
       // Manifest is an optimization only. The canonical JSON remains a safe fallback.
     }
-    const payload = await fetchFirstAvailable([dataUrl, relativeFrequencyPath(dataUrl), '/frequencies/frequency-data.json', 'frequencies/frequency-data.json'], { cache: 'default', timeout: 7500 });
+    const revision = manifest?.updatedAt ? encodeURIComponent(manifest.updatedAt) : '';
+    const versionedUrl = revision ? dataUrl + '?revision=' + revision : dataUrl;
+    const payload = await fetchFirstAvailable([versionedUrl, relativeFrequencyPath(versionedUrl), '/frequencies/frequency-data.json', 'frequencies/frequency-data.json'], { cache: 'no-cache', timeout: 7500 });
     if (payload && Array.isArray(payload.items) && payload.items.length) {
       DATA = payload.items;
       window.embeddedFrequencyBackup = DATA;

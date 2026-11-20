@@ -119,10 +119,10 @@ assert(explicitRows.some(x => x.frequency === '11223' && x.pol === 'V' && x.sr =
 console.log('Labeled tuning columns parsed without guessing missing access.');
 
 const kingPage = `<table class="frequencies-table frq kos-frequency-header"><tr>
-<td>7.0&deg;W</td><td>Nilesat 201</td><td>13</td><td>11823.20</td><td>V</td><td>6</td>
-<td>Middle-East</td><td>DVB-S</td><td>QPSK</td><td>27500 5/6</td></tr></table>
+<td>7.0degW</td><td>Nilesat 201 13</td><td>11823.20 V</td><td>6</td>
+<td>Middle-East</td><td>DVB-S</td><td>QPSK</td><td>27500</td><td>5/6</td></tr></table>
 <table class="frq kos-stream-summary"><tr><td>Transport Stream</td><td>2048</td></tr></table>
-<table class="fl kos-channel-table"><tr><td>Atlas News</td><td>Jordan</td><td>News</td>
+<table class="fl kos-channel-table"><tr><td class="vrd"></td><td class="ch">Atlas News</td><td>Jordan</td><td>News</td>
 <td>NILESAT</td><td>Clear</td><td>1107</td><td>1009</td></tr></table>`;
 const kingSource = { ...source('en.kingofsat.net').source, satelliteName: 'Nilesat 201/301 + Eutelsat 7 West A' };
 const king = extractKingOfSatListings(kingPage, kingSource);
