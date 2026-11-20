@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { mergeFrequencyData } from '../functions/_lib/frequency-utils.js';
+import { mergeFrequencyData, validateFrequencyCoverage } from '../functions/_lib/frequency-utils.js';
 
 const row = {
   satelliteGroup: 'Nilesat', satelliteName: 'Nilesat 201', orbitalSlot: '7W',
@@ -55,4 +55,8 @@ assert.equal(merge(hosts.slice(0, 2).map(host => source(host, { candidates: [oth
 assert.equal(merge(hosts.slice(0, 3).map(host => source(host, {
   closedCandidates: [{ ...closure, satelliteName: 'Nilesat 301' }]
 }))).items.length, 1);
+const confirmedRemoval = merge([...close.slice(0, 3), ...keep.slice(3)]);
+assert.doesNotThrow(() => validateFrequencyCoverage([row], confirmedRemoval.items, confirmedRemoval.removedItems));
+assert.throws(() => validateFrequencyCoverage([row], [], []), /Nilesat 201: 1/);
+assert.throws(() => validateFrequencyCoverage([row], [], [{ ...row, removedReason: 'publisher-majority', closedSourceCount: 2 }]), /Refusing to publish/);
 console.log('Publisher majority, source coverage, and channel rename checks passed.');

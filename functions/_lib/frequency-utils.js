@@ -1090,6 +1090,24 @@ function applyPublisherVotes(baseline, byKey, checkedSources, changes, removedIt
   return renamedChannels;
 }
 
+export function validateFrequencyCoverage(baseline, proposed, removals) {
+  const proposedKeys = new Set(proposed.map(itemKey));
+  const confirmedKeys = new Set(removals
+    .filter(item => item.removedReason === "publisher-majority" && item.closedSourceCount >= 3)
+    .map(itemKey));
+  const unexplainedBySatellite = new Map();
+  for (const item of baseline) {
+    const key = itemKey(item);
+    if (proposedKeys.has(key) || confirmedKeys.has(key)) continue;
+    const satellite = item.satelliteName || item.satelliteGroup || "unknown";
+    unexplainedBySatellite.set(satellite, (unexplainedBySatellite.get(satellite) || 0) + 1);
+  }
+  if (unexplainedBySatellite.size) {
+    const details = [...unexplainedBySatellite].map(([satellite, count]) => `${satellite}: ${count}`).join(", ");
+    throw new Error(`Refusing to publish frequencies missing without publisher confirmation: ${details}`);
+  }
+}
+
 export function mergeFrequencyData(baselineItems, sourceCandidates, sources, options = {}) {
   const now = new Date().toISOString();
   const approvedModes = new Set(["auto-approve", "baseline-refresh"]);

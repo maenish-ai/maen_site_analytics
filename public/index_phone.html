@@ -1634,8 +1634,8 @@ body.lang-en #frequencies .station-frequency-meta span{
 <option value="Azerspace">أذر سبيس 46E</option>
 </select>
 <select aria-label="فلتر نوع القنوات" id="frequencyServiceFilter" onchange="if(window.loadFrequencyFeature)window.loadFrequencyFeature()" title="فلتر نوع القنوات">
-<option value="all" selected>الكل</option>
-<option value="free">قنوات مجانية / FTA</option>
+<option value="all">الكل</option>
+<option value="free" selected>قنوات مجانية / FTA</option>
 <option value="encrypted">قنوات مشفرة</option>
 <option value="radio">راديو</option>
 </select>
@@ -1847,6 +1847,9 @@ async function loadLiveFrequencyData(){
 }
 let exactPackageMode = null;
 let frequencyRenderFrame = 0;
+let frequencyRenderRevision = 0;
+const frequencyRowsBySatellite = new WeakMap();
+const frequencySearchResults = new WeakMap();
 let frequencySearchTimer = 0;
 let frequencySuggestionTimer = 0;
 const FREQUENCY_BATCH_SIZE = 60;
@@ -1856,7 +1859,7 @@ let frequencyRenderedData = null;
 let frequencyRenderKey = '';
 let frequencyPaginationObserver = null;
 const STATION_CARD_LIMIT = 360;
-const FREQUENCY_SEARCH_DEBOUNCE_MS = 250;
+const FREQUENCY_SEARCH_DEBOUNCE_MS = 120;
 const FREQUENCY_SUGGEST_DEBOUNCE_MS = 360;
 const FREQUENCY_DATA_LOW_CREDIT_MODE = true;
 
@@ -1865,8 +1868,11 @@ function esc(value){
   return String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 
+const normalizedFrequencyText = new Map();
 function normalizeText(text = '') {
-  return String(text)
+  const raw = String(text);
+  if (normalizedFrequencyText.has(raw)) return normalizedFrequencyText.get(raw);
+  const normalized = raw
     .toLowerCase()
     .replace(/[\u064b-\u065f\u0670\u0640]/g, '')
     .replace(/[أإآٱ]/g, 'ا')
@@ -1877,10 +1883,15 @@ function normalizeText(text = '') {
     .replace(/[^\u0600-\u06FFa-z0-9\s]/gi, ' ')
     .replace(/\s+/g, ' ')
     .trim();
+  if (raw.length <= 512) {
+    if (normalizedFrequencyText.size >= 12000) normalizedFrequencyText.delete(normalizedFrequencyText.keys().next().value);
+    normalizedFrequencyText.set(raw, normalized);
+  }
+  return normalized;
 }
 
 function compactText(text = '') {
-  return normalizeText(text).replace(/\s+/g, '');
+  return normalizeText(text).replace(/ /g, '');
 }
 
 
@@ -2053,7 +2064,9 @@ const SMART_QUERY_EQUIVALENTS = [
   [['islamic','muslim','اسلامي','اسلامية','اسلاميه','ديني اسلامي','دينية اسلامية'], ['islamic','muslim','اسلامية','قنوات اسلامية']]
 ];
 
+const frequencyTokenVariants = new Map();
 function smartTokenVariants(token) {
+  if (frequencyTokenVariants.has(token)) return frequencyTokenVariants.get(token);
   const q = normalizeText(token);
   const c = compactText(token);
   const script = detectTextScript(token);
@@ -2069,7 +2082,10 @@ function smartTokenVariants(token) {
     });
     if (hit) vals.forEach(v => { if (variantAllowedForQueryScript(v, script)) out.add(v); });
   });
-  return Array.from(out).filter(Boolean);
+  const variants = Array.from(out).filter(Boolean);
+  if (frequencyTokenVariants.size >= 128) frequencyTokenVariants.delete(frequencyTokenVariants.keys().next().value);
+  frequencyTokenVariants.set(token, variants);
+  return variants;
 }
 
 function isLatinShortToken(text) {
@@ -2533,10 +2549,9 @@ function containsCountryMarker(text, keys){
     const nk = normalizeText(key);
     const ck = compactText(key);
     if (!nk || !ck) return false;
-    const escaped = nk.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const wholeWord = new RegExp('(^| )' + escaped + '($| )').test(n.trim());
+    const wholeWord = n.includes(' ' + nk + ' ');
     if (/^[a-z0-9]+$/.test(nk) && nk.length <= 3) return wholeWord;
-    if (wholeWord || n.includes(' ' + nk + ' ')) return true;
+    if (wholeWord) return true;
     if (/^[\u0600-\u06FF]+$/.test(nk) && nk.length >= 4 && n.includes(nk)) return true;
     return ck.length >= 5 && compact.includes(ck);
   });
@@ -2585,11 +2600,16 @@ function frequencyRowDedupeKey(item) {
   ].map(channelDisplayDedupeKey).join('|');
 }
 
+const frequencySplitChannels = new WeakMap();
 function splitChannels(item) {
+  const cached = frequencySplitChannels.get(item);
+  if (cached) return cached;
   const raw = Array.isArray(item.channels) && item.channels.length
     ? item.channels
     : String(item.channel || '').split(/،|,|\n|\s+\+\s+/);
-  return uniqueChannelNames(raw.map(s => String(s || '').trim()));
+  const channels = uniqueChannelNames(raw.map(s => String(s || '').trim()));
+  frequencySplitChannels.set(item, channels);
+  return channels;
 }
 
 
@@ -2621,7 +2641,18 @@ function getStoredChannelEncryption(name, item){
   for (const key in meta) if (normalizeText(key) === wanted) return normalizeEncryptionStatus(meta[key]);
   return null;
 }
+const frequencyEncryptionCache = new WeakMap();
 function getChannelEncryptionStatus(name, item){
+  if (!item) return resolveChannelEncryptionStatus(name, item);
+  let cache = frequencyEncryptionCache.get(item);
+  if (!cache) {
+    cache = new Map();
+    frequencyEncryptionCache.set(item, cache);
+  }
+  if (!cache.has(name)) cache.set(name, resolveChannelEncryptionStatus(name, item));
+  return cache.get(name);
+}
+function resolveChannelEncryptionStatus(name, item){
   const stored = getStoredChannelEncryption(name, item);
   if (stored) return { key: stored, ...ENCRYPTION_STATUS_META[stored], source: 'مدقق داخل الداتا' };
   const packageText = [item && item.package, item && item.packageId, item && item.network, item && item.provider, item && item.source, item && item.sourceLastUpdated].filter(Boolean).join(' ');
@@ -2707,9 +2738,17 @@ function applyFrequencyServiceFilter(channels, item, filter){
   return (channels || []).filter(name => frequencyServiceAllowsChannel(name, item, f));
 }
 
+const generatedFrequencyAliases = new Map();
 function channelAliases(name){
-  const aliases = [];
   const n = normalizeText(name);
+  if (!generatedFrequencyAliases.has(n)) {
+    if (generatedFrequencyAliases.size >= 8000) generatedFrequencyAliases.delete(generatedFrequencyAliases.keys().next().value);
+    generatedFrequencyAliases.set(n, buildChannelAliases(n));
+  }
+  return generatedFrequencyAliases.get(n);
+}
+function buildChannelAliases(n){
+  const aliases = [];
   function add(){ aliases.push(...arguments); }
   addBilingualAliasRules(n, add);
   if (containsAny(n, ['al malakoot','malakoot','malakut','the kingdom sat'])) add('الملكوت','الملكو','ملكوت','malakoot','al malakoot','kingdom tv','قنوات مسيحية');
@@ -2868,7 +2907,7 @@ function getChannelCategories(name, item) {
 }
 
 function channelInCategory(name, category, item) {
-  const fullText = searchableChannelText(name, item);
+  const fullText = category === 'religion' || category === 'quran' ? searchableChannelText(name, item) : '';
 
   if (category === 'christian') {
     const cats = getChannelCategories(name, item);
@@ -2971,24 +3010,25 @@ function addUniqueCountryHit(hits, id){
   if (id && !hits.includes(id)) hits.push(id);
 }
 
-function inferChannelCountries(name, item = {}) {
+function inferChannelCountries(name, item = {}, onlyCountry) {
   const t = searchableChannelIdentityText(name, item || {});
   const hits = [];
 
-  Object.keys(CHANNEL_COUNTRY_RULES).forEach(countryId => {
+  const countryIds = onlyCountry ? [onlyCountry] : Object.keys(CHANNEL_COUNTRY_RULES);
+  countryIds.forEach(countryId => {
     if (containsCountryMarker(t, CHANNEL_COUNTRY_RULES[countryId])) addUniqueCountryHit(hits, countryId);
   });
 
   // بعض القنوات التركية أسماؤها عامة، لذلك نربطها بتركيا فقط إذا جاءت من قمر تركسات.
-  const satBlob = satelliteSearchBlob(item || {});
-  if (containsCountryMarker(satBlob, ['turksat','türksat','42e']) && containsCountryMarker(name, [
+  const satBlob = !onlyCountry || ['turkey','uk','english'].includes(onlyCountry) ? satelliteSearchBlob(item || {}) : '';
+  if (satBlob && (!onlyCountry || onlyCountry === 'turkey') && containsCountryMarker(satBlob, ['turksat','türksat','42e']) && containsCountryMarker(name, [
     'kanal d','show tv','star tv','kanal 7','beyaz tv','tv8','ntv','kanal b','krt tv','eurostar','brt 1','brt 2','kıbrıs tv','kibris tv','ada tv','kanal 3','kanal 5','kon tv','kanal fırat','kanal firat','local anatolia tv'
   ])) addUniqueCountryHit(hits, 'turkey');
 
   // قنوات إنجليزية بأسماء عامة داخل باقات إنجليزية.
-  if (containsCountryMarker(satBlob, ['astra','28e']) && containsCountryMarker(name, ['itv 1','itv 2','channel 4','film4','e4','quest','dave','drama'])) {
-    addUniqueCountryHit(hits, 'uk');
-    addUniqueCountryHit(hits, 'english');
+  if (satBlob && onlyCountry !== 'turkey' && containsCountryMarker(satBlob, ['astra','28e']) && containsCountryMarker(name, ['itv 1','itv 2','channel 4','film4','e4','quest','dave','drama'])) {
+    if (!onlyCountry || onlyCountry === 'uk') addUniqueCountryHit(hits, 'uk');
+    if (!onlyCountry || onlyCountry === 'english') addUniqueCountryHit(hits, 'english');
   }
 
   return hits;
@@ -3028,15 +3068,11 @@ function channelInCountry(name, item, country) {
   const taggedCountries = getChannelCountries(name, item);
   if (taggedCountries.length) return taggedCountries.indexOf(wantedCountry) !== -1;
 
-  const inferredCountries = inferChannelCountries(name, item).map(normalizeText);
-  if (inferredCountries.length) return inferredCountries.indexOf(wantedCountry) !== -1;
+  if (inferChannelCountries(name, item, wantedCountry).length) return true;
 
-  // Only use row-level country metadata as a safe fallback for single-channel rows.
-  // Multi-channel mixed rows need explicit per-channel inference above.
-  const channels = splitChannels(item);
-  if (channels.length <= 1) return itemCountryIs(item, wantedCountry);
-
-  return false;
+  // Only use row metadata when a single channel remains and no name rule identifies it.
+  return splitChannels(item).length <= 1 && itemCountryIs(item, wantedCountry) &&
+    !inferChannelCountries(name, item).length;
 }
 
 function channelPackageText(name, item = {}) {
@@ -3045,27 +3081,23 @@ function channelPackageText(name, item = {}) {
   return [name, ...(getChannelAliases(name, item) || [])].filter(Boolean).join(' ');
 }
 
+const frequencyPackageMatches = new WeakMap();
 function channelInPackage(name, item, pkg) {
-  const text = channelPackageText(name, item);
   const keys = PACKAGE_KEYWORDS[pkg] || [];
-  if (containsAny(text, keys)) return true;
-
-  // If the row is explicitly tagged as this package, every channel in that row belongs to it.
-  // This is needed for packages like OSN where many carried channels do not include "OSN" in their names
-  // (History, Nickelodeon, Discovery, TLC, CNN, Cartoon Network, Fatafeat...).
-  const explicitRowPackage = [item.package, item.packageName, item.network, item.searchAliases]
-    .flat()
-    .filter(Boolean)
-    .join(' ');
-  if (containsAny(explicitRowPackage, keys)) {
-    // ON/ON Time transponders are often mixed with unrelated stations. Keep this
-    // package per-channel unless the channel name/aliases itself carries ON markers.
-    if (pkg === 'ontime') return containsAny(text, keys);
-    return true;
+  // ON Time rows can also carry unrelated stations, so match this package per channel.
+  if (pkg !== 'ontime') {
+    let matches = frequencyPackageMatches.get(item);
+    if (!matches) {
+      matches = new Map();
+      frequencyPackageMatches.set(item, matches);
+    }
+    if (!matches.has(pkg)) {
+      const explicit = [item.package, item.packageName, item.network, item.searchAliases].flat().filter(Boolean).join(' ');
+      matches.set(pkg, containsAny(explicit, keys));
+    }
+    if (matches.get(pkg)) return true;
   }
-
-  // For untagged mixed transponders, stay per-channel to avoid pulling unrelated stations.
-  return false;
+  return containsAny(channelPackageText(name, item), keys);
 }
 
 function getFrequency(item) {
@@ -3365,16 +3397,15 @@ function contextNameTokens(raw, country, category, satellite, allSatellites) {
 }
 
 function channelMatchesMode(channel, item, mode) {
-  if (mode.nameTokens?.length && !freeTextMatch(channel, item, mode.nameTokens)) return false;
   if (mode.acronym && !channelHasProtectedAcronym(channel, item, mode.acronym)) return false;
   if (mode.type === 'all') return true;
   if (mode.type === 'frequency') return true;
   if (mode.type === 'package') return channelInPackage(channel, item, mode.package);
   if (mode.type === 'namedChannel') return channelMatchesNamedIntent(channel, item, mode.brand);
-  if (mode.type === 'category') return channelInCategory(channel, mode.category, item);
-  if (mode.type === 'country') return channelInCountry(channel, item, mode.country);
-  if (mode.type === 'countryCategory') return channelInCountry(channel, item, mode.country) && channelInCategory(channel, mode.category, item);
-  if (mode.type === 'countryPackage') return channelInCountry(channel, item, mode.country) && channelInPackage(channel, item, mode.package);
+  if (mode.type === 'category') return channelInCategory(channel, mode.category, item) && freeTextMatch(channel, item, mode.nameTokens || []);
+  if (mode.type === 'country') return channelInCountry(channel, item, mode.country) && freeTextMatch(channel, item, mode.nameTokens || []);
+  if (mode.type === 'countryCategory') return channelInCategory(channel, mode.category, item) && channelInCountry(channel, item, mode.country) && freeTextMatch(channel, item, mode.nameTokens || []);
+  if (mode.type === 'countryPackage') return channelInPackage(channel, item, mode.package) && channelInCountry(channel, item, mode.country);
   if (mode.type === 'free') return freeTextMatch(channel, item, mode.tokens || []);
   return false;
 }
@@ -3731,12 +3762,8 @@ window.clearFrequencySearch = function(){
   const input = document.getElementById('frequencySearch');
   const packageSelect = document.getElementById('frequencyAutoPackage');
   const categorySelect = document.getElementById('frequencyAutoCategory');
-  const serviceSelect = document.getElementById('frequencyServiceFilter');
-  const satelliteSelect = document.getElementById('frequencySatellite');
-  if (satelliteSelect) satelliteSelect.value = 'Nilesat';
   if (packageSelect) packageSelect.value = '';
   if (categorySelect) categorySelect.value = '';
-  if (serviceSelect) serviceSelect.value = 'all';
   if (input) { input.value = ''; input.focus(); }
   window.renderFrequencies();
 };
@@ -3750,7 +3777,10 @@ function updateActiveFrequencyFilters(mode){
 
 window.renderFrequencies = function(){
   if (frequencyRenderFrame) cancelAnimationFrame(frequencyRenderFrame);
-  frequencyRenderFrame = requestAnimationFrame(renderFrequenciesNow);
+  const revision = ++frequencyRenderRevision;
+  frequencyRenderFrame = requestAnimationFrame(() => {
+    renderFrequenciesNow(revision).catch(error => console.warn('Frequency rendering failed', error));
+  });
 };
 
 function appendFrequencyBatch() {
@@ -3777,6 +3807,7 @@ function appendFrequencyBatch() {
 window.showMoreFrequencies = appendFrequencyBatch;
 
 function scheduleFrequencySearch(){
+  frequencyRenderRevision++;
   clearTimeout(frequencySearchTimer);
   frequencySearchTimer = setTimeout(function(){
     window.renderFrequencies();
@@ -3822,7 +3853,25 @@ function scheduleFailedSearchLog(query, mode, selected, serviceFilter, rowCount)
   }, FAILED_SEARCH_DEBOUNCE_MS);
 }
 
-function renderFrequenciesNow(){
+function indexesForSelectedSatellite(data, selection) {
+  if (selection === 'all') return null;
+  let groups = frequencyRowsBySatellite.get(data);
+  if (!groups) {
+    groups = new Map();
+    frequencyRowsBySatellite.set(data, groups);
+  }
+  if (!groups.has(selection)) {
+    const indexes = [];
+    for (let index = 0; index < data.length; index++) {
+      if (satelliteAllowed(data[index], selection)) indexes.push(index);
+    }
+    groups.set(selection, indexes);
+  }
+  return groups.get(selection);
+}
+
+async function renderFrequenciesNow(revision){
+  if (revision !== frequencyRenderRevision) return;
   const tbody = document.getElementById('frequencyTableBody');
   if (!tbody) return;
   const selected = (document.getElementById('frequencySatellite')?.value || 'all');
@@ -3830,9 +3879,6 @@ function renderFrequenciesNow(){
   let serviceFilter = getFrequencyServiceFilter();
   if (!query) exactPackageMode = null;
   const mode = getSearchMode(query);
-  const satelliteControl = document.getElementById('frequencySatellite');
-  const satelliteWasSelected = satelliteControl?.dataset.userSelected;
-  if (!satelliteWasSelected && satelliteControl) satelliteControl.value = query ? 'all' : 'Nilesat';
   if (mode.requestedService) serviceFilter = mode.requestedService;
   // احترم فلتر مجاني/مشفر حتى أثناء البحث النصي.
   // مثال: MBC مع فلتر "قنوات مشفرة" لا يعرض MBC إذا كانت مفتوحة/FTA.
@@ -3842,38 +3888,58 @@ function renderFrequenciesNow(){
   const stationCardSearchActive = false;
   // البحث يحترم القمر المختار من القائمة: كل قمر لحاله.
   // إذا كتب المستخدم اسم قمر داخل مربع البحث، الاسم المكتوب يسبق اختيار القائمة.
-  const effectiveSelected = mode.satelliteOverrideAll ? 'all' : (mode.satellite || satelliteControl?.value || selected || 'all');
+  const effectiveSelected = mode.satelliteOverrideAll ? 'all' : (mode.satellite || selected);
   const renderKey = JSON.stringify([query, exactPackageMode, effectiveSelected, serviceFilter]);
   if (frequencyRenderedData === DATA && frequencyRenderKey === renderKey) {
     return;
   }
-  frequencyRenderedData = DATA;
-  frequencyRenderKey = renderKey;
   const tableWrap = tbody.closest('.frequency-table-wrap');
   if (tableWrap) tableWrap.classList.toggle('frequency-search-hidden', false);
   updateActiveFrequencyFilters(mode);
 
-  const rowMap = new Map();
-  for (let index = 0; index < DATA.length; index++) {
-    const item = DATA[index];
-    if (!satelliteAllowed(item, effectiveSelected)) continue;
-    if ((mode.type === 'frequency' || item.hideFromNamedSearch) && !itemMatchesMode(item, mode)) continue;
-    const serviceChannels = uniqueChannelNames(applyFrequencyServiceFilter(matchingChannels(item, mode), item, serviceFilter));
-    if (!serviceChannels.length && (serviceFilter !== 'all' || !['all', 'frequency'].includes(mode.type))) continue;
-    const rowScoreValue = mode.type === 'all' ? (100000 - index) : rowScore(item, mode, index, serviceChannels);
-    const rowKey = frequencyRowDedupeKey(item);
-    if (rowMap.has(rowKey)) {
-      const existing = rowMap.get(rowKey);
-      existing.channels = uniqueChannelNames((existing.channels || []).concat(serviceChannels));
-      existing.score = Math.max(Number(existing.score || 0), Number(rowScoreValue || 0));
-      existing.index = Math.min(existing.index, index);
-      continue;
-    }
-    rowMap.set(rowKey, { item, index, channels: serviceChannels, score: rowScoreValue });
+  const data = DATA;
+  let searches = frequencySearchResults.get(data);
+  if (!searches) {
+    searches = new Map();
+    frequencySearchResults.set(data, searches);
   }
-  const rows = Array.from(rowMap.values());
-  if (mode.type !== 'all') rows.sort((a, b) => b.score - a.score || a.index - b.index);
+  let rows = searches.get(renderKey);
+  if (!rows) {
+    const rowMap = new Map();
+    const indexes = indexesForSelectedSatellite(data, effectiveSelected);
+    const candidateCount = indexes?.length ?? data.length;
+    let sliceStart = performance.now();
+    for (let cursor = 0; cursor < candidateCount; cursor++) {
+      if ((cursor & 7) === 0 && performance.now() - sliceStart >= 14) {
+        await new Promise(resolve => setTimeout(resolve, 0));
+        if (revision !== frequencyRenderRevision || data !== DATA) return;
+        sliceStart = performance.now();
+      }
+      const index = indexes ? indexes[cursor] : cursor;
+      const item = data[index];
+      if ((mode.type === 'frequency' || item.hideFromNamedSearch) && !itemMatchesMode(item, mode)) continue;
+      const serviceChannels = uniqueChannelNames(applyFrequencyServiceFilter(matchingChannels(item, mode), item, serviceFilter));
+      if (!serviceChannels.length && (serviceFilter !== 'all' || !['all', 'frequency'].includes(mode.type))) continue;
+      const rowScoreValue = mode.type === 'all' ? (100000 - index) : rowScore(item, mode, index, serviceChannels);
+      const rowKey = frequencyRowDedupeKey(item);
+      if (rowMap.has(rowKey)) {
+        const existing = rowMap.get(rowKey);
+        existing.channels = uniqueChannelNames((existing.channels || []).concat(serviceChannels));
+        existing.score = Math.max(Number(existing.score || 0), Number(rowScoreValue || 0));
+        existing.index = Math.min(existing.index, index);
+        continue;
+      }
+      rowMap.set(rowKey, { item, index, channels: serviceChannels, score: rowScoreValue });
+    }
+    rows = Array.from(rowMap.values());
+    if (mode.type !== 'all') rows.sort((a, b) => b.score - a.score || a.index - b.index);
 
+    if (searches.size >= 8) searches.delete(searches.keys().next().value);
+    searches.set(renderKey, rows);
+  }
+  if (revision !== frequencyRenderRevision || data !== DATA) return;
+  frequencyRenderedData = data;
+  frequencyRenderKey = renderKey;
   frequencyRows = rows;
   frequencyRenderedCount = 0;
   tbody.replaceChildren();
@@ -4017,7 +4083,6 @@ let frequencyControlsBound = false;
 let frequencyDataReadyPromise = null;
 function onFrequencySearchChanged(){
   exactPackageMode = null;
-  scheduleFrequencySuggestions();
   scheduleFrequencySearch();
 }
 function bindFrequencyControlsOnce(){
@@ -4045,10 +4110,8 @@ function bindFrequencyControlsOnce(){
     input.addEventListener('keydown', function(e){ if (e.key === 'Escape') hideFrequencySuggestions(); });
   }
   const sat = document.getElementById('frequencySatellite');
-  if (sat && !sat.dataset.smartDefaultApplied) { sat.dataset.smartDefaultApplied = '1'; if (!sat.value || sat.value === 'all') sat.value = 'Nilesat'; }
-  if (sat) sat.addEventListener('change', function(){ sat.dataset.userSelected = '1'; if (!initFrequencyFeature.done) initFrequencyFeature(); hideFrequencySuggestions(); window.renderFrequencies(); scheduleFrequencySuggestions(); });
+  if (sat) sat.addEventListener('change', function(){ if (!initFrequencyFeature.done) initFrequencyFeature(); hideFrequencySuggestions(); window.renderFrequencies(); scheduleFrequencySuggestions(); });
   const serviceSelect = document.getElementById('frequencyServiceFilter');
-  if (serviceSelect && !serviceSelect.dataset.smartDefaultApplied) { serviceSelect.dataset.smartDefaultApplied = '1'; if (!serviceSelect.value) serviceSelect.value = 'all'; }
   if (serviceSelect) serviceSelect.addEventListener('change', function(){ if (!initFrequencyFeature.done) initFrequencyFeature(); hideFrequencySuggestions(); window.renderFrequencies(); });
 }
 function initFrequencyFeature(){

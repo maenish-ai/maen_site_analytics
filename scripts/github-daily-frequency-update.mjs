@@ -16,7 +16,8 @@ import {
   mapWithConcurrency,
   mergeFrequencyData,
   sendFrequencyUpdateEmail,
-  setRuntimeContext
+  setRuntimeContext,
+  validateFrequencyCoverage
 } from '../functions/_lib/frequency-utils.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -100,6 +101,7 @@ async function main() {
   const merged = mergeFrequencyData(baseline.items || [], candidates, sources, { successfulSourceCount, closedCandidates, sourceQuality, preserveUnconfirmedChannels: true, sourceResults });
 
   validateCompleteProgrammingSystems(merged.items);
+  validateFrequencyCoverage(baseline.items, merged.items, merged.removedItems);
 
   const payload = {
     ok: true,
