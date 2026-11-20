@@ -99,6 +99,22 @@ jobs:
               }).filter(link => link?.hostname === new URL(response.url).hostname &&
                 /updates|sats|nilesat|eutelsat|package|7west/i.test(link.pathname))
                 .map(link => link.pathname);
+              if (response.ok && (publisher === 'KingOfSat' || publisher === 'FlySat')) {
+                const clean = value => value.replace(/<[^>]+>/g, ' ').replace(/&(?:nbsp|amp|#160);/g, ' ').replace(/\s+/g, ' ').trim().replace(/[^\p{L}\p{N} .+\-/|:]/gu, '');
+                if (publisher === 'KingOfSat') {
+                  const tables = [...html.matchAll(/<table\b([^>]*)>([\s\S]*?)<\/table>/gi)];
+                  for (const index of tables.keys()) {
+                    const table = tables[index];
+                    if (!/mix\s*bel\s*arab/i.test(table[2])) continue;
+                    const context = tables.slice(Math.max(index - 2, 0), index + 1).map(part =>
+                      (part[1].match(/class=["']?([\w -]+)/i)?.[1] || 'table') + ' ' + clean(part[2]).slice(0, 300)).join(' | ');
+                    console.log(`::notice::KingOfSat service context: ${context}`);
+                  }
+                } else {
+                  const sampleLinks = [...html.matchAll(/href=["']([^"' <]+)/gi)].map(match => match[1]).filter(link => /^\/|^https?:/i.test(link));
+                  console.log(`::notice::FlySat index: ${clean(html.match(/<title[^>]*>(.*?)<\/title>/i)?.[1] || '')}; ${[...new Set(sampleLinks)].slice(0, 12).join(' ')}`);
+                }
+              }
               const names = [...html.matchAll(/<tr\b[^>]*>[\s\S]*?<\/tr>/gi)].flatMap(match => {
                 const text = match[0].replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
                 if (!/mix\s*(?:bel|bil)\s*arab|\bon\s*(?:time\s*)?sports?\b/i.test(text)) return [];
