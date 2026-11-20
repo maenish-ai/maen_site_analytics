@@ -78,23 +78,6 @@ jobs:
       - name: Check publisher voting
         run: node scripts/frequency-publisher-votes-test.mjs
 
-      - name: Check Mix and ON Sport using the supported source adapters
-        if: env.MODE == 'dry_run'
-        run: |
-          node --input-type=module <<'NODE'
-          import { readFile } from 'node:fs/promises';
-          import { fetchSourceCandidates } from './functions/_lib/frequency-utils.js';
-          const registry = JSON.parse(await readFile('public/frequencies/frequency-sources.json', 'utf8'));
-          await Promise.all(registry.filter(source => ['nilesat-official-channels','kingofsat-7w-all','lyngsat-nilesat-7w'].includes(source.id)).map(async source => {
-            const result = await fetchSourceCandidates(source);
-            const rows = (result.candidates || []).flatMap(row => {
-              const relevant = row.channels.filter(name => /mix\s*(?:bel|bil)\s*arab|\bon\s*(?:time\s*)?sports?\b/i.test(name));
-              return relevant.length ? [`${row.frequency}${row.pol}/${row.sr || '?'} ${relevant.join(', ')}`] : [];
-            });
-            console.log(`::notice::Adapter check ${source.id}: HTTP ${result.status || 'unavailable'}, ${result.candidates?.length || 0} rows; ${rows.slice(0, 8).join('; ') || 'no direct sample'}`);
-          }));
-          NODE
-
       - name: Check proposed frequency changes
         if: env.MODE == 'dry_run'
         run: |
