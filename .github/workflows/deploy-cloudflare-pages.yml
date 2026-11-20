@@ -1,4 +1,5 @@
 name: Deploy Maensat to Cloudflare Pages
+run-name: ${{ inputs.target == 'preview' && 'نشر معاينة الموقع' || 'نشر الموقع على Cloudflare' }}
 
 on:
   push:

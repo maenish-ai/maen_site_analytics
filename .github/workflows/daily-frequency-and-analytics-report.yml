@@ -1,4 +1,10 @@
 name: Daily frequency and analytics reports
+run-name: >-
+  ${{
+    github.event_name == 'schedule' && 'تحديث الترددات والتقارير اليومي'
+    || github.event_name == 'push' && 'فحص تجريبي للترددات'
+    || format('تشغيل يدوي للترددات والتقارير ({0})', inputs.run_mode)
+  }}
 
 on:
   schedule:
@@ -6,8 +12,8 @@ on:
   push:
     branches: [main]
     paths:
-      - .github/workflows/daily-frequency-and-analytics-report.yml
       - scripts/github-daily-frequency-update.mjs
+      - scripts/generate-frequency-assets.mjs
       - scripts/search-smoke-tests.mjs
       - scripts/frequency-publisher-votes-test.mjs
       - public/frequencies/frequency-sources.json
