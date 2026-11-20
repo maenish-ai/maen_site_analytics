@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { extractCandidatesFromHtml, extractChannelAccessObservations, mergeFrequencyData, validateFrequencyCoverage } from '../functions/_lib/frequency-utils.js';
+import { alignPublisherListings, extractCandidatesFromHtml, extractKingOfSatListings, extractChannelAccessObservations, mergeFrequencyData, validateFrequencyCoverage } from '../functions/_lib/frequency-utils.js';
 
 const row = {
   satelliteGroup: 'Nilesat', satelliteName: 'Nilesat 201', orbitalSlot: '7W',
@@ -117,3 +117,22 @@ const explicitTuning = `<table><tr><th>Service Name</th><th>Frequency</th><th>Po
 const explicitRows = extractCandidatesFromHtml(explicitTuning, source('a.test').source);
 assert(explicitRows.some(x => x.frequency === '11223' && x.pol === 'V' && x.sr === '27500' && x.mod === '8PSK' && x.channels.includes('Atlas News')));
 console.log('Labeled tuning columns parsed without guessing missing access.');
+
+const kingPage = `<table class="frequencies-table frq kos-frequency-header"><tr>
+<td>7.0&deg;W</td><td>Nilesat 201</td><td>13</td><td>11823.20</td><td>V</td><td>6</td>
+<td>Middle-East</td><td>DVB-S</td><td>QPSK</td><td>27500 5/6</td></tr></table>
+<table class="frq kos-stream-summary"><tr><td>Transport Stream</td><td>2048</td></tr></table>
+<table class="fl kos-channel-table"><tr><td>Atlas News</td><td>Jordan</td><td>News</td>
+<td>NILESAT</td><td>Clear</td><td>1107</td><td>1009</td></tr></table>`;
+const kingSource = { ...source('en.kingofsat.net').source, satelliteName: 'Nilesat 201/301 + Eutelsat 7 West A' };
+const king = extractKingOfSatListings(kingPage, kingSource);
+assert.equal(king.candidates[0].satelliteName, 'Nilesat 201');
+assert.equal(king.candidates[0].orbitalSlot, '7W');
+assert.deepEqual([king.candidates[0].frequency, king.candidates[0].sr, king.accessObservations[0].status], ['11823', '27500', 'free']);
+const aggregateRow = { ...row, satelliteName: kingSource.satelliteName, frequency: '11823', pol: 'V' };
+const [aligned] = alignPublisherListings([aggregateRow], [king]);
+assert.equal(aligned.candidates[0].satelliteName, kingSource.satelliteName);
+assert.equal(aligned.candidates[0].observedSatelliteName, 'Nilesat 201');
+const [conflictListing] = alignPublisherListings([aggregateRow, { ...aggregateRow, satelliteName: 'Nilesat 301' }], [king]);
+assert.equal(conflictListing.candidates[0].satelliteName, 'Nilesat 201');
+console.log('KingOfSat uses its exact transponder header and keeps ambiguous satellites distinct.');

@@ -78,24 +78,21 @@ jobs:
       - name: Check publisher voting
         run: node scripts/frequency-publisher-votes-test.mjs
 
-      - name: Verify parser columns for a real KingOfSat service
+      - name: Check Mix and ON Sport using the supported source adapters
         if: env.MODE == 'dry_run'
         run: |
           node --input-type=module <<'NODE'
-          const response = await fetch('https://en.kingofsat.net/find.php?question=Mix+Bel+Araby', { signal: AbortSignal.timeout(15000) });
-          if (!response.ok) throw Error(`KingOfSat returned HTTP ${response.status}`);
-          const html = await response.text();
-          const tables = [...html.matchAll(/<table\b([^>]*)>([\s\S]*?)<\/table>/gi)];
-          for (const index of tables.keys()) {
-            if (!/mix\s*bel\s*arab/i.test(tables[index][2]) || !/kos-channel-table/.test(tables[index][1])) continue;
-            for (const table of tables.slice(Math.max(index - 2, 0), index + 1)) {
-              const row = [...table[2].matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gi)]
-                .find(x => /mix\s*bel\s*arab/i.test(x[1])) || [...table[2].matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gi)][0];
-              const cells = [...(row?.[1] || '').matchAll(/<t[dh]\b([^>]*)>([\s\S]*?)<\/t[dh]>/gi)]
-                .map(x => (x[1].match(/class=["']([^"']+)/i)?.[1] || '-') + ':' + x[2].replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim().replace(/[^\p{L}\p{N} .+\-/]/gu, ''));
-              console.log(`::notice::KingOfSat columns: ${cells.join(' | ')}`);
-            }
-          }
+          import { readFile } from 'node:fs/promises';
+          import { fetchSourceCandidates } from './functions/_lib/frequency-utils.js';
+          const registry = JSON.parse(await readFile('public/frequencies/frequency-sources.json', 'utf8'));
+          await Promise.all(registry.filter(source => ['nilesat-official-channels','kingofsat-7w-all','lyngsat-nilesat-7w'].includes(source.id)).map(async source => {
+            const result = await fetchSourceCandidates(source);
+            const rows = (result.candidates || []).flatMap(row => {
+              const relevant = row.channels.filter(name => /mix\s*(?:bel|bil)\s*arab|\bon\s*(?:time\s*)?sports?\b/i.test(name));
+              return relevant.length ? [`${row.frequency}${row.pol}/${row.sr || '?'} ${relevant.join(', ')}`] : [];
+            });
+            console.log(`::notice::Adapter check ${source.id}: HTTP ${result.status || 'unavailable'}, ${result.candidates?.length || 0} rows; ${rows.slice(0, 8).join('; ') || 'no direct sample'}`);
+          }));
           NODE
 
       - name: Check proposed frequency changes
