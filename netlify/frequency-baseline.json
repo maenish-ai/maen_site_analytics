@@ -3,7 +3,7 @@
   "mode": "github-actions-static",
   "servedFrom": "github-actions-static-json",
   "version": "satellite-orbital-structure-2026-05-28-v5",
-  "updatedAt": "2026-11-20T08:41:51.950Z",
+  "updatedAt": "2026-11-20T08:58:21.637Z",
   "count": 4003,
   "removedCount": 0,
   "candidateCount": 4369,
@@ -146141,7 +146141,7 @@
     {
       "satellite": "Nilesat 201/301 + Eutelsat 7 West A",
       "orbit": "7W",
-      "channel": "MBN Alhurra HD، Palestine، Modern Mti، Egyptian TV HD، MBC Masr 2، ELMEHWAR، AlHadath Alyoum، Sada ElBalad 3، Sada El Balad، Sada El Balad 2، VOA IRAQ، Palestine Radio + 1 قناة أخرى",
+      "channel": "MBN Alhurra HD، Palestine، Modern Mti، Egyptian TV HD، MBC Masr 2، ELMEHWAR، AlHadath Alyoum، Sada ElBalad 3، Sada El Balad، Sada El Balad 2، VOA IRAQ، Palestine Radio، ON Time Sports HD، 1 قناة أخرى، Mix Bel Araby",
       "frequency": "11823",
       "pol": "V",
       "sr": "27500",
@@ -146165,9 +146165,10 @@
         "VOA IRAQ",
         "Palestine Radio",
         "ON Time Sports HD",
-        "1 قناة أخرى"
+        "1 قناة أخرى",
+        "Mix Bel Araby"
       ],
-      "channelCount": 14,
+      "channelCount": 15,
       "sourceUrl": "https://www.facebook.com/OnTimeSports/posts/11977-%D9%86%D8%B2%D9%84-%D8%A7%D9%84%D8%AA%D8%B1%D8%AF%D8%AF-%D8%A7%D9%84%D8%AC%D8%AF%D9%8A%D8%AF-%D9%84%D9%82%D9%86%D9%88%D8%A7%D8%AA-%D8%A3%D9%88%D9%86-%D8%B3%D8%A8%D9%88%D8%B1%D8%AA-%D9%88%D8%A7%D8%AA%D9%81%D8%B1%D8%AC-%D8%A8%D8%A3%D8%B9%D9%84%D9%89-%D8%AC%D9%88%D8%AF%D8%A9/1518248512992325/",
       "officialSourceUrl": "https://www.facebook.com/OnTimeSports/posts/11977-%D9%86%D8%B2%D9%84-%D8%A7%D9%84%D8%AA%D8%B1%D8%AF%D8%AF-%D8%A7%D9%84%D8%AC%D8%AF%D9%8A%D8%AF-%D9%84%D9%82%D9%86%D9%88%D8%A7%D8%AA-%D8%A3%D9%88%D9%86-%D8%B3%D8%A8%D9%88%D8%B1%D8%AA-%D9%88%D8%A7%D8%AA%D9%81%D8%B1%D8%AC-%D8%A8%D8%A3%D8%B9%D9%84%D9%89-%D8%AC%D9%88%D8%AF%D8%A9/1518248512992325/",
       "verifiedOn": "2026-05-30",
@@ -146252,7 +146253,8 @@
         "Sada El Balad 2": "free",
         "VOA IRAQ": "free",
         "Palestine Radio": "free",
-        "ON Time Sports HD": "free"
+        "ON Time Sports HD": "free",
+        "Mix Bel Araby": "free"
       },
       "channelEncryptionReason": {
         "MBN Alhurra HD": "no-pay-package-listed",
@@ -146393,7 +146395,12 @@
           "الولايات المتحدة",
           "امريكي"
         ],
-        "Palestine Radio": []
+        "Palestine Radio": [],
+        "Mix Bel Araby": [
+          "ميكس بالعربي",
+          "ميكس بل عربي",
+          "Mix Bel Araby"
+        ]
       },
       "channelCountries": {
         "ON Time Sports HD": [
@@ -146420,7 +146427,10 @@
         ]
       },
       "baseline": true,
-      "confidence": 100
+      "confidence": 100,
+      "channelAccessNotes": {
+        "Mix Bel Araby": "20 November 2026 source check: Nilesat official listing corroborates 11823 V 27500; KingOfSat lists the matching service as Clear."
+      }
     },
     {
       "satelliteGroup": "Nilesat",
