@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { extractChannelAccessObservations, mergeFrequencyData, validateFrequencyCoverage } from '../functions/_lib/frequency-utils.js';
+import { extractCandidatesFromHtml, extractChannelAccessObservations, mergeFrequencyData, validateFrequencyCoverage } from '../functions/_lib/frequency-utils.js';
 
 const row = {
   satelliteGroup: 'Nilesat', satelliteName: 'Nilesat 201', orbitalSlot: '7W',
@@ -104,3 +104,10 @@ const simultaneous = merge([...moveReports.slice(0, 2), ...keep.slice(2)], [rowW
 assert.equal(simultaneous.movedChannels.length, 0);
 assert(simultaneous.items.find(item => item.frequency === '11766').channels.includes('Atlas News'));
 console.log('Station move, simulcast protection, and catalog coverage passed.');
+
+const frequencyBlocks = `<p>11977 V</p><p>DVB-S2 8PSK 27500 3/4</p>
+<p>Atlas News MPEG-4</p><p>Service ID 12345</p><p>2026</p>
+<p>12015 V</p><p>DVB-S2</p><p>Local Radio MPEG-4</p><p>2025</p>`;
+const extracted = extractCandidatesFromHtml(frequencyBlocks, source('a.test').source);
+assert.deepEqual(extracted.map(item => [item.frequency, item.sr]), [['11977', '27500'], ['12015', '']]);
+console.log('Tuning extraction ignores service identifiers and years.');

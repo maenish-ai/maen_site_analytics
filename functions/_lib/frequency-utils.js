@@ -332,17 +332,14 @@ function channelNameFromServiceLine(line = "") {
 }
 
 function extractBlockSr(blockLines = []) {
-  const blockText = blockLines.join(" | ");
-  const afterDvb = normalizeSr(blockText);
-  if (afterDvb) return afterDvb;
-  for (const line of blockLines.slice(0, 12)) {
-    const candidates = [...String(line).matchAll(/\b(\d{4,5})\b/g)].map(m => Number(m[1])).filter(n => n >= 1000 && n <= 60000);
-    if (candidates.length) return String(candidates[candidates.length - 1]);
+  for (const [index, line] of blockLines.slice(0, 12).entries()) {
+    const technical = index === 0 ? String(line).replace(/^\s*\d{4,5}(?:[.,]\d{1,3})?\s*([HVLR])\b/i, "") : line;
+    const explicit = String(technical).match(/(?:\bSR\b|Symbol\s*Rate)\D{0,12}(\d{3,5})/i);
+    const rateWithFec = String(technical).match(/(?:^|\s)(\d{3,5})\s*(?:[-/]\s*)?(?=[1-9]\s*\/\s*[1-9]\b|auto\b)/i);
+    if (explicit || rateWithFec) return (explicit || rateWithFec)[1];
   }
   return "";
 }
-
-
 
 function looksLikeDthSatHeader(lines, i) {
   const a = String(lines[i] || "");
@@ -581,46 +578,14 @@ export function extractCandidatesFromHtml(html, source) {
   const dthSatCandidates = extractDthSatSimpleTableCandidates(lines, source);
   const isDthSatSource = /dthsat/i.test(String(source.url || source.name || ""));
   if (isDthSatSource && (dthSatFlexibleCandidates.length || dthSatCandidates.length)) {
-    return dedupeItems([...dthSatFlexibleCandidates, ...dthSatCandidates]);
+    return dedupeItems([...dthSatFlexibleCandidates, ...dthSatCandidates])
+      .filter(item => !item.sr || item.frequency !== item.sr);
   }
   const blockCandidates = extractTableBlockCandidates(lines, source);
-  const genericCandidates = [];
-  for (let i = 0; i < lines.length; i++) {
-    const windowText = lines.slice(Math.max(0, i - 2), Math.min(lines.length, i + 5)).join(" | ");
-    const freqMatches = [...lines[i].matchAll(/\b(\d{4,5}(?:[\.,]\d{1,3})?)\s*(?:MHz)?\b/gi)];
-    for (const fm of freqMatches) {
-      const frequency = normalizeFrequency(fm[1]);
-      if (!frequency) continue;
-      const pol = normalizePol(windowText);
-      if (!pol) continue;
-      const sr = normalizeSr(windowText);
-      const fec = normalizeFec(windowText);
-      const channelName = candidateChannelName(lines, i);
-      const satelliteGroup = normalizeSatelliteGroup(source.satelliteGroup || source.name || "");
-      const item = {
-        ...candidateBase(source, satelliteGroup),
-        channel: channelName || `${satelliteGroup} ${frequency}${pol}`,
-        channels: channelName ? [channelName] : [],
-        frequency,
-        pol,
-        sr,
-        fec,
-        system: normalizeSystem(windowText),
-        mod: normalizeMod(windowText),
-        source: source.name,
-        sourceUrl: source.url,
-        sourceAuditUrl: source.url,
-        authority: source.authority || "reference",
-        trust: source.trust || "reference",
-        updatePolicy: source.mode || "compare-only",
-        lastCheckedAt: new Date().toISOString(),
-        confidence: source.mode === "auto-approve" || source.trust === "official" ? 92 : 55
-      };
-      genericCandidates.push(item);
-    }
-  }
-  // Prefer the block parser because it captures all channels inside a transponder; generic parsing remains as fallback.
-  return dedupeItems([...dthSatFlexibleCandidates, ...dthSatCandidates, ...blockCandidates, ...genericCandidates]);
+  // Arbitrary numbers around a channel name can be dates, service IDs or symbol
+  // rates. Only accept inputs with a tuning header or explicit table columns.
+  return dedupeItems([...dthSatFlexibleCandidates, ...dthSatCandidates, ...blockCandidates])
+    .filter(item => !item.sr || item.frequency !== item.sr);
 }
 function parseAccessStatus(value) {
   const text = String(value || "").trim();
@@ -1173,7 +1138,7 @@ function applyPublisherVotes(baseline, byKey, checkedSources, changes, removedIt
       const stationKey = key.split("|")[0] + "|" + stationNameKey(name);
       const locations = stationLocations.get(stationKey) || new Map();
       const destinations = [...locations].filter(([location, reports]) =>
-        location !== key && byKey.has(location) &&
+        location !== key && byKey.get(location)?.channels?.some(channel => stationNameKey(channel) === stationNameKey(name)) &&
         (reports.some(report => report.official) || new Set(reports.map(report => report.publisher)).size >= 2));
       const moveAbsences = active.filter(entry => completePublishers.has(entry.publisher) &&
         entry.channels.length && !supportsName(entry)).map(entry => entry.publisher);
@@ -1181,9 +1146,9 @@ function applyPublisherVotes(baseline, byKey, checkedSources, changes, removedIt
         ? majority([...closures, ...absences, ...moveAbsences], supporting)
         : { approved: false, count: 0 };
       if (movementVote.approved) {
-        const [destinationKey, reports] = destinations[0];
+        const [destinationKey] = destinations[0];
         const destination = byKey.get(destinationKey);
-        const newName = reports[0].channel;
+        const newName = destination.channels.find(channel => stationNameKey(channel) === stationNameKey(name));
         const oldAliases = item.channelAliases?.[name] || [];
         if (oldAliases.length) {
           destination.channelAliases = { ...destination.channelAliases, [newName]: [...new Set([
