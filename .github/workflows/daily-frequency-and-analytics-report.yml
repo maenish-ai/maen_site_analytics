@@ -35,7 +35,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: maensat-pages-production
+  group: ${{ github.event_name == 'push' && 'maensat-frequency-validation' || 'maensat-pages-production' }}
   cancel-in-progress: false
 
 jobs:
