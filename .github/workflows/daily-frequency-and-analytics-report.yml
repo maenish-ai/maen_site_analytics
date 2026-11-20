@@ -113,6 +113,35 @@ jobs:
         run: |
           npx --yes wrangler@4.165.0 pages deploy public --project-name maensat --branch main
 
+      - name: Verify the catalog is live
+        if: env.MODE == 'all' || env.MODE == 'frequency_only'
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFile } from 'node:fs/promises';
+          const expected = JSON.parse(await readFile('public/frequencies/frequency-manifest.json', 'utf8'));
+          const base = 'https://maensat.pages.dev';
+          for (let attempt = 1; attempt <= 8; attempt++) {
+            try {
+              const manifest = await fetch(`${base}/frequencies/frequency-manifest.json?catalog=${expected.generatedAt}`, {
+                signal: AbortSignal.timeout(6000)
+              }).then(response => response.ok ? response.json() : null);
+              if (manifest?.generatedAt === expected.generatedAt && manifest.count === expected.count) {
+                const data = await fetch(`${base}${expected.dataFile}?catalog=${expected.generatedAt}`, {
+                  signal: AbortSignal.timeout(10000)
+                }).then(response => response.ok ? response.json() : null);
+                if (data?.updatedAt === expected.updatedAt && data.items?.length === expected.count) {
+                  console.log(`::notice::Published catalog confirmed: ${expected.count} frequencies, ${expected.updatedAt}.`);
+                  process.exit(0);
+                }
+              }
+            } catch (error) {
+              console.log(`Catalog verification retry: ${error.message}`);
+            }
+            await new Promise(resolve => setTimeout(resolve, 5000));
+          }
+          throw new Error('The deployed catalog did not become visible on the public site.');
+          NODE
+
       - name: Validate report email addresses
         if: env.MODE == 'reports_only'
         env:

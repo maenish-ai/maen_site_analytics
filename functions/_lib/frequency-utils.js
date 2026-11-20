@@ -1045,10 +1045,30 @@ function publisherKey(source) {
   }
 }
 
+function stationNameKey(name) {
+  return safeText(name, 140).normalize("NFKC").toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "");
+}
+
+function tuningDetails(item) {
+  return { satellite: item.satelliteName, frequency: item.frequency, pol: item.pol, sr: item.sr };
+}
+
 function applyPublisherVotes(baseline, byKey, checkedSources, changes, removedItems, reviewedOnly, now) {
   const activeByKey = new Map();
   const closedByFrequency = new Map();
   const coverageBySatellite = new Map();
+  const stationLocations = new Map();
+  const movedChannels = [];
+  const movedDestinations = [];
+  const auditedGroups = new Map();
+  const groupAudit = rawGroup => {
+    const group = normalizeSatelliteGroup(rawGroup || "غير محدد");
+    if (!auditedGroups.has(group)) auditedGroups.set(group, {
+      group, frequencies: 0, channelEntries: 0, frequenciesObserved: 0, channelEntriesObserved: 0,
+      respondingPublishers: new Set(), completePublishers: new Set()
+    });
+    return auditedGroups.get(group);
+  };
   const satelliteKey = key => key.split("|").slice(0, 3).join("|");
   const frequencyKey = key => key.split("|").slice(0, 4).join("|");
   const add = (map, key, entry) => {
@@ -1063,7 +1083,17 @@ function applyPublisherVotes(baseline, byKey, checkedSources, changes, removedIt
     const listed = new Map();
     for (const candidate of candidates) {
       const key = itemKey(candidate);
-      add(activeByKey, key, { publisher, channels: candidate.channels?.length ? candidate.channels : channelSet(candidate) });
+      const group = candidate.satelliteGroup || result.source.satelliteGroup;
+      const names = candidate.channels?.length ? candidate.channels : channelSet(candidate);
+      add(activeByKey, key, { publisher, channels: names });
+      groupAudit(group).respondingPublishers.add(publisher);
+      for (const channel of names) {
+        const stationKey = key.split("|")[0] + "|" + stationNameKey(channel);
+        if (!stationLocations.has(stationKey)) stationLocations.set(stationKey, new Map());
+        add(stationLocations.get(stationKey), key, {
+          publisher, channel, official: result.source.authority === "official"
+        });
+      }
       if (!listed.has(satelliteKey(key))) listed.set(satelliteKey(key), new Set());
       listed.get(satelliteKey(key)).add(key);
     }
@@ -1073,6 +1103,7 @@ function applyPublisherVotes(baseline, byKey, checkedSources, changes, removedIt
     const transponders = listed.get(scope);
     if (Number.isInteger(minimum) && minimum > 0 && transponders?.size >= minimum) {
       add(coverageBySatellite, scope, { publisher, transponders });
+      groupAudit(result.source.satelliteGroup).completePublishers.add(publisher);
     }
     for (const candidate of result.closedCandidates || []) {
       const key = itemKey(candidate);
@@ -1088,8 +1119,16 @@ function applyPublisherVotes(baseline, byKey, checkedSources, changes, removedIt
   for (const original of baseline) {
     const key = itemKey(original);
     const item = byKey.get(key);
-    if (!item || item.forceKeep || item.keep || original.updatePolicy === "manual-keep") continue;
+    if (!item) continue;
     const active = activeByKey.get(key) || [];
+    const originalChannels = original.channels || channelSet(original);
+    const audit = groupAudit(original.satelliteGroup);
+    audit.frequencies++;
+    audit.channelEntries += originalChannels.length;
+    if (active.length) audit.frequenciesObserved++;
+    const activeNames = new Set(active.flatMap(entry => entry.channels.map(stationNameKey)));
+    audit.channelEntriesObserved += originalChannels.filter(name => activeNames.has(stationNameKey(name))).length;
+    if (item.forceKeep || item.keep || original.updatePolicy === "manual-keep") continue;
     const closed = (closedByFrequency.get(frequencyKey(key)) || []).filter(({ candidate }) =>
       (!candidate.pol || normalizePol(candidate.pol) === normalizePol(item.pol)) &&
       (!candidate.sr || normalizeSr(candidate.sr) === normalizeSr(item.sr)));
@@ -1098,7 +1137,7 @@ function applyPublisherVotes(baseline, byKey, checkedSources, changes, removedIt
     const fullClosures = closed.filter(({ candidate }) => !channelSet(candidate).length && candidate.pol && candidate.sr)
       .map(({ publisher }) => publisher);
     const rowVote = majority([...absences, ...fullClosures], new Set(active.map(({ publisher }) => publisher)));
-    const before = original.channels || channelSet(original);
+    const before = originalChannels;
     const current = item.channels || channelSet(item);
     const completePublishers = new Set((coverageBySatellite.get(satelliteKey(key)) || [])
       .filter(({ transponders }) => transponders.has(key)).map(({ publisher }) => publisher));
@@ -1131,11 +1170,35 @@ function applyPublisherVotes(baseline, byKey, checkedSources, changes, removedIt
           if (currentName) confirmedRenames.set(name, currentName);
         }
       }
+      const stationKey = key.split("|")[0] + "|" + stationNameKey(name);
+      const locations = stationLocations.get(stationKey) || new Map();
+      const destinations = [...locations].filter(([location, reports]) =>
+        location !== key && byKey.has(location) &&
+        (reports.some(report => report.official) || new Set(reports.map(report => report.publisher)).size >= 2));
+      const moveAbsences = active.filter(entry => completePublishers.has(entry.publisher) &&
+        entry.channels.length && !supportsName(entry)).map(entry => entry.publisher);
+      const movementVote = destinations.length === 1
+        ? majority([...closures, ...absences, ...moveAbsences], supporting)
+        : { approved: false, count: 0 };
+      if (movementVote.approved) {
+        const [destinationKey, reports] = destinations[0];
+        const destination = byKey.get(destinationKey);
+        const newName = reports[0].channel;
+        const oldAliases = item.channelAliases?.[name] || [];
+        if (oldAliases.length) {
+          destination.channelAliases = { ...destination.channelAliases, [newName]: [...new Set([
+            ...(destination.channelAliases?.[newName] || []), ...oldAliases
+          ])] };
+        }
+        movedDestinations.push([destinationKey, newName]);
+        movedChannels.push({ channel: newName, from: tuningDetails(item), to: tuningDetails(destination),
+          departurePublishers: movementVote.count });
+      }
       const vote = majority(closures, supporting);
-      if (vote.approved || confirmedRenames.has(name)) {
+      if (vote.approved || movementVote.approved || confirmedRenames.has(name)) {
         removedNames.push(name);
-        largestChannelVote = Math.max(largestChannelVote, vote.count);
-      } else if (vote.count || renameOptions.size) {
+        largestChannelVote = Math.max(largestChannelVote, vote.count, movementVote.count);
+      } else if (vote.count || renameOptions.size || (destinations.length && (absences.length || moveAbsences.length))) {
         reviewedOnly.push({ ...original, channel: name, reviewReason: "Channel change lacks an independent publisher majority" });
       }
     }
@@ -1170,7 +1233,17 @@ function applyPublisherVotes(baseline, byKey, checkedSources, changes, removedIt
     changes.channelNamesRemoved += removedNames.length;
   }
   changes.renamed = renamedChannels.length;
-  return renamedChannels;
+  for (const [key, channel] of movedDestinations) {
+    if (!byKey.get(key)?.channels?.includes(channel)) {
+      throw new Error(`Cannot publish a station move whose destination was also removed: ${channel}`);
+    }
+  }
+  changes.moved = movedChannels.length;
+  const coverage = [...auditedGroups.values()].map(group => ({
+    ...group, respondingPublishers: [...group.respondingPublishers].sort(),
+    completePublishers: [...group.completePublishers].sort()
+  })).sort((a, b) => a.group.localeCompare(b.group));
+  return { renamedChannels, movedChannels, coverage };
 }
 
 export function validateFrequencyCoverage(baseline, proposed, removals) {
@@ -1275,9 +1348,9 @@ export function mergeFrequencyData(baselineItems, sourceCandidates, sources, opt
     }
   }
 
-  const renamedChannels = options.sourceResults
+  const { renamedChannels, movedChannels, coverage } = options.sourceResults
     ? applyPublisherVotes(baseline, byKey, options.sourceResults, changes, removedItems, reviewedOnly, now)
-    : [];
+    : { renamedChannels: [], movedChannels: [], coverage: [] };
   const removalEnabled = !options.sourceResults && String(envValue("FREQUENCY_REMOVE_MISSING") || "1") !== "0";
   const minCandidates = Number(envValue("FREQUENCY_MIN_CANDIDATES_FOR_REMOVAL") || 50);
   const minSuccessfulSources = Number(envValue("FREQUENCY_MIN_SUCCESSFUL_SOURCES_FOR_REMOVAL") || 5);
@@ -1417,7 +1490,7 @@ export function mergeFrequencyData(baselineItems, sourceCandidates, sources, opt
     return Number(a.frequency || 0) - Number(b.frequency || 0) || String(a.pol || "").localeCompare(String(b.pol || ""));
   });
   const channelAccess = options.sourceResults ? applyChannelAccessEvidence(items, options.sourceResults) : undefined;
-  return { items, reviewedOnly, removedItems, renamedChannels, channelAccess, changes, sourceCount: sources.length, checkedAt: now, successfulSourceCount, candidateCount: candidateGroups.size, closedCandidateCount: (options.closedCandidates || []).length, closedConsensusCount: closedConsensus.size };
+  return { items, reviewedOnly, removedItems, renamedChannels, movedChannels, coverage, channelAccess, changes, sourceCount: sources.length, checkedAt: now, successfulSourceCount, candidateCount: candidateGroups.size, closedCandidateCount: (options.closedCandidates || []).length, closedConsensusCount: closedConsensus.size };
 }
 
 export async function fetchSourceCandidates(source) {
@@ -1599,6 +1672,8 @@ export function buildFrequencyReport(payload) {
     changes: payload.changes,
     removedItems: (payload.removedItems || []).slice(0, 80),
     renamedChannels: (payload.renamedChannels || []).slice(0, 80),
+    movedChannels: (payload.movedChannels || []).slice(0, 80),
+    coverage: payload.coverage || [],
     channelAccess: payload.channelAccess,
     reviewedOnlyCount: (payload.reviewedOnly || []).length,
     groupCounts: payload.groupCounts || buildGroupCounts(payload.items || []),
@@ -1635,6 +1710,12 @@ export function frequencyReportText(report) {
   lines.push(`أسماء محطات حُذفت من ترددات قائمة بسبب الإغلاق: ${report.changes.closedConsensusChannelNamesRemoved || 0}`);
   lines.push(`أسماء محطات أضيفت: ${report.changes.channelNamesAdded}`);
   lines.push(`أسماء محطات حُذفت من ترددات قائمة: ${report.changes.channelNamesRemoved || 0}`);
+  for (const move of (report.movedChannels || []).slice(0, 20)) {
+    lines.push(`انتقال: ${move.channel} من ${move.from.frequency}${move.from.pol} إلى ${move.to.frequency}${move.to.pol}`);
+  }
+  for (const audit of report.coverage || []) {
+    lines.push(`${audit.group}: رُصد ${audit.frequenciesObserved}/${audit.frequencies} ترددًا و${audit.channelEntriesObserved}/${audit.channelEntries} سجل محطة، مصادر كاملة: ${audit.completePublishers.length}`);
+  }
   for (const rename of (report.renamedChannels || []).slice(0, 20)) {
     lines.push(`تغيير اسم: ${rename.from} ← ${rename.to} / ${rename.satelliteName} ${rename.frequency}`);
   }
@@ -1680,10 +1761,12 @@ export function frequencyReportHtml(report) {
     ["اختلافات حالة التشفير", report.channelAccess?.conflictCount || 0],
     ["للمراجعة فقط", report.reviewedOnlyCount]
   ].map(([a,b]) => `<tr><td>${esc(a)}</td><td>${esc(b)}</td></tr>`).join("");
+  const coverage = (report.coverage || []).map(audit => `<li>${esc(audit.group)}: ${audit.frequenciesObserved}/${audit.frequencies} ترددًا، ${audit.channelEntriesObserved}/${audit.channelEntries} سجل محطة، مصادر كاملة: ${audit.completePublishers.length}</li>`).join("");
+  const moved = (report.movedChannels || []).slice(0, 20).map(move => `<li>${esc(move.channel)}: ${esc(move.from.frequency)}${esc(move.from.pol)} ← ${esc(move.to.frequency)}${esc(move.to.pol)}</li>`).join("");
   const renamed = (report.renamedChannels || []).slice(0, 20).map(item => `<li>${esc(item.from)} ← ${esc(item.to)} / ${esc(item.satelliteName)} ${esc(item.frequency)}</li>`).join("");
   const failed = (report.failedSources || []).map(s => `<li>${esc(s.name || s.id)}: ${esc(s.error || s.status || "failed")}</li>`).join("");
   const removed = (report.removedItems || []).slice(0, 20).map(item => `<li>${esc(item.satelliteGroup || "-")} / ${esc(item.orbitalSlot || "-")} / ${esc(item.frequency || "-")}${esc(item.pol || "")} SR ${esc(item.sr || "-")}: ${esc(item.channel || "-")}</li>`).join("");
-  return `<!doctype html><html lang="ar" dir="rtl"><meta charset="utf-8"><body style="font-family:Tahoma,Arial,sans-serif;background:#f8f5ed;color:#111;line-height:1.7"><main style="max-width:860px;margin:auto;background:#fff;border-radius:22px;padding:24px"><h1>تقرير تحديث الترددات اليومي</h1><p>وقت الفحص: <b>${esc(report.generatedAt)}</b></p><table style="width:100%;border-collapse:collapse">${rows}</table>${report.changes.removalSkippedReason ? `<p><b>ملاحظة الحذف:</b> ${esc(report.changes.removalSkippedReason)}</p>` : ""}<p>${esc(report.note)}</p>${removed ? `<h2>أمثلة على ترددات حُذفت</h2><ul>${removed}</ul>` : ""}${renamed ? `<h2>أسماء محطات تغيّرت</h2><ul>${renamed}</ul>` : ""}${failed ? `<h2>مصادر تحتاج مراجعة</h2><ul>${failed}</ul>` : ""}</main></body></html>`;
+  return `<!doctype html><html lang="ar" dir="rtl"><meta charset="utf-8"><body style="font-family:Tahoma,Arial,sans-serif;background:#f8f5ed;color:#111;line-height:1.7"><main style="max-width:860px;margin:auto;background:#fff;border-radius:22px;padding:24px"><h1>تقرير تحديث الترددات اليومي</h1><p>وقت الفحص: <b>${esc(report.generatedAt)}</b></p><table style="width:100%;border-collapse:collapse">${rows}</table>${report.changes.removalSkippedReason ? `<p><b>ملاحظة الحذف:</b> ${esc(report.changes.removalSkippedReason)}</p>` : ""}<p>${esc(report.note)}</p>${removed ? `<h2>أمثلة على ترددات حُذفت</h2><ul>${removed}</ul>` : ""}${moved ? `<h2>محطات انتقلت</h2><ul>${moved}</ul>` : ""}${coverage ? `<h2>تغطية الفحص حسب القمر</h2><ul>${coverage}</ul>` : ""}${renamed ? `<h2>أسماء محطات تغيّرت</h2><ul>${renamed}</ul>` : ""}${failed ? `<h2>مصادر تحتاج مراجعة</h2><ul>${failed}</ul>` : ""}</main></body></html>`;
 }
 
 export async function sendFrequencyUpdateEmail(report) {

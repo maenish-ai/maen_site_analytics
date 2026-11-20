@@ -123,6 +123,8 @@ async function main() {
     items: merged.items,
     removedItems: (merged.removedItems || []).slice(0, 300),
     renamedChannels: merged.renamedChannels,
+    movedChannels: merged.movedChannels,
+    coverage: merged.coverage,
     channelAccess: {
       observations: merged.channelAccess.observations,
       updated: merged.channelAccess.updated,
@@ -151,6 +153,11 @@ async function main() {
 
   if (process.env.GITHUB_ACTIONS === 'true') {
     console.log(`::notice::Channel access: ${payload.channelAccess.observations} observations, ${payload.channelAccess.updated} status changes, ${payload.channelAccess.conflictCount} disagreements.`);
+    const coverage = payload.coverage.filter(group => group.frequencies > 0);
+    const observed = coverage.reduce((total, group) => total + group.frequenciesObserved, 0);
+    const stationsObserved = coverage.reduce((total, group) => total + group.channelEntriesObserved, 0);
+    const stationCount = coverage.reduce((total, group) => total + group.channelEntries, 0);
+    console.log(`::notice::Catalog review: ${coverage.length} groups, ${observed}/${baseline.items.length} frequencies and ${stationsObserved}/${stationCount} station entries directly observed, ${payload.movedChannels.length} confirmed moves.`);
     console.log(`::notice::Frequency check: ${successfulSourceCount} sources responded, ${candidates.length} candidates, ${merged.changes.added} additions and ${merged.changes.removed} removals proposed.`);
   }
 

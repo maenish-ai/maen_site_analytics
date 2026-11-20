@@ -87,3 +87,20 @@ assert.equal(conflict.channelAccess.conflicts.length, 1);
 const wrongFrequency = accessTable.replaceAll('11766 H', '11766 V');
 assert.equal(merge([accessA, accessSource('b.test', wrongFrequency)], mixedCatalog).items[0].channelEncryption['Atlas News'], 'encrypted');
 console.log('Per-channel access parsing, independent evidence, and conflicts passed.');
+
+const newTuning = { ...row, frequency: '11223' };
+const oldTuningWithRemainingStation = { ...row, channels: ['Local Radio'] };
+const moveReports = hosts.slice(0, 3).map(host => source(host, {
+  candidates: [oldTuningWithRemainingStation, newTuning], complete: true
+}));
+const moved = merge([...moveReports, ...keep.slice(3)], [rowWithNeighbor]);
+assert.equal(moved.movedChannels.length, 1);
+assert.deepEqual(moved.items.find(item => item.frequency === '11766').channels, ['Local Radio']);
+assert.deepEqual(moved.items.find(item => item.frequency === '11223').channels, ['Atlas News']);
+assert.equal(moved.coverage[0].frequencies, 1);
+assert.equal(moved.coverage[0].channelEntries, 2);
+assert.equal(moved.coverage[0].completePublishers.length, 3);
+const simultaneous = merge([...moveReports.slice(0, 2), ...keep.slice(2)], [rowWithNeighbor]);
+assert.equal(simultaneous.movedChannels.length, 0);
+assert(simultaneous.items.find(item => item.frequency === '11766').channels.includes('Atlas News'));
+console.log('Station move, simulcast protection, and catalog coverage passed.');
