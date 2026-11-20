@@ -572,19 +572,37 @@ function extractTableBlockCandidates(lines, source) {
   return dedupeItems(candidates);
 }
 
-export function extractCandidatesFromHtml(html, source) {
-  const lines = htmlToLines(html);
+export function extractCandidatesFromHtml(html, source, labeledRows = extractLabeledChannelRows(html)) {
+  const lines = [];
+  const rawLines = htmlToLines(html);
+  for (let index = 0; index < rawLines.length; index++) {
+    const line = rawLines[index];
+    const next = rawLines[index + 1] || "";
+    if (/^\d{4,5}(?:[.,]\d{1,3})?$/.test(line) && /^[HVLR]$/i.test(next)) {
+      lines.push(`${line} ${next}`);
+      index++;
+    } else {
+      lines.push(line);
+    }
+  }
+  const structured = labeledRows.map(({ frequency, pol, sr, channel, technical }) => ({
+    ...candidateBase(source), frequency, pol, sr, channel, channels: [channel],
+    fec: normalizeFec(technical), system: normalizeSystem(technical), mod: normalizeMod(technical),
+    source: source.name, sourceUrl: source.url, sourceAuditUrl: source.url,
+    authority: source.authority || "reference", trust: source.trust || "reference",
+    updatePolicy: source.mode || "compare-only", dataQuality: "labeled-tuning-table"
+  }));
   const dthSatFlexibleCandidates = extractDthSatFlexibleTableCandidates(lines, source);
   const dthSatCandidates = extractDthSatSimpleTableCandidates(lines, source);
   const isDthSatSource = /dthsat/i.test(String(source.url || source.name || ""));
   if (isDthSatSource && (dthSatFlexibleCandidates.length || dthSatCandidates.length)) {
-    return dedupeItems([...dthSatFlexibleCandidates, ...dthSatCandidates])
+    return dedupeItems([...structured, ...dthSatFlexibleCandidates, ...dthSatCandidates])
       .filter(item => !item.sr || item.frequency !== item.sr);
   }
   const blockCandidates = extractTableBlockCandidates(lines, source);
   // Arbitrary numbers around a channel name can be dates, service IDs or symbol
   // rates. Only accept inputs with a tuning header or explicit table columns.
-  return dedupeItems([...dthSatFlexibleCandidates, ...dthSatCandidates, ...blockCandidates])
+  return dedupeItems([...structured, ...dthSatFlexibleCandidates, ...dthSatCandidates, ...blockCandidates])
     .filter(item => !item.sr || item.frequency !== item.sr);
 }
 function parseAccessStatus(value) {
@@ -594,12 +612,13 @@ function parseAccessStatus(value) {
   return free === encrypted ? "" : free ? "free" : "encrypted";
 }
 
-export function extractChannelAccessObservations(html, source) {
-  const observations = [];
+function extractLabeledChannelRows(html) {
+  const rows = [];
   for (const table of String(html || "").matchAll(/<table\b[^>]*>([\s\S]*?)<\/table>/gi)) {
     let columns;
+    let columnCount;
     for (const row of table[1].matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gi)) {
-      if (row[1].includes("colspan")) continue;
+      if (/<t[dh]\b[^>]*\b(?:colspan|rowspan)\s*=/i.test(row[1])) continue;
       const cells = [...row[1].matchAll(/<t[dh]\b[^>]*>([\s\S]*?)<\/t[dh]>/gi)]
         .map(cell => safeText(decodeHtml(cell[1].replace(/<[^>]*>/g, " ")), 300));
       if (!cells.length) continue;
@@ -607,22 +626,118 @@ export function extractChannelAccessObservations(html, source) {
       const frequency = cells.findIndex(cell => /^(?:frequency|freq)(?:\s*\/?\s*(?:polarity|pol|mhz))?$/i.test(cell));
       const rate = cells.findIndex(cell => /^(?:symbol\s*rate|sr)(?:\s*\/?\s*fec)?$/i.test(cell));
       const access = cells.findIndex(cell => /^(?:access|encryption|system\s*\/?\s*encryption|scrambling|fta)$/i.test(cell));
-      if (name >= 0 && frequency >= 0 && rate >= 0 && access >= 0) {
+      if (name >= 0 && frequency >= 0 && rate >= 0) {
         columns = { name, frequency, rate, access, pol: cells.findIndex(cell => /^(?:polarity|pol)$/i.test(cell)) };
+        columnCount = cells.length;
         continue;
       }
-      if (!columns || cells.length <= Math.max(...Object.values(columns))) continue;
-      const status = parseAccessStatus(cells[columns.access]);
+      if (!columns || cells.length !== columnCount) continue;
       const channel = cells[columns.name];
       const tuning = cells[columns.frequency];
       const frequencyValue = normalizeFrequency(tuning);
       const pol = normalizePol(cells[columns.pol] || tuning);
       const sr = cells[columns.rate].match(/^\s*(\d{3,5})(?=\s|[-/]|$)/)?.[1];
-      if (!status || !frequencyValue || !pol || !sr || !channel || isLikelyHeaderOrAd(channel)) continue;
-      observations.push({ ...candidateBase(source), frequency: frequencyValue, pol, sr, channel, status });
+      if (!frequencyValue || !pol || !sr || frequencyValue === sr || !channel || isLikelyHeaderOrAd(channel)) continue;
+      rows.push({ frequency: frequencyValue, pol, sr, channel, status: parseAccessStatus(cells[columns.access]),
+        technical: cells.filter((_, index) => index !== columns.name).join(" ") });
     }
   }
-  return observations;
+  return rows;
+}
+
+export function extractChannelAccessObservations(html, source, labeledRows = extractLabeledChannelRows(html)) {
+  const satellite = candidateBase(source);
+  return labeledRows.filter(row => row.status).map(({ frequency, pol, sr, channel, status }) => ({
+    ...satellite, frequency, pol, sr, channel, status
+  }));
+}
+
+function satelliteTableCells(html) {
+  return [...html.matchAll(/<t[dh]\b[^>]*>([\s\S]*?)<\/t[dh]>/gi)]
+    .map(cell => safeText(decodeHtml(cell[1].replace(/<[^>]*>/g, " ")), 300));
+}
+
+export function extractKingOfSatListings(html, source) {
+  const candidates = [];
+  const accessObservations = [];
+  let tuning;
+  for (const [, attributes, contents] of String(html || "").matchAll(/<table\b([^>]*)>([\s\S]*?)<\/table>/gi)) {
+    if (/\bkos-frequency-header\b/i.test(attributes)) {
+      tuning = null;
+      const cells = satelliteTableCells(contents);
+      const frequencyIndex = cells.findIndex((value, index) =>
+        /^\d{4,5}(?:[.,]\d{1,3})?$/.test(value) && /^[HVLR]$/i.test(cells[index + 1] || ""));
+      const orbitalSlot = normalizeOrbitSlot(cells[0]?.replace(/&deg;|°/gi, "")).replace(/\.0+([EW])$/, "$1");
+      const satelliteName = cells[1];
+      const technical = cells.slice(frequencyIndex + 2).join(" ");
+      const sr = technical.match(/(?:^|\s)(\d{3,5})\s+(?=[1-9]\s*\/\s*[1-9]\b|auto\b)/i)?.[1];
+      const frequency = normalizeFrequency(cells[frequencyIndex]);
+      if (frequencyIndex < 2 || !frequency || !orbitalSlot || !satelliteName || !sr || frequency === sr) continue;
+      tuning = {
+        ...candidateBase({ ...source, orbitalSlot, orbit: orbitalSlot, satelliteName }),
+        frequency, sr, pol: normalizePol(cells[frequencyIndex + 1]),
+        fec: normalizeFec(technical), system: normalizeSystem(technical), mod: normalizeMod(technical),
+        dataQuality: "kingofsat-labeled-transponder"
+      };
+      continue;
+    }
+    if (!tuning || !/\bkos-channel-table\b/i.test(attributes) || /\bkos-channel-header\b/i.test(attributes)) continue;
+    for (const [, row] of contents.matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gi)) {
+      const cells = satelliteTableCells(row);
+      const accessIndex = cells.findIndex((value, index) => index >= 4 && parseAccessStatus(value));
+      const channel = cells[accessIndex - 4];
+      if (!channel || isLikelyHeaderOrAd(channel)) continue;
+      const status = parseAccessStatus(cells[accessIndex]);
+      candidates.push({
+        ...tuning, channel, channels: [channel], source: source.name, sourceUrl: source.url,
+        sourceAuditUrl: source.url, authority: source.authority || "reference",
+        trust: source.trust || "reference", updatePolicy: source.mode || "compare-only"
+      });
+      if (status) accessObservations.push({ ...tuning, channel, status });
+    }
+  }
+  return { candidates: dedupeItems(candidates), accessObservations };
+}
+
+export function alignPublisherListings(baseline, sourceResults) {
+  const tuningKey = item => {
+    const [group, slot, , frequency, pol, sr] = itemKey(item).split("|");
+    return [group, slot, frequency, pol, sr].join("|");
+  };
+  const indexed = new Map();
+  for (const item of baseline) {
+    const key = tuningKey(item);
+    if (!indexed.has(key)) indexed.set(key, []);
+    indexed.get(key).push(item);
+  }
+
+  const physicalNames = new Map();
+  for (const result of sourceResults) {
+    for (const item of result.candidates || []) {
+      if (item.dataQuality !== "kingofsat-labeled-transponder") continue;
+      const key = tuningKey(item);
+      if (!physicalNames.has(key)) physicalNames.set(key, new Set());
+      physicalNames.get(key).add(item.satelliteName.toLowerCase());
+    }
+  }
+
+  const align = item => {
+    if (item.dataQuality !== "kingofsat-labeled-transponder") return item;
+    const key = tuningKey(item);
+    const rows = indexed.get(key);
+    if (rows?.length !== 1 || physicalNames.get(key)?.size !== 1) return item;
+    const previous = rows[0];
+    const aggregate = String(previous.satelliteName || "").toLowerCase();
+    const observed = item.satelliteName.toLowerCase();
+    if (!/position|\/|\+/.test(aggregate) || (!aggregate.includes(observed) && !aggregate.endsWith(" position"))) return item;
+    return hydrateFrequencyItem({ ...item, satelliteName: previous.satelliteName, satellite: previous.satelliteName,
+      observedSatelliteName: item.satelliteName });
+  };
+  return sourceResults.map(result => ({
+    ...result,
+    candidates: (result.candidates || []).map(align),
+    accessObservations: (result.accessObservations || []).map(align)
+  }));
 }
 
 function channelAccessKey(item, channel) {
@@ -1460,7 +1575,7 @@ export function mergeFrequencyData(baselineItems, sourceCandidates, sources, opt
 
 export async function fetchSourceCandidates(source) {
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), Number(envValue("FREQUENCY_FETCH_TIMEOUT_MS") || 4500));
+  const timeout = setTimeout(() => controller.abort(), Number(envValue("FREQUENCY_FETCH_TIMEOUT_MS") || 8000));
   try {
     if (source.mode === "coverage-only") return { source, ok: true, candidates: [], closedCandidates: [], coverageOnly: true };
     const response = await fetch(source.url, {
@@ -1471,10 +1586,16 @@ export async function fetchSourceCandidates(source) {
       }
     });
     const text = await response.text();
-    const candidates = response.ok ? extractCandidatesFromHtml(text, source) : [];
+    const kingListings = response.ok && publisherKey(source) === "kingofsat.net"
+      ? extractKingOfSatListings(text, source) : null;
+    const labeledRows = response.ok && !kingListings?.candidates.length ? extractLabeledChannelRows(text) : [];
+    const candidates = kingListings?.candidates.length ? kingListings.candidates
+      : response.ok ? extractCandidatesFromHtml(text, source, labeledRows) : [];
     const closedCandidates = response.ok ? extractClosedCandidatesFromHtml(text, source) : [];
-    const accessObservations = response.ok ? extractChannelAccessObservations(text, source) : [];
-    return { source, ok: response.ok, status: response.status, candidates, closedCandidates, accessObservations, bytes: text.length };
+    const accessObservations = kingListings?.candidates.length ? kingListings.accessObservations
+      : response.ok ? extractChannelAccessObservations(text, source, labeledRows) : [];
+    const parseStatus = !response.ok ? "http-error" : candidates.length || closedCandidates.length || accessObservations.length ? "parsed" : "empty";
+    return { source, ok: response.ok, status: response.status, parseStatus, candidates, closedCandidates, accessObservations, bytes: text.length };
   } catch (error) {
     return { source, ok: false, error: String(error && error.message || error), candidates: [], closedCandidates: [] };
   } finally {

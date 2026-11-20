@@ -9,6 +9,7 @@ import {
   EXPECTED_SOURCE_SERVICE_COUNTS,
   FREQUENCY_DATA_VERSION,
   JORDAN_MENA_SATELLITES,
+  alignPublisherListings,
   buildFrequencyReport,
   buildGroupCounts,
   buildSatelliteIdentityCounts,
@@ -81,12 +82,13 @@ async function main() {
   console.log(`[frequency] Daily GitHub update started at ${startedAt}`);
   console.log(`[frequency] Baseline items: ${baseline.items.length}; sources: ${sources.length}`);
 
-  const sourceResults = await mapWithConcurrency(
+  const fetchedSources = await mapWithConcurrency(
     sources,
     process.env.FREQUENCY_SOURCE_CONCURRENCY || 16,
     fetchSourceCandidates
   );
 
+  const sourceResults = alignPublisherListings(baseline.items, fetchedSources);
   const candidates = sourceResults.flatMap(r => r.candidates || []);
   const closedCandidates = sourceResults.flatMap(r => r.closedCandidates || []);
   const successfulSourceCount = sourceResults.filter(r => r.ok && !r.coverageOnly).length;
@@ -137,6 +139,7 @@ async function main() {
       name: r.source && r.source.name,
       ok: Boolean(r.ok),
       status: r.status || null,
+      parseStatus: r.parseStatus || null,
       candidates: (r.candidates || []).length,
       closedCandidates: (r.closedCandidates || []).length,
       coverageOnly: Boolean(r.coverageOnly),
@@ -158,6 +161,8 @@ async function main() {
     const stationsObserved = coverage.reduce((total, group) => total + group.channelEntriesObserved, 0);
     const stationCount = coverage.reduce((total, group) => total + group.channelEntries, 0);
     console.log(`::notice::Catalog review: ${coverage.length} groups, ${observed}/${baseline.items.length} frequencies and ${stationsObserved}/${stationCount} station entries directly observed, ${payload.movedChannels.length} confirmed moves.`);
+    const emptySources = sourceResults.filter(result => result.parseStatus === 'empty').length;
+    console.log(`::notice::Publisher coverage: ${sourceResults.filter(result => result.parseStatus === 'parsed').length} parsed pages, ${emptySources} HTTP-success pages with no usable listings.`);
     console.log(`::notice::Frequency check: ${successfulSourceCount} sources responded, ${candidates.length} candidates, ${merged.changes.added} additions and ${merged.changes.removed} removals proposed.`);
   }
 

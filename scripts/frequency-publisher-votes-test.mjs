@@ -111,3 +111,9 @@ const frequencyBlocks = `<p>11977 V</p><p>DVB-S2 8PSK 27500 3/4</p>
 const extracted = extractCandidatesFromHtml(frequencyBlocks, source('a.test').source);
 assert.deepEqual(extracted.map(item => [item.frequency, item.sr]), [['11977', '27500'], ['12015', '']]);
 console.log('Tuning extraction ignores service identifiers and years.');
+
+const explicitTuning = `<table><tr><th>Service Name</th><th>Frequency</th><th>Polarity</th><th>Symbol Rate</th><th>System</th></tr>
+<tr><td>Atlas News</td><td>11223</td><td>V</td><td>27500</td><td>DVB-S2 8PSK</td></tr></table>`;
+const explicitRows = extractCandidatesFromHtml(explicitTuning, source('a.test').source);
+assert(explicitRows.some(x => x.frequency === '11223' && x.pol === 'V' && x.sr === '27500' && x.mod === '8PSK' && x.channels.includes('Atlas News')));
+console.log('Labeled tuning columns parsed without guessing missing access.');
