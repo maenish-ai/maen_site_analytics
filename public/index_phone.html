@@ -158,6 +158,8 @@
 .frequency-trust-badge.low{background:rgba(107,114,128,.12);border-color:rgba(107,114,128,.25);color:#374151;}
 .frequency-row-trust{margin:0 0 8px;}
 .frequency-data-status{font-size:11px;font-weight:900;color:#6b7280;margin:-4px 0 10px;}
+.frequency-pagination{display:flex;gap:.75rem;align-items:center;justify-content:center;padding:.75rem;overflow-anchor:none;}
+#frequencyLoadMore[hidden]{display:none;}
 @media(max-width:700px){#frequencySearchSuggest.frequency-ai-suggest{max-height:280px;border-radius:18px}.frequency-suggest-item{grid-template-columns:34px minmax(0,1fr);}.frequency-suggest-icon{width:32px;height:32px;border-radius:12px}.frequency-suggest-type{display:none}.frequency-trust-badge{font-size:10px;padding:5px 8px}}
 /* /MAEN CREDIT-SAFE SMART SEARCH SUGGESTIONS 2026-05-30 */
 
@@ -1632,8 +1634,8 @@ body.lang-en #frequencies .station-frequency-meta span{
 <option value="Azerspace">أذر سبيس 46E</option>
 </select>
 <select aria-label="فلتر نوع القنوات" id="frequencyServiceFilter" onchange="if(window.loadFrequencyFeature)window.loadFrequencyFeature()" title="فلتر نوع القنوات">
-<option value="all">الكل</option>
-<option value="free" selected>قنوات مجانية / FTA</option>
+<option value="all" selected>الكل</option>
+<option value="free">قنوات مجانية / FTA</option>
 <option value="encrypted">قنوات مشفرة</option>
 <option value="radio">راديو</option>
 </select>
@@ -1659,6 +1661,10 @@ body.lang-en #frequencies .station-frequency-meta span{
 </thead>
 <tbody id="frequencyTableBody"></tbody>
 </table>
+</div>
+<div class="frequency-pagination">
+<span id="frequencyResultCount" role="status"></span>
+<button class="pill" id="frequencyLoadMore" type="button" aria-controls="frequencyTableBody" hidden>عرض المزيد من الترددات</button>
 </div>
 <div class="frequency-empty" id="frequencyEmpty">لا توجد نتائج مطابقة للبحث الحالي.</div>
 </div>
@@ -1834,7 +1840,7 @@ async function loadLiveFrequencyData(){
   } catch (error) {
     console.warn('Using embedded frequency backup', error);
     window.frequencyDataStatus = { source: 'embedded-backup', updatedAt: null, count: DATA.length, error: String(error && error.message || error) };
-    if (DATA.length) setStatus('');
+    if (DATA.length) setStatus('تعذر تحميل القائمة الكاملة. تُعرض نسخة احتياطية مؤقتة.');
     else setStatus('تعذر تحميل قاعدة الترددات مؤقتًا. جرّب تحديث الصفحة.');
     return false;
   }
@@ -1843,9 +1849,12 @@ let exactPackageMode = null;
 let frequencyRenderFrame = 0;
 let frequencySearchTimer = 0;
 let frequencySuggestionTimer = 0;
-let frequencyVisibleLimit = 60;
-const FREQUENCY_INITIAL_LIMIT = 60;
-const FREQUENCY_SEARCH_LIMIT = 2000;
+const FREQUENCY_BATCH_SIZE = 60;
+let frequencyRows = [];
+let frequencyRenderedCount = 0;
+let frequencyRenderedData = null;
+let frequencyRenderKey = '';
+let frequencyPaginationObserver = null;
 const STATION_CARD_LIMIT = 360;
 const FREQUENCY_SEARCH_DEBOUNCE_MS = 250;
 const FREQUENCY_SUGGEST_DEBOUNCE_MS = 360;
@@ -3064,6 +3073,11 @@ function getFrequency(item) {
   return Number.isFinite(n) ? n : null;
 }
 
+const frequencySatelliteGroups = new Map(Object.keys(SATELLITE_QUERY_KEYWORDS)
+  .map(name => [normalizeText(name), normalizeText(name)]));
+frequencySatelliteGroups.set('arabsat badr', 'arabsat');
+frequencySatelliteGroups.set('badr', 'arabsat');
+
 function satelliteAllowed(item, selected) {
   const s = normalizeText(selected || 'all');
   const group = normalizeText(item.satelliteGroup || '');
@@ -3074,6 +3088,9 @@ function satelliteAllowed(item, selected) {
   const cluster = normalizeText(item.satelliteCluster || '');
   const blob = [group, sat, orbit, slot, satName, cluster].join(' ');
   if (s === 'all') return true;
+  const catalogGroup = frequencySatelliteGroups.get(group);
+  const selectedGroup = frequencySatelliteGroups.get(s);
+  if (catalogGroup && selectedGroup) return catalogGroup === selectedGroup;
   if (s === 'nilesat') return group.includes('nilesat') || sat.includes('nilesat') || orbit.includes('7w') || orbit.includes('8w');
   if (s === 'arabsat' || s === 'badr') return group.includes('arabsat') || group.includes('badr') || sat.includes('arabsat') || sat.includes('badr') || orbit.includes('26e');
   if (s.includes('eshail') || s.includes('es hail')) return blob.includes('eshail') || blob.includes('es hail') || orbit.includes('25');
@@ -3688,7 +3705,6 @@ window.setFrequencyAutoCategory = function(value){
   if (pkgSelect) pkgSelect.value = '';
   const input = document.getElementById('frequencySearch');
   if (input) { input.value = CATEGORY_LABELS[id] || id; input.focus(); }
-  frequencyVisibleLimit = FREQUENCY_SEARCH_LIMIT;
   window.renderFrequencies();
 };
 
@@ -3698,7 +3714,6 @@ window.setFrequencyPackageExact = function(id, label){
   const categorySelect = document.getElementById('frequencyAutoCategory');
   if (categorySelect) categorySelect.value = '';
   if (input) { input.value = label || exactPackageMode || ''; input.focus(); }
-  frequencyVisibleLimit = FREQUENCY_SEARCH_LIMIT;
   window.renderFrequencies();
 };
 
@@ -3708,7 +3723,6 @@ window.setFrequencyCategory = function(value){
   const packageSelect = document.getElementById('frequencyAutoPackage');
   if (packageSelect) packageSelect.value = '';
   if (input) { input.value = String(value || ''); input.focus(); }
-  frequencyVisibleLimit = FREQUENCY_SEARCH_LIMIT;
   window.renderFrequencies();
 };
 
@@ -3722,9 +3736,8 @@ window.clearFrequencySearch = function(){
   if (satelliteSelect) satelliteSelect.value = 'Nilesat';
   if (packageSelect) packageSelect.value = '';
   if (categorySelect) categorySelect.value = '';
-  if (serviceSelect) serviceSelect.value = 'free';
+  if (serviceSelect) serviceSelect.value = 'all';
   if (input) { input.value = ''; input.focus(); }
-  frequencyVisibleLimit = FREQUENCY_INITIAL_LIMIT;
   window.renderFrequencies();
 };
 
@@ -3740,15 +3753,32 @@ window.renderFrequencies = function(){
   frequencyRenderFrame = requestAnimationFrame(renderFrequenciesNow);
 };
 
-window.showMoreFrequencies = function(){
-  frequencyVisibleLimit += 60;
-  window.renderFrequencies();
-};
+function appendFrequencyBatch() {
+  const tbody = document.getElementById('frequencyTableBody');
+  const more = document.getElementById('frequencyLoadMore');
+  const count = document.getElementById('frequencyResultCount');
+  if (!tbody || !more || !count) return;
+  const next = frequencyRows.slice(frequencyRenderedCount, frequencyRenderedCount + FREQUENCY_BATCH_SIZE);
+  if (next.length) {
+    tbody.insertAdjacentHTML('beforeend', next.map(frequencyRowHtml).join(''));
+    frequencyRenderedCount += next.length;
+  }
+  const english = document.body.classList.contains('lang-en');
+  count.textContent = frequencyRows.length
+    ? (english ? `Showing ${frequencyRenderedCount} of ${frequencyRows.length} frequencies` : `عرض ${frequencyRenderedCount} من ${frequencyRows.length} ترددًا`)
+    : '';
+  more.textContent = english ? 'Show more frequencies' : 'عرض المزيد من الترددات';
+  more.hidden = frequencyRenderedCount >= frequencyRows.length;
+  // Reobserve after moving the button so short batches can continue loading.
+  frequencyPaginationObserver?.unobserve(more);
+  if (!more.hidden) frequencyPaginationObserver?.observe(more);
+}
+
+window.showMoreFrequencies = appendFrequencyBatch;
 
 function scheduleFrequencySearch(){
   clearTimeout(frequencySearchTimer);
   frequencySearchTimer = setTimeout(function(){
-    frequencyVisibleLimit = FREQUENCY_SEARCH_LIMIT;
     window.renderFrequencies();
   }, FREQUENCY_SEARCH_DEBOUNCE_MS);
 }
@@ -3801,14 +3831,8 @@ function renderFrequenciesNow(){
   if (!query) exactPackageMode = null;
   const mode = getSearchMode(query);
   const satelliteControl = document.getElementById('frequencySatellite');
-  const serviceControl = document.getElementById('frequencyServiceFilter');
   const satelliteWasSelected = satelliteControl?.dataset.userSelected;
-  const serviceWasSelected = serviceControl?.dataset.userSelected;
   if (!satelliteWasSelected && satelliteControl) satelliteControl.value = query ? 'all' : 'Nilesat';
-  if (!serviceWasSelected && serviceControl) {
-    serviceControl.value = query ? 'all' : 'free';
-    serviceFilter = getFrequencyServiceFilter();
-  }
   if (mode.requestedService) serviceFilter = mode.requestedService;
   // احترم فلتر مجاني/مشفر حتى أثناء البحث النصي.
   // مثال: MBC مع فلتر "قنوات مشفرة" لا يعرض MBC إذا كانت مفتوحة/FTA.
@@ -3816,10 +3840,15 @@ function renderFrequenciesNow(){
   // البحث والفلاتر تبقى داخل جدول الترددات نفسه.
   // لا نبدّل الشكل إلى بطاقات عند كتابة MBC / مصرية / مسيحية / إسلامية.
   const stationCardSearchActive = false;
-  const searchActive = !!query || !!exactPackageMode || serviceFilter !== 'all';
   // البحث يحترم القمر المختار من القائمة: كل قمر لحاله.
   // إذا كتب المستخدم اسم قمر داخل مربع البحث، الاسم المكتوب يسبق اختيار القائمة.
   const effectiveSelected = mode.satelliteOverrideAll ? 'all' : (mode.satellite || satelliteControl?.value || selected || 'all');
+  const renderKey = JSON.stringify([query, exactPackageMode, effectiveSelected, serviceFilter]);
+  if (frequencyRenderedData === DATA && frequencyRenderKey === renderKey) {
+    return;
+  }
+  frequencyRenderedData = DATA;
+  frequencyRenderKey = renderKey;
   const tableWrap = tbody.closest('.frequency-table-wrap');
   if (tableWrap) tableWrap.classList.toggle('frequency-search-hidden', false);
   updateActiveFrequencyFilters(mode);
@@ -3830,7 +3859,7 @@ function renderFrequenciesNow(){
     if (!satelliteAllowed(item, effectiveSelected)) continue;
     if ((mode.type === 'frequency' || item.hideFromNamedSearch) && !itemMatchesMode(item, mode)) continue;
     const serviceChannels = uniqueChannelNames(applyFrequencyServiceFilter(matchingChannels(item, mode), item, serviceFilter));
-    if (!serviceChannels.length) continue;
+    if (!serviceChannels.length && (serviceFilter !== 'all' || !['all', 'frequency'].includes(mode.type))) continue;
     const rowScoreValue = mode.type === 'all' ? (100000 - index) : rowScore(item, mode, index, serviceChannels);
     const rowKey = frequencyRowDedupeKey(item);
     if (rowMap.has(rowKey)) {
@@ -3845,25 +3874,25 @@ function renderFrequenciesNow(){
   const rows = Array.from(rowMap.values());
   if (mode.type !== 'all') rows.sort((a, b) => b.score - a.score || a.index - b.index);
 
-  const baseLimit = mode.type === 'all' ? FREQUENCY_INITIAL_LIMIT : FREQUENCY_SEARCH_LIMIT;
-  const activeLimit = Math.max(baseLimit, frequencyVisibleLimit || 0);
-  const visibleRows = rows.slice(0, activeLimit);
+  frequencyRows = rows;
+  frequencyRenderedCount = 0;
+  tbody.replaceChildren();
+  appendFrequencyBatch();
 
-  tbody.innerHTML = visibleRows.map(row => {
-    const item = row.item;
-    const channels = uniqueChannelNames(Array.isArray(row.channels) ? row.channels : matchingChannels(item, mode));
-    const visible = channels.slice(0, 10).map(ch => channelChipHtml(ch, item, '')).join('');
-    const hidden = channels.slice(10).map(ch => channelChipHtml(ch, item, 'channel-extra')).join('');
-    const chHtml = channels.length ? '<div class="frequency-row-trust">' + frequencyTrustBadgesHtml(item) + '</div><div class="channels-cell">' + visible + hidden + (channels.length > 10 ? '<button type="button" class="show-more-channels" onclick="toggleChannelList(this)">عرض المزيد (' + (channels.length - 10) + ')</button>' : '') + '</div>' : '<div class="channels-missing">لا توجد محطات مطابقة داخل هذا التردد</div>';
-    return '<tr><td><span class="frequency-badge">' + esc(satelliteLabel(item.satelliteGroup || '')) + '</span></td><td>' + esc(physicalSatelliteLabel(item)) + '</td><td>' + esc(item.frequency || '') + '</td><td>' + esc(item.pol || '') + '</td><td>' + esc(item.sr || '') + '</td><td>' + esc(item.fec || '') + '</td><td class="frequency-system-td"><strong class="frequency-system-value">' + esc([item.system || '', item.mod || ''].filter(Boolean).join(' / ') || 'غير مذكور') + '</strong></td><td>' + chHtml + '</td></tr>';
-  }).join('');
-
-  renderStationCards(stationCardSearchActive ? rows : visibleRows, mode, stationCardSearchActive);
+  renderStationCards([], mode, stationCardSearchActive);
   scheduleFailedSearchLog(query, mode, effectiveSelected, serviceFilter, rows.length);
   const empty = document.getElementById('frequencyEmpty');
   if (empty) empty.classList.toggle('active', rows.length === 0);
 }
 
+function frequencyRowHtml(row) {
+  const item = row.item;
+  const channels = row.channels;
+  const visible = channels.slice(0, 10).map(ch => channelChipHtml(ch, item, '')).join('');
+  const hidden = channels.slice(10).map(ch => channelChipHtml(ch, item, 'channel-extra')).join('');
+  const chHtml = channels.length ? '<div class="frequency-row-trust">' + frequencyTrustBadgesHtml(item) + '</div><div class="channels-cell">' + visible + hidden + (channels.length > 10 ? '<button type="button" class="show-more-channels" onclick="toggleChannelList(this)">عرض المزيد (' + (channels.length - 10) + ')</button>' : '') + '</div>' : '<div class="channels-missing">لا توجد محطات مطابقة داخل هذا التردد</div>';
+  return '<tr><td><span class="frequency-badge">' + esc(satelliteLabel(item.satelliteGroup || '')) + '</span></td><td>' + esc(physicalSatelliteLabel(item)) + '</td><td>' + esc(item.frequency || '') + '</td><td>' + esc(item.pol || '') + '</td><td>' + esc(item.sr || '') + '</td><td>' + esc(item.fec || '') + '</td><td class="frequency-system-td"><strong class="frequency-system-value">' + esc([item.system || '', item.mod || ''].filter(Boolean).join(' / ') || 'غير مذكور') + '</strong></td><td>' + chHtml + '</td></tr>';
+}
 
 function buildSearchSuggestions(){
   const suggestions = [];
@@ -3982,19 +4011,27 @@ function scheduleFrequencySuggestions(){
   clearTimeout(frequencySuggestionTimer);
   frequencySuggestionTimer=setTimeout(renderFrequencySuggestions,FREQUENCY_SUGGEST_DEBOUNCE_MS);
 }
-window.applyFrequencySuggestion=function(value){const input=document.getElementById('frequencySearch');if(input){input.value=String(value || '');input.focus();}exactPackageMode=null;hideFrequencySuggestions();frequencyVisibleLimit=FREQUENCY_SEARCH_LIMIT;window.renderFrequencies();};
+window.applyFrequencySuggestion=function(value){const input=document.getElementById('frequencySearch');if(input){input.value=String(value || '');input.focus();}exactPackageMode=null;hideFrequencySuggestions();window.renderFrequencies();};
 
 let frequencyControlsBound = false;
 let frequencyDataReadyPromise = null;
 function onFrequencySearchChanged(){
   exactPackageMode = null;
-  frequencyVisibleLimit = FREQUENCY_SEARCH_LIMIT;
   scheduleFrequencySuggestions();
   scheduleFrequencySearch();
 }
 function bindFrequencyControlsOnce(){
   if (frequencyControlsBound) return;
   frequencyControlsBound = true;
+  const more = document.getElementById('frequencyLoadMore');
+  if (more) {
+    more.addEventListener('click', appendFrequencyBatch);
+    if ('IntersectionObserver' in window) {
+      frequencyPaginationObserver = new IntersectionObserver(entries => {
+        if (!more.hidden && entries.some(entry => entry.isIntersecting)) appendFrequencyBatch();
+      }, { rootMargin: '0px 0px 240px 0px' });
+    }
+  }
   const input = document.getElementById('frequencySearch');
   if (input) {
     input.defaultValue = '';
@@ -4009,10 +4046,10 @@ function bindFrequencyControlsOnce(){
   }
   const sat = document.getElementById('frequencySatellite');
   if (sat && !sat.dataset.smartDefaultApplied) { sat.dataset.smartDefaultApplied = '1'; if (!sat.value || sat.value === 'all') sat.value = 'Nilesat'; }
-  if (sat) sat.addEventListener('change', function(){ sat.dataset.userSelected = '1'; if (!initFrequencyFeature.done) initFrequencyFeature(); frequencyVisibleLimit = FREQUENCY_INITIAL_LIMIT; hideFrequencySuggestions(); window.renderFrequencies(); scheduleFrequencySuggestions(); });
+  if (sat) sat.addEventListener('change', function(){ sat.dataset.userSelected = '1'; if (!initFrequencyFeature.done) initFrequencyFeature(); hideFrequencySuggestions(); window.renderFrequencies(); scheduleFrequencySuggestions(); });
   const serviceSelect = document.getElementById('frequencyServiceFilter');
-  if (serviceSelect && !serviceSelect.dataset.smartDefaultApplied) { serviceSelect.dataset.smartDefaultApplied = '1'; if (!serviceSelect.value || serviceSelect.value === 'all') serviceSelect.value = 'free'; }
-  if (serviceSelect) serviceSelect.addEventListener('change', function(){ serviceSelect.dataset.userSelected = '1'; if (!initFrequencyFeature.done) initFrequencyFeature(); frequencyVisibleLimit = FREQUENCY_SEARCH_LIMIT; hideFrequencySuggestions(); window.renderFrequencies(); });
+  if (serviceSelect && !serviceSelect.dataset.smartDefaultApplied) { serviceSelect.dataset.smartDefaultApplied = '1'; if (!serviceSelect.value) serviceSelect.value = 'all'; }
+  if (serviceSelect) serviceSelect.addEventListener('change', function(){ if (!initFrequencyFeature.done) initFrequencyFeature(); hideFrequencySuggestions(); window.renderFrequencies(); });
 }
 function initFrequencyFeature(){
   bindFrequencyControlsOnce();
@@ -4067,7 +4104,7 @@ function shareSite(){var shareData={title:'معن حنونة للستلايت',t
     });
   }
   return frequencyFeatureLoading;
-}window.loadFrequencyFeature=loadFrequencyFeature;window.setFrequencyCategory=window.setFrequencyCategory || function(value){loadFrequencyFeature().then(function(){if(typeof window.setFrequencyCategory==='function')window.setFrequencyCategory(value);});};window.setFrequencyPackageExact=window.setFrequencyPackageExact || function(id,label){loadFrequencyFeature().then(function(){if(typeof window.setFrequencyPackageExact==='function')window.setFrequencyPackageExact(id,label);});};function showPage(id,skipHistory){var pages=document.querySelectorAll('.page');pages.forEach(function(page){page.classList.remove('active');});var target=document.getElementById(id);if(target){target.classList.add('active');}if(id==='frequencies'){loadFrequencyFeature();}document.querySelectorAll('[data-nav-target]').forEach(function(btn){btn.classList.toggle('active',btn.getAttribute('data-nav-target')===id);});if(!skipHistory){var newHash='#'+id;if(window.location.hash !==newHash){history.pushState({page:id},'',newHash);}}if(typeof setLanguage==='function'){setLanguage(window.maenStorageGet('siteLang')|| 'ar');}resetSectionScrollById(id);resetActivePageScroll();forceScrollTop();requestAnimationFrame(function(){resetActivePageScroll();forceScrollTop();});setTimeout(forceScrollTop,30);setTimeout(forceScrollTop,120);}window.addEventListener('load',function(){var initialPage=(window.location.hash || '#home').replace('#','');if(!document.getElementById(initialPage)){initialPage='home';}history.replaceState({page:initialPage},'','#'+initialPage);showPage(initialPage,true);if(typeof setupWhatsAppMessages==='function'){setupWhatsAppMessages();}if(typeof renderReceiverSoftware==='function'){renderReceiverSoftware();}lockSidebarPosition();resetActivePageScroll();forceScrollTop();setTimeout(function(){resetActivePageScroll();forceScrollTop();},30);});window.addEventListener('popstate',function(event){var page=(event.state && event.state.page)||(window.location.hash || '#home').replace('#','')|| 'home';if(!document.getElementById(page)){page='home';}showPage(page,true);});function openLightbox(src,title){src=String(src||'').replace('/assets/images-optimized/','/assets/images-hq/').replace('assets/images-optimized/','assets/images-hq/');var box=document.getElementById('imageLightbox');var img=document.getElementById('lightboxImage');var text=document.getElementById('lightboxTitle');if(!box || !img || !text)return;img.src=src;img.alt=title || 'صورة';text.textContent=title || 'صورة';box.classList.add('active');document.body.style.overflow='hidden';}function hideLightbox(){var box=document.getElementById('imageLightbox');var img=document.getElementById('lightboxImage');if(!box || !img)return;box.classList.remove('active');img.src='';document.body.style.overflow='';}function closeLightbox(event){if(event.target && event.target.id==='imageLightbox'){hideLightbox();}}document.addEventListener('keydown',function(event){if(event.key==='Escape'){hideLightbox();}});(function(){var PHONE='962788272988';var CART_KEY='maen_sat_store_cart_v1';function readCart(){try{return JSON.parse(window.maenStorageGet(CART_KEY)|| '[]');}catch(e){return[];}}function saveCart(cart){window.maenStorageSet(CART_KEY,JSON.stringify(cart));updateCartBadge();}function productFromCard(card){var name=card.getAttribute('data-product-name')||(card.querySelector('h3')? card.querySelector('h3').textContent.trim():'منتج');var priceAttr=card.getAttribute('data-product-price');var priceText=priceAttr ||(card.querySelector('.price-row strong')? card.querySelector('.price-row strong').textContent:'0');var price=Number(String(priceText).replace(/[^0-9.]/g,''))|| 0;var image=card.querySelector('.image-wrap img')? card.querySelector('.image-wrap img').getAttribute('src'):'';return{name:name,price:price,image:image,qty:1};}function addToCart(product){var cart=readCart();var found=cart.find(function(x){return x.name===product.name;});if(found){found.qty+=1;}else{cart.push(product);}saveCart(cart);openCart();}window.storeChangeQty=function(name,delta){var cart=readCart();cart=cart.map(function(item){if(item.name===name){item.qty+=delta;}return item;}).filter(function(item){return item.qty>0;});saveCart(cart);renderCart();};window.storeClearCart=function(){saveCart([]);renderCart();};function money(n){return(Math.round(n*100)/100)+' د.أ';}function renderCart(){var list=document.getElementById('storeCartList');var totalEl=document.getElementById('storeCartTotal');if(!list || !totalEl)return;var cart=readCart();if(!cart.length){list.innerHTML='<div class="store-empty">السلة فارغة حالياً</div>';totalEl.textContent=money(0);return;}var total=cart.reduce(function(sum,item){return sum+(item.price*item.qty);},0);list.innerHTML=cart.map(function(item){return '<div class="store-cart-item"><div><strong>'+escapeHtml(item.name)+'</strong><small>'+money(item.price)+' × '+item.qty+'</small></div><div class="store-cart-actions"><button type="button" onclick="storeChangeQty(\''+escapeAttr(item.name)+'\',1)">+</button><button type="button" onclick="storeChangeQty(\''+escapeAttr(item.name)+'\',-1)">−</button></div></div>';}).join('');totalEl.textContent=money(total);}function checkout(){var cart=readCart();if(!cart.length){alert('السلة فارغة');return;}var lines=['مرحبا، أريد تأكيد طلب من موقع معن حنونة للستلايت:'];var total=0;cart.forEach(function(item,index){total+=item.price*item.qty;lines.push((index+1)+'. '+item.name+' | الكمية: '+item.qty+' | سعر القطعة: '+money(item.price)+' | الإجمالي: '+money(item.price*item.qty));});lines.push('المجموع التقريبي: '+money(total));lines.push('الرجاء تأكيد التوفر والسعر النهائي وموعد التسليم/التركيب المناسب.');window.open('https://wa.me/'+PHONE+'?text='+encodeURIComponent(lines.join('\n')),'_blank','noopener');}function escapeHtml(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}function escapeAttr(s){return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'");}function updateCartBadge(){var badge=document.getElementById('storeCartCount');if(!badge)return;var count=readCart().reduce(function(sum,item){return sum+item.qty;},0);badge.textContent=count;}function openCart(){var p=document.getElementById('storeCartPanel');if(p){renderCart();p.classList.add('active');}}function closeCart(){var p=document.getElementById('storeCartPanel');if(p){p.classList.remove('active');}}window.storeOpenCart=openCart;window.storeCloseCart=closeCart;window.storeCheckout=checkout;function initStore(){if(document.getElementById('storeCartPanel'))return;var float=document.createElement('button');float.type='button';float.className='store-cart-float';float.setAttribute('onclick','storeOpenCart()');float.innerHTML='<svg class="hq-svg-icon" viewBox="0 0 64 64" aria-hidden="true"><path d="M8 10h8l6 31h27l6-21H21" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="26" cy="53" r="4" fill="currentColor"/><circle cx="48" cy="53" r="4" fill="currentColor"/></svg> السلة<span id="storeCartCount">0</span>';document.body.appendChild(float);var panel=document.createElement('div');panel.id='storeCartPanel';panel.className='store-cart-panel';panel.innerHTML='<div class="store-cart-box"><div class="store-cart-head"><h3>سلة الطلبات</h3><button type="button" class="store-close-btn" onclick="storeCloseCart()">إغلاق</button></div><div id="storeCartList" class="store-cart-list"></div><div class="store-cart-total"><span>المجموع</span><strong id="storeCartTotal">0 د.أ</strong></div><div class="store-cart-footer"><button type="button" class="store-whatsapp-checkout" onclick="storeCheckout()">اطلب الآن عبر واتساب</button><button type="button" class="store-clear-cart" onclick="storeClearCart()">تفريغ السلة</button></div></div>';panel.addEventListener('click',function(e){if(e.target===panel)closeCart();});document.body.appendChild(panel);document.querySelectorAll('#devices .device-card').forEach(function(card){var priceRow=card.querySelector('.price-row');if(!priceRow || card.querySelector('.store-add-btn'))return;var btn=document.createElement('button');btn.type='button';btn.className='store-add-btn';btn.textContent='أضف للسلة';btn.addEventListener('click',function(){addToCart(productFromCard(card));});priceRow.appendChild(btn);});updateCartBadge();}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initStore);else initStore();})();
+}window.loadFrequencyFeature=loadFrequencyFeature;window.setFrequencyCategory=window.setFrequencyCategory || function(value){loadFrequencyFeature().then(function(){if(typeof window.setFrequencyCategory==='function')window.setFrequencyCategory(value);});};window.setFrequencyPackageExact=window.setFrequencyPackageExact || function(id,label){loadFrequencyFeature().then(function(){if(typeof window.setFrequencyPackageExact==='function')window.setFrequencyPackageExact(id,label);});};function showPage(id,skipHistory){if(id==='frequencies' && document.getElementById(id)?.classList.contains('active')){loadFrequencyFeature();return;}var pages=document.querySelectorAll('.page');pages.forEach(function(page){page.classList.remove('active');});var target=document.getElementById(id);if(target){target.classList.add('active');}if(id==='frequencies'){loadFrequencyFeature();}document.querySelectorAll('[data-nav-target]').forEach(function(btn){btn.classList.toggle('active',btn.getAttribute('data-nav-target')===id);});if(!skipHistory){var newHash='#'+id;if(window.location.hash !==newHash){history.pushState({page:id},'',newHash);}}if(typeof setLanguage==='function'){setLanguage(window.maenStorageGet('siteLang')|| 'ar');}resetSectionScrollById(id);resetActivePageScroll();forceScrollTop();requestAnimationFrame(function(){resetActivePageScroll();forceScrollTop();});setTimeout(forceScrollTop,30);setTimeout(forceScrollTop,120);}window.addEventListener('load',function(){var initialPage=(window.location.hash || '#home').replace('#','');if(!document.getElementById(initialPage)){initialPage='home';}history.replaceState({page:initialPage},'','#'+initialPage);showPage(initialPage,true);if(typeof setupWhatsAppMessages==='function'){setupWhatsAppMessages();}if(typeof renderReceiverSoftware==='function'){renderReceiverSoftware();}lockSidebarPosition();resetActivePageScroll();forceScrollTop();setTimeout(function(){resetActivePageScroll();forceScrollTop();},30);});window.addEventListener('popstate',function(event){var page=(event.state && event.state.page)||(window.location.hash || '#home').replace('#','')|| 'home';if(!document.getElementById(page)){page='home';}showPage(page,true);});function openLightbox(src,title){src=String(src||'').replace('/assets/images-optimized/','/assets/images-hq/').replace('assets/images-optimized/','assets/images-hq/');var box=document.getElementById('imageLightbox');var img=document.getElementById('lightboxImage');var text=document.getElementById('lightboxTitle');if(!box || !img || !text)return;img.src=src;img.alt=title || 'صورة';text.textContent=title || 'صورة';box.classList.add('active');document.body.style.overflow='hidden';}function hideLightbox(){var box=document.getElementById('imageLightbox');var img=document.getElementById('lightboxImage');if(!box || !img)return;box.classList.remove('active');img.src='';document.body.style.overflow='';}function closeLightbox(event){if(event.target && event.target.id==='imageLightbox'){hideLightbox();}}document.addEventListener('keydown',function(event){if(event.key==='Escape'){hideLightbox();}});(function(){var PHONE='962788272988';var CART_KEY='maen_sat_store_cart_v1';function readCart(){try{return JSON.parse(window.maenStorageGet(CART_KEY)|| '[]');}catch(e){return[];}}function saveCart(cart){window.maenStorageSet(CART_KEY,JSON.stringify(cart));updateCartBadge();}function productFromCard(card){var name=card.getAttribute('data-product-name')||(card.querySelector('h3')? card.querySelector('h3').textContent.trim():'منتج');var priceAttr=card.getAttribute('data-product-price');var priceText=priceAttr ||(card.querySelector('.price-row strong')? card.querySelector('.price-row strong').textContent:'0');var price=Number(String(priceText).replace(/[^0-9.]/g,''))|| 0;var image=card.querySelector('.image-wrap img')? card.querySelector('.image-wrap img').getAttribute('src'):'';return{name:name,price:price,image:image,qty:1};}function addToCart(product){var cart=readCart();var found=cart.find(function(x){return x.name===product.name;});if(found){found.qty+=1;}else{cart.push(product);}saveCart(cart);openCart();}window.storeChangeQty=function(name,delta){var cart=readCart();cart=cart.map(function(item){if(item.name===name){item.qty+=delta;}return item;}).filter(function(item){return item.qty>0;});saveCart(cart);renderCart();};window.storeClearCart=function(){saveCart([]);renderCart();};function money(n){return(Math.round(n*100)/100)+' د.أ';}function renderCart(){var list=document.getElementById('storeCartList');var totalEl=document.getElementById('storeCartTotal');if(!list || !totalEl)return;var cart=readCart();if(!cart.length){list.innerHTML='<div class="store-empty">السلة فارغة حالياً</div>';totalEl.textContent=money(0);return;}var total=cart.reduce(function(sum,item){return sum+(item.price*item.qty);},0);list.innerHTML=cart.map(function(item){return '<div class="store-cart-item"><div><strong>'+escapeHtml(item.name)+'</strong><small>'+money(item.price)+' × '+item.qty+'</small></div><div class="store-cart-actions"><button type="button" onclick="storeChangeQty(\''+escapeAttr(item.name)+'\',1)">+</button><button type="button" onclick="storeChangeQty(\''+escapeAttr(item.name)+'\',-1)">−</button></div></div>';}).join('');totalEl.textContent=money(total);}function checkout(){var cart=readCart();if(!cart.length){alert('السلة فارغة');return;}var lines=['مرحبا، أريد تأكيد طلب من موقع معن حنونة للستلايت:'];var total=0;cart.forEach(function(item,index){total+=item.price*item.qty;lines.push((index+1)+'. '+item.name+' | الكمية: '+item.qty+' | سعر القطعة: '+money(item.price)+' | الإجمالي: '+money(item.price*item.qty));});lines.push('المجموع التقريبي: '+money(total));lines.push('الرجاء تأكيد التوفر والسعر النهائي وموعد التسليم/التركيب المناسب.');window.open('https://wa.me/'+PHONE+'?text='+encodeURIComponent(lines.join('\n')),'_blank','noopener');}function escapeHtml(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}function escapeAttr(s){return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'");}function updateCartBadge(){var badge=document.getElementById('storeCartCount');if(!badge)return;var count=readCart().reduce(function(sum,item){return sum+item.qty;},0);badge.textContent=count;}function openCart(){var p=document.getElementById('storeCartPanel');if(p){renderCart();p.classList.add('active');}}function closeCart(){var p=document.getElementById('storeCartPanel');if(p){p.classList.remove('active');}}window.storeOpenCart=openCart;window.storeCloseCart=closeCart;window.storeCheckout=checkout;function initStore(){if(document.getElementById('storeCartPanel'))return;var float=document.createElement('button');float.type='button';float.className='store-cart-float';float.setAttribute('onclick','storeOpenCart()');float.innerHTML='<svg class="hq-svg-icon" viewBox="0 0 64 64" aria-hidden="true"><path d="M8 10h8l6 31h27l6-21H21" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="26" cy="53" r="4" fill="currentColor"/><circle cx="48" cy="53" r="4" fill="currentColor"/></svg> السلة<span id="storeCartCount">0</span>';document.body.appendChild(float);var panel=document.createElement('div');panel.id='storeCartPanel';panel.className='store-cart-panel';panel.innerHTML='<div class="store-cart-box"><div class="store-cart-head"><h3>سلة الطلبات</h3><button type="button" class="store-close-btn" onclick="storeCloseCart()">إغلاق</button></div><div id="storeCartList" class="store-cart-list"></div><div class="store-cart-total"><span>المجموع</span><strong id="storeCartTotal">0 د.أ</strong></div><div class="store-cart-footer"><button type="button" class="store-whatsapp-checkout" onclick="storeCheckout()">اطلب الآن عبر واتساب</button><button type="button" class="store-clear-cart" onclick="storeClearCart()">تفريغ السلة</button></div></div>';panel.addEventListener('click',function(e){if(e.target===panel)closeCart();});document.body.appendChild(panel);document.querySelectorAll('#devices .device-card').forEach(function(card){var priceRow=card.querySelector('.price-row');if(!priceRow || card.querySelector('.store-add-btn'))return;var btn=document.createElement('button');btn.type='button';btn.className='store-add-btn';btn.textContent='أضف للسلة';btn.addEventListener('click',function(){addToCart(productFromCard(card));});priceRow.appendChild(btn);});updateCartBadge();}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initStore);else initStore();})();
 </script>
 <script>
 // Mobile navigation polish: keep the new bottom bar synced with the active page.
@@ -4928,46 +4965,6 @@ function shareSite(){var shareData={title:'معن حنونة للستلايت',t
 #worldcup2026 [aria-label="القنوات الناقلة"],
 #worldcup2026 [aria-label="Broadcasters"]{display:none!important;}
 </style>
-<script id="latest-bilingual-frequency-scroll-fix-script">
-(function(){
-  function isMobileFrequencyView(){
-    return window.matchMedia && window.matchMedia('(max-width: 720px)').matches;
-  }
-  function resetFrequencyTableEdge(){
-    if(!isMobileFrequencyView()) return;
-    var page=document.getElementById('frequencies');
-    if(!page || !page.classList.contains('active')) return;
-    var wrap=page.querySelector('.frequency-table-wrap');
-    if(!wrap) return;
-    wrap.setAttribute('dir','rtl');
-    // In modern mobile browsers, 0 on an RTL scroller keeps the table on the
-    // same starting edge as Arabic; the user can then drag to reveal channels.
-    try{ wrap.scrollLeft = 0; }catch(e){}
-  }
-  document.addEventListener('DOMContentLoaded',function(){
-    setTimeout(resetFrequencyTableEdge,60);
-    var tbody=document.getElementById('frequencyTableBody');
-    if(tbody && window.MutationObserver){
-      new MutationObserver(function(){ setTimeout(resetFrequencyTableEdge,30); }).observe(tbody,{childList:true,subtree:false});
-    }
-    if(document.body && window.MutationObserver){
-      new MutationObserver(function(){ setTimeout(resetFrequencyTableEdge,30); }).observe(document.body,{attributes:true,attributeFilter:['class']});
-    }
-  });
-  window.addEventListener('resize',function(){ setTimeout(resetFrequencyTableEdge,80); });
-  window.addEventListener('hashchange',function(){ setTimeout(resetFrequencyTableEdge,120); });
-  var oldRender=window.renderFrequencies;
-  if(typeof oldRender==='function' && !oldRender.__frequencyScrollPatched){
-    var wrapped=function(){
-      var result=oldRender.apply(this,arguments);
-      setTimeout(resetFrequencyTableEdge,40);
-      return result;
-    };
-    wrapped.__frequencyScrollPatched=true;
-    window.renderFrequencies=wrapped;
-  }
-})();
-</script>
 <!-- MAINTENANCE_ENGLISH_TRANSLATION_FIX_2026_05_19 -->
 <script id="maintenance-english-translation-fix">
 (function(){
