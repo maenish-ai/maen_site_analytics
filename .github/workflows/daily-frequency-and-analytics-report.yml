@@ -35,7 +35,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: maensat-pages-production
+  group: ${{ github.event_name == 'push' && 'maensat-frequency-validation' || 'maensat-pages-production' }}
   cancel-in-progress: false
 
 jobs:
@@ -44,7 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     env:
-      MODE: ${{ github.event_name == 'push' && 'catalog_only' || inputs.run_mode || 'all' }}
+      MODE: ${{ github.event_name == 'push' && 'dry_run' || inputs.run_mode || 'all' }}
       ANALYTICS_TIMEZONE: ${{ secrets.ANALYTICS_TIMEZONE || 'Asia/Amman' }}
       PUBLIC_BASE_URL: ${{ secrets.PUBLIC_BASE_URL || 'https://maensat.pages.dev' }}
       FREQUENCY_SOURCE_CONCURRENCY: ${{ secrets.FREQUENCY_SOURCE_CONCURRENCY || '12' }}
@@ -89,13 +89,13 @@ jobs:
           node scripts/search-smoke-tests.mjs
 
       - name: Update frequencies
-        if: env.MODE == 'all' || env.MODE == 'frequency_only' || env.MODE == 'catalog_only'
+        if: env.MODE == 'all' || env.MODE == 'frequency_only'
         run: |
           npm run github:update-frequencies -- --skip-email
           node scripts/search-smoke-tests.mjs
 
       - name: Save validated frequency data
-        if: env.MODE == 'all' || env.MODE == 'frequency_only' || env.MODE == 'catalog_only'
+        if: env.MODE == 'all' || env.MODE == 'frequency_only'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -106,7 +106,7 @@ jobs:
           fi
 
       - name: Publish frequency update to Cloudflare
-        if: env.MODE == 'all' || env.MODE == 'frequency_only' || env.MODE == 'catalog_only'
+        if: env.MODE == 'all' || env.MODE == 'frequency_only'
         env:
           CLOUDFLARE_ACCOUNT_ID: '218002bc26df57e7e750a6cf8107ef4a'
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_PAGES_DEPLOY_TOKEN }}
@@ -114,7 +114,7 @@ jobs:
           npx --yes wrangler@4.165.0 pages deploy public --project-name maensat --branch main
 
       - name: Verify the catalog is live
-        if: env.MODE == 'all' || env.MODE == 'frequency_only' || env.MODE == 'catalog_only'
+        if: env.MODE == 'all' || env.MODE == 'frequency_only'
         run: |
           node --input-type=module <<'NODE'
           import { readFile } from 'node:fs/promises';

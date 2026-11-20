@@ -88,25 +88,6 @@ async function main() {
   );
 
   const candidates = sourceResults.flatMap(r => r.candidates || []);
-  if (process.env.GITHUB_ACTIONS === 'true') {
-    for (const [label, matches] of [
-      ['Mix Bel Araby', /mix\s*(?:bel|bil|bil?-)?\s*arab|ميكس.*عرب/i],
-      ['ON Sport', /\bon\s*(?:time\s*)?sports?\b|اون.*سبورت/i]
-    ]) {
-      const sightings = new Map();
-      for (const result of sourceResults) {
-        if (!result.ok) continue;
-        for (const row of result.candidates || []) {
-          if (!(row.channels || []).some(channel => matches.test(channel))) continue;
-          const key = `${row.frequency}${row.pol}/${row.sr || '?'}`;
-          if (!sightings.has(key)) sightings.set(key, new Set());
-          sightings.get(key).add(new URL(result.source.url).hostname);
-        }
-      }
-      const summary = [...sightings].slice(0, 12).map(([key, publishers]) => `${key} (${[...publishers].join(', ')})`).join('; ');
-      console.log(`::notice::Station source check ${label}: ${summary || 'no direct listing'}.`);
-    }
-  }
   const closedCandidates = sourceResults.flatMap(r => r.closedCandidates || []);
   const successfulSourceCount = sourceResults.filter(r => r.ok && !r.coverageOnly).length;
   if (!candidates.length) {
