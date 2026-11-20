@@ -4122,8 +4122,12 @@ function shareSite(){var shareData={title:'معن حنونة للستلايت',t
     });
     if(window.matchMedia && window.matchMedia('(max-width:699px)').matches){
       var active=document.querySelector('.mobile-bottom-nav .mobile-nav-item.active');
-      if(active && active.scrollIntoView){
-        try{active.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});}catch(e){active.scrollIntoView(false);}
+      const nav = active?.closest('.mobile-bottom-nav');
+      if (nav && typeof nav.scrollBy === 'function') {
+        const buttonBounds = active.getBoundingClientRect();
+        const navBounds = nav.getBoundingClientRect();
+        const horizontalOffset = (buttonBounds.left + buttonBounds.right - navBounds.left - navBounds.right) / 2;
+        if (Math.abs(horizontalOffset) > 1) nav.scrollBy({ left: horizontalOffset, behavior: 'smooth' });
       }
     }
   }
