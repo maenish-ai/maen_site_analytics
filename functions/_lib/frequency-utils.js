@@ -1019,12 +1019,9 @@ function applyPublisherVotes(baseline, byKey, checkedSources, changes, removedIt
     const current = item.channels || channelSet(item);
     const completePublishers = new Set((coverageBySatellite.get(satelliteKey(key)) || [])
       .filter(({ transponders }) => transponders.has(key)).map(({ publisher }) => publisher));
-    const replacement = before.length === 1 ? current.filter(name =>
-      normalizeChannelIdentity(name) !== normalizeChannelIdentity(before[0])) : [];
-    const replacementName = replacement.length === 1 ? replacement[0] : null;
-    const replacementVotes = replacementName ? active.filter(entry => entry.channels.length === 1 &&
-      normalizeChannelIdentity(entry.channels[0]) === normalizeChannelIdentity(replacementName)) : [];
+    const originalNames = new Set(before.map(normalizeChannelIdentity));
     const removedNames = [];
+    const confirmedRenames = new Map();
     let largestChannelVote = 0;
     for (const name of before) {
       const identity = normalizeChannelIdentity(name);
@@ -1032,14 +1029,32 @@ function applyPublisherVotes(baseline, byKey, checkedSources, changes, removedIt
       const supporting = new Set(active.filter(supportsName).map(({ publisher }) => publisher));
       const closures = closed.filter(({ candidate }) => supportsName({ channels: channelSet(candidate) }))
         .map(({ publisher }) => publisher);
-      const renameEvidence = replacementVotes.filter(({ publisher }) => completePublishers.has(publisher))
-        .map(({ publisher }) => publisher);
-      const vote = majority([...closures, ...renameEvidence], supporting);
-      if (vote.approved) {
+      const renameOptions = new Map();
+      for (const entry of active) {
+        if (!completePublishers.has(entry.publisher) || supportsName(entry)) continue;
+        const names = new Set(entry.channels.map(normalizeChannelIdentity));
+        if ([...originalNames].some(previous => previous !== identity && !names.has(previous))) continue;
+        const added = [...names].filter(candidate => !originalNames.has(candidate));
+        if (added.length === 1) add(renameOptions, added[0], entry.publisher);
+      }
+
+      for (const [replacement, publishers] of renameOptions) {
+        const opposers = new Set(supporting);
+        for (const [other, votes] of renameOptions) {
+          if (other !== replacement) votes.forEach(publisher => opposers.add(publisher));
+        }
+        if (majority(publishers, opposers).approved) {
+          const currentName = current.find(channel => normalizeChannelIdentity(channel) === replacement);
+          if (currentName) confirmedRenames.set(name, currentName);
+        }
+      }
+      const vote = majority(closures, supporting);
+      if (vote.approved || confirmedRenames.has(name)) {
         removedNames.push(name);
         largestChannelVote = Math.max(largestChannelVote, vote.count);
+      } else if (vote.count || renameOptions.size) {
+        reviewedOnly.push({ ...original, channel: name, reviewReason: "Channel change lacks an independent publisher majority" });
       }
-      else if (vote.count) reviewedOnly.push({ ...original, channel: name, reviewReason: "Channel closure lacks an independent publisher majority" });
     }
 
     const removedKeys = new Set(removedNames.map(normalizeChannelIdentity));
@@ -1053,23 +1068,18 @@ function applyPublisherVotes(baseline, byKey, checkedSources, changes, removedIt
     if (rowVote.count) reviewedOnly.push({ ...original, reviewReason: "Transponder closure lacks an independent publisher majority" });
     if (!removedNames.length) continue;
 
-    if (before.length === 1 && remaining.length === 1) {
-      const newName = remaining[0];
-      const identity = normalizeChannelIdentity(newName);
-      const supporting = new Set(active.filter(entry => entry.channels.length === 1 &&
-        normalizeChannelIdentity(entry.channels[0]) === identity).map(({ publisher }) => publisher));
-      if (supporting.size >= 3) {
-        item.channelAliases = { ...item.channelAliases, [newName]: [...new Set([
-          ...(item.channelAliases?.[newName] || []), ...removedNames
-        ])] };
-        for (const field of ["channelCountries", "channelCategories", "channelEncryption", "channelLogos"]) {
-          const metadata = item[field];
-          if (metadata?.[removedNames[0]] != null && metadata[newName] == null) {
-            item[field] = { ...metadata, [newName]: metadata[removedNames[0]] };
-          }
+    for (const [oldName, newName] of confirmedRenames) {
+      if (!remaining.includes(newName)) continue;
+      item.channelAliases = { ...item.channelAliases, [newName]: [...new Set([
+        ...(item.channelAliases?.[newName] || []), oldName, ...(item.channelAliases?.[oldName] || [])
+      ])] };
+      for (const field of ["channelCountries", "channelCategories", "channelEncryption", "channelLogos"]) {
+        const metadata = item[field];
+        if (metadata?.[oldName] != null && metadata[newName] == null) {
+          item[field] = { ...metadata, [newName]: metadata[oldName] };
         }
-        renamedChannels.push({ frequency: item.frequency, satelliteName: item.satelliteName, from: removedNames[0], to: newName });
       }
+      renamedChannels.push({ frequency: item.frequency, satelliteName: item.satelliteName, from: oldName, to: newName });
     }
     item.channels = remaining;
     item.channel = remaining.slice(0, 18).join("، ");

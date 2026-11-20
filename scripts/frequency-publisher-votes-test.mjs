@@ -17,8 +17,8 @@ function source(host, { candidates = [], closedCandidates = [], ok = true, compl
   };
 }
 
-function merge(sourceResults) {
-  return mergeFrequencyData([row], sourceResults.flatMap(result => result.candidates),
+function merge(sourceResults, baseline = [row]) {
+  return mergeFrequencyData(baseline, sourceResults.flatMap(result => result.candidates),
     sourceResults.map(result => result.source), { sourceResults, preserveUnconfirmedChannels: true });
 }
 
@@ -37,6 +37,15 @@ const renamed = merge([...renames, ...keep.slice(3)]);
 assert.deepEqual(renamed.items[0].channels, ['Orion News']);
 assert.deepEqual(renamed.items[0].channelAliases['Orion News'], ['Atlas News']);
 assert.equal(renamed.renamedChannels.length, 1);
+
+const rowWithNeighbor = { ...row, channels: ['Atlas News', 'Local Radio'] };
+const replacementWithNeighbor = { ...row, channels: ['Orion News', 'Local Radio'] };
+const shared = merge(
+  hosts.slice(0, 3).map(host => source(host, { candidates: [replacementWithNeighbor], complete: true })),
+  [rowWithNeighbor]
+);
+assert.deepEqual(shared.items[0].channels, ['Local Radio', 'Orion News']);
+assert.deepEqual(shared.items[0].channelAliases['Orion News'], ['Atlas News']);
 
 const other = { ...row, frequency: '12000' };
 assert.equal(merge(hosts.slice(0, 3).map(host => source(host, { candidates: [other], complete: true }))).removedItems.length, 1);
