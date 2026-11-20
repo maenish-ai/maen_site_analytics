@@ -3,7 +3,7 @@
   "mode": "github-actions-static",
   "servedFrom": "github-actions-static-json",
   "version": "satellite-orbital-structure-2026-05-28-v5",
-  "updatedAt": "2026-11-19T20:02:51.683Z",
+  "updatedAt": "2026-11-20T08:32:16.872Z",
   "count": 4003,
   "removedCount": 0,
   "candidateCount": 4824,
@@ -152081,7 +152081,7 @@
       "dataQuality": "cleaned-non-placeholder",
       "dataQualityNote": "تم حذف الصفوف العامة/الوهمية وعدم استخدام أسماء قنوات غير مؤكدة داخل الداتا المخزنة. | v4 all-sat method: live updater parses DTHSat flexible/simple tables for all configured satellites; use run-frequency-update after deploy. | v5 orbital structure: merge keys now include orbitalSlot + satelliteName so several physical satellites at the same orbital position are not collapsed into one transponder row.",
       "channelEncryption": {
-        "beIN SPORTS": "encrypted",
+        "beIN SPORTS": "free",
         "beIN SPORTS 4": "encrypted",
         "beIN SPORTS 6": "encrypted",
         "beIN SPORTS 7": "encrypted",
@@ -152200,7 +152200,10 @@
         ]
       },
       "baseline": true,
-      "confidence": 100
+      "confidence": 100,
+      "channelAccessNotes": {
+        "beIN SPORTS": "Field observation reported by satellite technician, 2026-11-20."
+      }
     },
     {
       "satellite": "8.0W / Eutelsat 8 West B",
