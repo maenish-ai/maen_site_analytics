@@ -87,7 +87,8 @@
     "satelliteCluster": "Nilesat @ 7W",
     "satelliteIdentityKey": "nilesat|7w|nilesat 201/301 + eutelsat 7 west a",
     "satelliteMetaVersion": "satellite-orbital-structure-2026-05-28-v5",
-    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري."
+    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري.",
+    "minimumCompleteTransponders": 152
   },
   {
     "id": "kingofsat-8w-all",
@@ -105,7 +106,8 @@
     "satelliteCluster": "Nilesat @ 8W",
     "satelliteIdentityKey": "nilesat|8w|eutelsat 8 west b",
     "satelliteMetaVersion": "satellite-orbital-structure-2026-05-28-v5",
-    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري."
+    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري.",
+    "minimumCompleteTransponders": 121
   },
   {
     "id": "lyngsat-badr-4-5-6",
@@ -177,7 +179,8 @@
     "satelliteCluster": "Arabsat / BADR @ 26E",
     "satelliteIdentityKey": "arabsat / badr|26e|arabsat / badr position",
     "satelliteMetaVersion": "satellite-orbital-structure-2026-05-28-v5",
-    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري."
+    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري.",
+    "minimumCompleteTransponders": 198
   },
   {
     "id": "kingofsat-25e-all",
@@ -195,7 +198,8 @@
     "satelliteCluster": "Es'hailSat @ 25.5E",
     "satelliteIdentityKey": "es'hailsat|25.5e|arabsat / badr position",
     "satelliteMetaVersion": "satellite-orbital-structure-2026-05-28-v5",
-    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري."
+    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري.",
+    "minimumCompleteTransponders": 74
   },
   {
     "id": "lyngsat-hotbird-13e",
@@ -285,7 +289,8 @@
     "satelliteCluster": "Eutelsat 16E @ 16E",
     "satelliteIdentityKey": "eutelsat 16e|16e|eutelsat 16a",
     "satelliteMetaVersion": "satellite-orbital-structure-2026-05-28-v5",
-    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري."
+    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري.",
+    "minimumCompleteTransponders": 349
   },
   {
     "id": "kingofsat-16e-freqs-all",
@@ -303,7 +308,8 @@
     "satelliteCluster": "Eutelsat 16E @ 16E",
     "satelliteIdentityKey": "eutelsat 16e|16e|eutelsat 16a",
     "satelliteMetaVersion": "satellite-orbital-structure-2026-05-28-v5",
-    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري."
+    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري.",
+    "minimumCompleteTransponders": 349
   },
   {
     "id": "lyngsat-eutelsat-9b",
@@ -339,7 +345,8 @@
     "satelliteCluster": "Eutelsat 9E @ 9E",
     "satelliteIdentityKey": "eutelsat 9e|9e|eutelsat 9b / ka-sat 9a",
     "satelliteMetaVersion": "satellite-orbital-structure-2026-05-28-v5",
-    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري."
+    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري.",
+    "minimumCompleteTransponders": 76
   },
   {
     "id": "kingofsat-9e-freqs-all",
@@ -357,7 +364,8 @@
     "satelliteCluster": "Eutelsat 9E @ 9E",
     "satelliteIdentityKey": "eutelsat 9e|9e|eutelsat 9b / ka-sat 9a",
     "satelliteMetaVersion": "satellite-orbital-structure-2026-05-28-v5",
-    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري."
+    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري.",
+    "minimumCompleteTransponders": 76
   },
   {
     "id": "lyngsat-turksat-3a-4a-5b",
@@ -411,7 +419,8 @@
     "satelliteCluster": "Türksat @ 42E",
     "satelliteIdentityKey": "türksat|42e|türksat position",
     "satelliteMetaVersion": "satellite-orbital-structure-2026-05-28-v5",
-    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري."
+    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري.",
+    "minimumCompleteTransponders": 269
   },
   {
     "id": "kingofsat-42e-freqs-all",
@@ -429,7 +438,8 @@
     "satelliteCluster": "Türksat @ 42E",
     "satelliteIdentityKey": "türksat|42e|türksat position",
     "satelliteMetaVersion": "satellite-orbital-structure-2026-05-28-v5",
-    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري."
+    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري.",
+    "minimumCompleteTransponders": 269
   },
   {
     "id": "lyngsat-yahsat",
@@ -465,7 +475,8 @@
     "satelliteCluster": "Yahsat @ 52.5E",
     "satelliteIdentityKey": "yahsat|52.5e|al yah 1",
     "satelliteMetaVersion": "satellite-orbital-structure-2026-05-28-v5",
-    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري."
+    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري.",
+    "minimumCompleteTransponders": 58
   },
   {
     "id": "kingofsat-52e-freqs-all",
@@ -483,7 +494,8 @@
     "satelliteCluster": "Yahsat @ 52.5E",
     "satelliteIdentityKey": "yahsat|52.5e|al yah 1",
     "satelliteMetaVersion": "satellite-orbital-structure-2026-05-28-v5",
-    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري."
+    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري.",
+    "minimumCompleteTransponders": 58
   },
   {
     "id": "lyngsat-hellas",
@@ -501,7 +513,8 @@
     "satelliteCluster": "Hellas Sat @ 39E",
     "satelliteIdentityKey": "hellas sat|39e|eutelsat 9b / ka-sat 9a",
     "satelliteMetaVersion": "satellite-orbital-structure-2026-05-28-v5",
-    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري."
+    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري.",
+    "minimumCompleteTransponders": 76
   },
   {
     "id": "kingofsat-39e-all",
@@ -519,7 +532,8 @@
     "satelliteCluster": "Hellas Sat @ 39E",
     "satelliteIdentityKey": "hellas sat|39e|eutelsat 9b / ka-sat 9a",
     "satelliteMetaVersion": "satellite-orbital-structure-2026-05-28-v5",
-    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري."
+    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري.",
+    "minimumCompleteTransponders": 238
   },
   {
     "id": "kingofsat-39e-freqs-all",
@@ -537,7 +551,8 @@
     "satelliteCluster": "Hellas Sat @ 39E",
     "satelliteIdentityKey": "hellas sat|39e|eutelsat 9b / ka-sat 9a",
     "satelliteMetaVersion": "satellite-orbital-structure-2026-05-28-v5",
-    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري."
+    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري.",
+    "minimumCompleteTransponders": 238
   },
   {
     "id": "lyngsat-eutelsat-36d-express",
@@ -555,7 +570,8 @@
     "satelliteCluster": "Eutelsat 36E @ 36E",
     "satelliteIdentityKey": "eutelsat 36e|36e|eutelsat 36d / express amu1",
     "satelliteMetaVersion": "satellite-orbital-structure-2026-05-28-v5",
-    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري."
+    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري.",
+    "minimumCompleteTransponders": 197
   },
   {
     "id": "kingofsat-36e-all",
@@ -573,7 +589,8 @@
     "satelliteCluster": "Eutelsat 36E @ 36E",
     "satelliteIdentityKey": "eutelsat 36e|36e|eutelsat 36d / express amu1",
     "satelliteMetaVersion": "satellite-orbital-structure-2026-05-28-v5",
-    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري."
+    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري.",
+    "minimumCompleteTransponders": 250
   },
   {
     "id": "kingofsat-36e-freqs-all",
@@ -591,7 +608,8 @@
     "satelliteCluster": "Eutelsat 36E @ 36E",
     "satelliteIdentityKey": "eutelsat 36e|36e|eutelsat 36d / express amu1",
     "satelliteMetaVersion": "satellite-orbital-structure-2026-05-28-v5",
-    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري."
+    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري.",
+    "minimumCompleteTransponders": 250
   },
   {
     "id": "lyngsat-astra-19",
@@ -645,7 +663,8 @@
     "satelliteCluster": "Astra @ 19.2E",
     "satelliteIdentityKey": "astra|19.2e|astra 1kr/1l/1m/1n/1p",
     "satelliteMetaVersion": "satellite-orbital-structure-2026-05-28-v5",
-    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري."
+    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري.",
+    "minimumCompleteTransponders": 243
   },
   {
     "id": "kingofsat-28e-all",
@@ -663,7 +682,8 @@
     "satelliteCluster": "Astra @ 28.2E",
     "satelliteIdentityKey": "astra|28.2e|astra 2e/2f/2g",
     "satelliteMetaVersion": "satellite-orbital-structure-2026-05-28-v5",
-    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري."
+    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري.",
+    "minimumCompleteTransponders": 270
   },
   {
     "id": "kingofsat-19e-freqs-all",
@@ -681,7 +701,8 @@
     "satelliteCluster": "Astra @ 19.2E",
     "satelliteIdentityKey": "astra|19.2e|astra 1kr/1l/1m/1n/1p",
     "satelliteMetaVersion": "satellite-orbital-structure-2026-05-28-v5",
-    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري."
+    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري.",
+    "minimumCompleteTransponders": 243
   },
   {
     "id": "kingofsat-28e-freqs-all",
@@ -699,7 +720,8 @@
     "satelliteCluster": "Astra @ 28.2E",
     "satelliteIdentityKey": "astra|28.2e|astra 2e/2f/2g",
     "satelliteMetaVersion": "satellite-orbital-structure-2026-05-28-v5",
-    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري."
+    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري.",
+    "minimumCompleteTransponders": 270
   },
   {
     "id": "lyngsat-amos",
@@ -771,7 +793,8 @@
     "satelliteCluster": "Intelsat @ 68.5E",
     "satelliteIdentityKey": "intelsat|68.5e|intelsat 20",
     "satelliteMetaVersion": "satellite-orbital-structure-2026-05-28-v5",
-    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري."
+    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري.",
+    "minimumCompleteTransponders": 173
   },
   {
     "id": "kingofsat-68e-all",
@@ -789,7 +812,8 @@
     "satelliteCluster": "Intelsat @ 68.5E",
     "satelliteIdentityKey": "intelsat|68.5e|intelsat 20",
     "satelliteMetaVersion": "satellite-orbital-structure-2026-05-28-v5",
-    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري."
+    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري.",
+    "minimumCompleteTransponders": 233
   },
   {
     "id": "kingofsat-68e-freqs-all",
@@ -807,7 +831,8 @@
     "satelliteCluster": "Intelsat @ 68.5E",
     "satelliteIdentityKey": "intelsat|68.5e|intelsat 20",
     "satelliteMetaVersion": "satellite-orbital-structure-2026-05-28-v5",
-    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري."
+    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري.",
+    "minimumCompleteTransponders": 233
   },
   {
     "id": "lyngsat-azerspace-1",
@@ -825,7 +850,8 @@
     "satelliteCluster": "Azerspace @ 46E",
     "satelliteIdentityKey": "azerspace|46e|azerspace 1",
     "satelliteMetaVersion": "satellite-orbital-structure-2026-05-28-v5",
-    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري."
+    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري.",
+    "minimumCompleteTransponders": 88
   },
   {
     "id": "kingofsat-46e-all",
@@ -843,7 +869,8 @@
     "satelliteCluster": "Azerspace @ 46E",
     "satelliteIdentityKey": "azerspace|46e|azerspace 1",
     "satelliteMetaVersion": "satellite-orbital-structure-2026-05-28-v5",
-    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري."
+    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري.",
+    "minimumCompleteTransponders": 180
   },
   {
     "id": "kingofsat-46e-freqs-all",
@@ -861,7 +888,8 @@
     "satelliteCluster": "Azerspace @ 46E",
     "satelliteIdentityKey": "azerspace|46e|azerspace 1",
     "satelliteMetaVersion": "satellite-orbital-structure-2026-05-28-v5",
-    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري."
+    "satelliteMetaPolicy": "واجهة المستخدم تعرض المجموعة والمدار، لكن الدمج الداخلي يستخدم المدار + اسم القمر الفعلي حتى لا تختلط أقمار متعددة على نفس الموقع المداري.",
+    "minimumCompleteTransponders": 180
   },
   {
     "id": "satbeams-hotbird-13e-chart",

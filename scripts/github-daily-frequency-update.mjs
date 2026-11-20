@@ -97,7 +97,7 @@ async function main() {
   if (sourceQuality.missingSystemModCount) {
     console.log(`[frequency] Missing system/mod sample: ${JSON.stringify(sourceQuality.sampleMissingSystemMod.slice(0, 8))}`);
   }
-  const merged = mergeFrequencyData(baseline.items || [], candidates, sources, { successfulSourceCount, closedCandidates, sourceQuality, preserveUnconfirmedChannels: true });
+  const merged = mergeFrequencyData(baseline.items || [], candidates, sources, { successfulSourceCount, closedCandidates, sourceQuality, preserveUnconfirmedChannels: true, sourceResults });
 
   validateCompleteProgrammingSystems(merged.items);
 
@@ -120,6 +120,7 @@ async function main() {
     expectedSourceServiceCounts: EXPECTED_SOURCE_SERVICE_COUNTS,
     items: merged.items,
     removedItems: (merged.removedItems || []).slice(0, 300),
+    renamedChannels: merged.renamedChannels,
     reviewedOnly: merged.reviewedOnly.slice(0, 200),
     sourceResults: sourceResults.map(r => ({
       id: r.source && r.source.id,
@@ -133,7 +134,7 @@ async function main() {
     })),
     changes: merged.changes,
     satellites: JORDAN_MENA_SATELLITES,
-    note: 'Daily GitHub Actions update: imports current trusted satellite sources, refreshes channel names, adds new approved/consensus rows, removes rows missing from the daily source scan when coverage is sufficient, and deletes rows/channels that multiple trusted sources mark as closed when no current source still confirms them, then commits the updated static JSON. Cloudflare Pages and Netlify stay as hosting layers.'
+    note: 'Daily GitHub Actions update: imports current trusted satellite sources, refreshes channel names, adds new approved/consensus rows, removes rows or channels only when at least three independent publishers support removal and outvote current listings, then commits the updated static JSON. Cloudflare Pages and Netlify stay as hosting layers.'
   };
 
   const report = buildFrequencyReport(payload);

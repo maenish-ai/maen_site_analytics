@@ -9,6 +9,8 @@ on:
       - .github/workflows/daily-frequency-and-analytics-report.yml
       - scripts/github-daily-frequency-update.mjs
       - scripts/search-smoke-tests.mjs
+      - scripts/frequency-publisher-votes-test.mjs
+      - public/frequencies/frequency-sources.json
       - functions/_lib/frequency-utils.js
   workflow_dispatch:
     inputs:
@@ -46,8 +48,6 @@ jobs:
       ANALYTICS_TIMEZONE: ${{ secrets.ANALYTICS_TIMEZONE || 'Asia/Amman' }}
       PUBLIC_BASE_URL: ${{ secrets.PUBLIC_BASE_URL || 'https://maensat.pages.dev' }}
       FREQUENCY_SOURCE_CONCURRENCY: ${{ secrets.FREQUENCY_SOURCE_CONCURRENCY || '12' }}
-      # An absent listing alone does not establish a closure.
-      FREQUENCY_REMOVE_MISSING: '0'
 
     steps:
       - uses: actions/checkout@v4
@@ -74,6 +74,9 @@ jobs:
               fi
             done
           }
+
+      - name: Check publisher voting
+        run: node scripts/frequency-publisher-votes-test.mjs
 
       - name: Check proposed frequency changes
         if: env.MODE == 'dry_run'
