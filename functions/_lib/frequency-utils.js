@@ -622,6 +622,89 @@ export function extractCandidatesFromHtml(html, source) {
   // Prefer the block parser because it captures all channels inside a transponder; generic parsing remains as fallback.
   return dedupeItems([...dthSatFlexibleCandidates, ...dthSatCandidates, ...blockCandidates, ...genericCandidates]);
 }
+function parseAccessStatus(value) {
+  const text = String(value || "").trim();
+  const free = /^free$/i.test(text) || /\b(?:FTA|clear|free[- ]to[- ]air|unencrypted|in clear)\b/i.test(text);
+  const encrypted = /\b(?:encrypted|scrambled|BISS|Conax|Irdeto|Nagravision|Viaccess|VideoGuard|PowerVu|Panaccess|Cryptoworks|Verimatrix)\b/i.test(text);
+  return free === encrypted ? "" : free ? "free" : "encrypted";
+}
+
+export function extractChannelAccessObservations(html, source) {
+  const observations = [];
+  for (const table of String(html || "").matchAll(/<table\b[^>]*>([\s\S]*?)<\/table>/gi)) {
+    let columns;
+    for (const row of table[1].matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gi)) {
+      if (row[1].includes("colspan")) continue;
+      const cells = [...row[1].matchAll(/<t[dh]\b[^>]*>([\s\S]*?)<\/t[dh]>/gi)]
+        .map(cell => safeText(decodeHtml(cell[1].replace(/<[^>]*>/g, " ")), 300));
+      if (!cells.length) continue;
+      const name = cells.findIndex(cell => /^(?:channel(?: name)?|service name|name)$/i.test(cell));
+      const frequency = cells.findIndex(cell => /^(?:frequency|freq)(?:\s*\/?\s*(?:polarity|pol|mhz))?$/i.test(cell));
+      const rate = cells.findIndex(cell => /^(?:symbol\s*rate|sr)(?:\s*\/?\s*fec)?$/i.test(cell));
+      const access = cells.findIndex(cell => /^(?:access|encryption|system\s*\/?\s*encryption|scrambling|fta)$/i.test(cell));
+      if (name >= 0 && frequency >= 0 && rate >= 0 && access >= 0) {
+        columns = { name, frequency, rate, access, pol: cells.findIndex(cell => /^(?:polarity|pol)$/i.test(cell)) };
+        continue;
+      }
+      if (!columns || cells.length <= Math.max(...Object.values(columns))) continue;
+      const status = parseAccessStatus(cells[columns.access]);
+      const channel = cells[columns.name];
+      const tuning = cells[columns.frequency];
+      const frequencyValue = normalizeFrequency(tuning);
+      const pol = normalizePol(cells[columns.pol] || tuning);
+      const sr = cells[columns.rate].match(/^\s*(\d{3,5})(?=\s|[-/]|$)/)?.[1];
+      if (!status || !frequencyValue || !pol || !sr || !channel || isLikelyHeaderOrAd(channel)) continue;
+      observations.push({ ...candidateBase(source), frequency: frequencyValue, pol, sr, channel, status });
+    }
+  }
+  return observations;
+}
+
+function channelAccessKey(item, channel) {
+  const parts = itemKey(item).split("|");
+  // A display prefix such as "8.0W / Eutelsat 8 West B" names the same physical satellite.
+  parts[2] = parts[2].replace(/^\d+(?:\.\d+)?[ew]\s*\/\s*/, "");
+  const name = safeText(channel, 140).normalize("NFKC").toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "");
+  return [...parts, name].join("|");
+}
+
+function applyChannelAccessEvidence(items, sourceResults) {
+  const evidence = new Map();
+  for (const result of sourceResults) {
+    const publisher = publisherKey(result.source || {});
+    if (!result.ok || !publisher) continue;
+    for (const observation of result.accessObservations || []) {
+      const key = channelAccessKey(observation, observation.channel);
+      if (!evidence.has(key)) evidence.set(key, []);
+      evidence.get(key).push({ publisher, status: observation.status, official: result.source.authority === "official" });
+    }
+  }
+
+  const conflicts = [];
+  let updated = 0;
+  if (!evidence.size) return { observations: 0, updated, conflicts };
+  for (const item of items) {
+    for (const channel of item.channels || []) {
+      const observations = evidence.get(channelAccessKey(item, channel));
+      if (!observations) continue;
+      const free = new Set(observations.filter(entry => entry.status === "free").map(entry => entry.publisher));
+      const encrypted = new Set(observations.filter(entry => entry.status === "encrypted").map(entry => entry.publisher));
+      if (free.size && encrypted.size) {
+        conflicts.push({ satellite: item.satelliteName, frequency: item.frequency, pol: item.pol, channel,
+          freePublishers: [...free], encryptedPublishers: [...encrypted] });
+        if (new Set([...free, ...encrypted]).size < 2) continue;
+      }
+      const [first] = observations;
+      const status = free.size && encrypted.size ? "unknown"
+        : (free.size >= 2 || encrypted.size >= 2 || observations.some(entry => entry.official)) ? first.status : "";
+      if (!status || item.channelEncryption?.[channel] === status) continue;
+      item.channelEncryption = { ...item.channelEncryption, [channel]: status };
+      updated += 1;
+    }
+  }
+  return { observations: evidence.size, updated, conflicts };
+}
+
 export function itemKey(item) {
   // v5: several real satellites can share the same orbital slot.
   // Never merge rows only because frequency/polarity/SR match inside a grouped menu option.
@@ -1333,7 +1416,8 @@ export function mergeFrequencyData(baselineItems, sourceCandidates, sources, opt
     if (na) return na;
     return Number(a.frequency || 0) - Number(b.frequency || 0) || String(a.pol || "").localeCompare(String(b.pol || ""));
   });
-  return { items, reviewedOnly, removedItems, renamedChannels, changes, sourceCount: sources.length, checkedAt: now, successfulSourceCount, candidateCount: candidateGroups.size, closedCandidateCount: (options.closedCandidates || []).length, closedConsensusCount: closedConsensus.size };
+  const channelAccess = options.sourceResults ? applyChannelAccessEvidence(items, options.sourceResults) : undefined;
+  return { items, reviewedOnly, removedItems, renamedChannels, channelAccess, changes, sourceCount: sources.length, checkedAt: now, successfulSourceCount, candidateCount: candidateGroups.size, closedCandidateCount: (options.closedCandidates || []).length, closedConsensusCount: closedConsensus.size };
 }
 
 export async function fetchSourceCandidates(source) {
@@ -1351,7 +1435,8 @@ export async function fetchSourceCandidates(source) {
     const text = await response.text();
     const candidates = response.ok ? extractCandidatesFromHtml(text, source) : [];
     const closedCandidates = response.ok ? extractClosedCandidatesFromHtml(text, source) : [];
-    return { source, ok: response.ok, status: response.status, candidates, closedCandidates, bytes: text.length };
+    const accessObservations = response.ok ? extractChannelAccessObservations(text, source) : [];
+    return { source, ok: response.ok, status: response.status, candidates, closedCandidates, accessObservations, bytes: text.length };
   } catch (error) {
     return { source, ok: false, error: String(error && error.message || error), candidates: [], closedCandidates: [] };
   } finally {
@@ -1514,6 +1599,7 @@ export function buildFrequencyReport(payload) {
     changes: payload.changes,
     removedItems: (payload.removedItems || []).slice(0, 80),
     renamedChannels: (payload.renamedChannels || []).slice(0, 80),
+    channelAccess: payload.channelAccess,
     reviewedOnlyCount: (payload.reviewedOnly || []).length,
     groupCounts: payload.groupCounts || buildGroupCounts(payload.items || []),
     satelliteIdentityCounts: payload.satelliteIdentityCounts || buildSatelliteIdentityCounts(payload.items || []),
@@ -1552,6 +1638,9 @@ export function frequencyReportText(report) {
   for (const rename of (report.renamedChannels || []).slice(0, 20)) {
     lines.push(`تغيير اسم: ${rename.from} ← ${rename.to} / ${rename.satelliteName} ${rename.frequency}`);
   }
+  if (report.channelAccess) {
+    lines.push(`حالات التشفير المحدّثة: ${report.channelAccess.updated}، حالات اختلاف المصادر: ${report.channelAccess.conflictCount}`);
+  }
   lines.push(`عناصر للمراجعة فقط: ${report.reviewedOnlyCount}`);
   if (report.changes.removalSkippedReason) lines.push(`ملاحظة الحذف: ${report.changes.removalSkippedReason}`);
   if ((report.removedItems || []).length) {
@@ -1587,6 +1676,8 @@ export function frequencyReportHtml(report) {
     ["محطات حُذفت بسبب الإغلاق", report.changes.closedConsensusChannelNamesRemoved || 0],
     ["أسماء محطات أضيفت", report.changes.channelNamesAdded],
     ["أسماء محطات حُذفت", report.changes.channelNamesRemoved || 0],
+    ["حالات التشفير المحدّثة", report.channelAccess?.updated || 0],
+    ["اختلافات حالة التشفير", report.channelAccess?.conflictCount || 0],
     ["للمراجعة فقط", report.reviewedOnlyCount]
   ].map(([a,b]) => `<tr><td>${esc(a)}</td><td>${esc(b)}</td></tr>`).join("");
   const renamed = (report.renamedChannels || []).slice(0, 20).map(item => `<li>${esc(item.from)} ← ${esc(item.to)} / ${esc(item.satelliteName)} ${esc(item.frequency)}</li>`).join("");

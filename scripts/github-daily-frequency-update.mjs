@@ -123,6 +123,12 @@ async function main() {
     items: merged.items,
     removedItems: (merged.removedItems || []).slice(0, 300),
     renamedChannels: merged.renamedChannels,
+    channelAccess: {
+      observations: merged.channelAccess.observations,
+      updated: merged.channelAccess.updated,
+      conflictCount: merged.channelAccess.conflicts.length,
+      conflicts: merged.channelAccess.conflicts.slice(0, 100)
+    },
     reviewedOnly: merged.reviewedOnly.slice(0, 200),
     sourceResults: sourceResults.map(r => ({
       id: r.source && r.source.id,
@@ -144,6 +150,7 @@ async function main() {
   report.staticDataPath = 'public/frequencies/frequency-data.json';
 
   if (process.env.GITHUB_ACTIONS === 'true') {
+    console.log(`::notice::Channel access: ${payload.channelAccess.observations} observations, ${payload.channelAccess.updated} status changes, ${payload.channelAccess.conflictCount} disagreements.`);
     console.log(`::notice::Frequency check: ${successfulSourceCount} sources responded, ${candidates.length} candidates, ${merged.changes.added} additions and ${merged.changes.removed} removals proposed.`);
   }
 

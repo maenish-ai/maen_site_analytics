@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { mergeFrequencyData, validateFrequencyCoverage } from '../functions/_lib/frequency-utils.js';
+import { extractChannelAccessObservations, mergeFrequencyData, validateFrequencyCoverage } from '../functions/_lib/frequency-utils.js';
 
 const row = {
   satelliteGroup: 'Nilesat', satelliteName: 'Nilesat 201', orbitalSlot: '7W',
@@ -60,3 +60,30 @@ assert.doesNotThrow(() => validateFrequencyCoverage([row], confirmedRemoval.item
 assert.throws(() => validateFrequencyCoverage([row], [], []), /Nilesat 201: 1/);
 assert.throws(() => validateFrequencyCoverage([row], [], [{ ...row, removedReason: 'publisher-majority', closedSourceCount: 2 }]), /Refusing to publish/);
 console.log('Publisher majority, source coverage, and channel rename checks passed.');
+
+const accessTable = `<table>
+<tr><th>Channel Name</th><th>Frequency Polarity</th><th>Symbol Rate FEC</th><th>System Encryption</th></tr>
+<tr><td>Atlas News</td><td>11766 H</td><td>27500 3/4</td><td>DVB-S2 Clear</td></tr>
+<tr><td>Local Radio</td><td>11766 H</td><td>27500 3/4</td><td>Viaccess</td></tr>
+<tr><td>Other</td><td>11766 H</td><td>27500 3/4</td><td>DVB-S2</td></tr>
+<tr><td>Ambiguous</td><td>11766 H</td><td>27500 3/4</td><td>FTA / Encrypted</td></tr>
+</table>`;
+const mixedCatalog = [{ ...rowWithNeighbor, channelEncryption: { 'Atlas News': 'encrypted' } }];
+function accessSource(host, html = accessTable) {
+  const result = source(host, { candidates: [rowWithNeighbor] });
+  return { ...result, accessObservations: extractChannelAccessObservations(html, result.source) };
+}
+const accessA = accessSource('a.test');
+const accessB = accessSource('b.test');
+assert.deepEqual(accessA.accessObservations.map(x => [x.channel, x.status]), [
+  ['Atlas News', 'free'], ['Local Radio', 'encrypted']
+]);
+assert.equal(merge([accessA, accessSource('fr.a.test')], mixedCatalog).items[0].channelEncryption['Atlas News'], 'encrypted');
+const updatedAccess = merge([accessA, accessB], mixedCatalog);
+assert.deepEqual(updatedAccess.items[0].channelEncryption, { 'Atlas News': 'free', 'Local Radio': 'encrypted' });
+const conflict = merge([accessA, accessSource('b.test', accessTable.replace('DVB-S2 Clear', 'Encrypted'))], mixedCatalog);
+assert.equal(conflict.items[0].channelEncryption['Atlas News'], 'unknown');
+assert.equal(conflict.channelAccess.conflicts.length, 1);
+const wrongFrequency = accessTable.replaceAll('11766 H', '11766 V');
+assert.equal(merge([accessA, accessSource('b.test', wrongFrequency)], mixedCatalog).items[0].channelEncryption['Atlas News'], 'encrypted');
+console.log('Per-channel access parsing, independent evidence, and conflicts passed.');

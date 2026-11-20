@@ -1637,6 +1637,7 @@ body.lang-en #frequencies .station-frequency-meta span{
 <option value="all">الكل</option>
 <option value="free" selected>قنوات مجانية / FTA</option>
 <option value="encrypted">قنوات مشفرة</option>
+<option value="unknown">حالة التشفير غير مؤكدة</option>
 <option value="radio">راديو</option>
 </select>
 <input aria-label="بحث ذكي في الترددات" autocomplete="off" id="frequencySearch" inputmode="search" oninput="if(window.loadFrequencyFeature)window.loadFrequencyFeature()" onchange="if(window.loadFrequencyFeature)window.loadFrequencyFeature()" placeholder="ابحث: MBC، رياضة، دينية، beIN، أو تردد مثل 11766" type="search" value=""/>
@@ -2618,15 +2619,8 @@ function splitChannels(item) {
 const ENCRYPTION_STATUS_META = {
   free: { label: 'مفتوحة / FTA', shortLabel: 'مفتوحة', icon: '🔓', note: '' },
   encrypted: { label: 'مشفرة', shortLabel: 'مشفرة', icon: '🔒', note: '' },
-  unknown: { label: 'غير مؤكد', shortLabel: 'غير مؤكد', icon: '؟', note: '' }
+  unknown: { label: 'غير مؤكد', shortLabel: 'غير مؤكد', icon: '؟', note: 'لم تُؤكّد حالة التشفير لهذه القناة' }
 };
-const ENCRYPTION_PAY_PACKAGE_MARKERS = ['osn','bein','be in','polsat box','canal+','canal plus','canal+/polsat','canal+ polska','sky italia','sky deutschland','sky uk','nova greece','cosmote','vivacom','digitalb','tring','a1 croatia','a1 bulgaria','total tv','united media','telekom srbija','max tv','antik sat','afn europe','m7 / european','m7','nordic / baltic','d-smart','d smart','german private hd','orange romania','bulsatcom','trikolor','dstv','south asia entertainment','bis/polsat','bis / polsat','polsat','paramount','warner bros. discovery / tivùsat','warner bros discovery','tvn / nova','tvn warner','ukraine package','romanian hd package','kabelio','srg ssr','srg/ssr'];
-const ENCRYPTION_FREE_PACKAGE_MARKERS = ['fta','free to air','freesat','trt national package','turkish national fta','turkish news package','turkish music / regional','anatolia regional package','snrt morocco','dubai racing','saudi broadcasting authority','telespazio','arqiva','eutelsat / international','european fta / news','india fta / news','news / international','african religious package','israeli fta / radio','east europe fta','eutelsat 16a fta radios','azerspace international','azerspace regional','قنوات مسيحية','balkan fta / feeds','trt','turkish national','azer','russia / eurasia sports','international services','cctv/cgtn','cctv','cgtn'];
-const ENCRYPTION_PAY_CHANNEL_MARKERS = ['osn tv','osn movies','osn documentary','osn showcase','osn one','osn yahala','osn kids','osn comedy','osn crime','osn now','alfa cinema','alfa series','beinsports','bein sports 1','bein sports 2','bein sports 3','bein sports 4','bein sports 5','bein sports 6','bein sports 7','bein sports 8','bein sports 9','bein sports max','bein sports xtra','bein movies','bein series','bein drama','bein 4k','box office','sky cinema','sky sport','sky showcase','sky atlantic','canal+','canal plus','polsat sport premium','eleven sports','cinemax','hbo','nova sport','nova greece','cosmote sport','super sport africa','supersport africa','m-net','m net','afn sports','afn prime','afn family','digitalb','tring sport','arena sport','sport klub','moviesmart','discovery turkey','history turkey','nickelodeon polska','comedy central polska','rtl hd','vox hd','n-tv hd','rtl zwei hd','super rtl hd','orange romania','bulsatcom','trikolor','cartoon network africa','nickelodeon arabia','nick jr arabia','disney channel poland','disney channel','disney junior'];
-const ENCRYPTION_FREE_CHANNEL_EXACT = ['bein sports news','beinsports news','bein sports haber','quran tv','sunna tv','saudi quran hd','saudi sunnah hd','al jazeera hd','aljazeera channel','al jazeera english hd','al jazeera documentary','al jazeera mubasher','france 24 arabic','france 24 english','france 24 français','france 24 francais','bbc world news','dw english','trt world','trt haber','trt spor','trt çocuk','trt cocuk','trt belgesel','trt türk','trt turk','cnn türk','cnn turk','a haber','ntv','habertürk','haberturk','sky news arabia','sky news hd','dubai tv hd','sudan tv','jordan tv','oman tv hd','ktv 1 hd','saudi tv','sbc hd','al ekhbaria hd','qatar tv hd','qatar tv quran','qatar radio','palestine hd','india today','aaj tak','news18 india','zee news','republic bharat'];
-const ENCRYPTION_FREE_CHANNEL_MARKERS = ['quran','sunna','sunnah','radio','france 24','al jazeera','aljazeera','euronews','cgtn','cctv','dw-tv','dw english','trt ','trt-','trt_','saudi ','qatar ','oman tv','kuwait tv','ktv ','dubai tv','abu dhabi','sharjah','jordan tv','palestine','al maghribia','al aoula','assadissa','tamazight','tbn ','daystar','god tv','faith','supreme master tv','mta international','mta 2','mta 3','vatican media'];
-const ENCRYPTION_AMBIGUOUS_PACKAGE_MARKERS = ['globecast','tivùsat','tivusat','rai / tivùsat','rai / tivusat','muxip','ikomg','eutelsat-rmb','data','feeds','feed','yahlive persian','gem group','mena entertainment','twofour54','eutelsat/4k','4k services','rai','italian regional mux','hungarian / central europe'];
-
 function normalizeEncryptionStatus(value){
   const v = normalizeText(value || '');
   if (['free','fta','clear','مفتوحه','مفتوحة','غير مشفر','غير مشفره','غير مشفرة'].includes(v)) return 'free';
@@ -2654,23 +2648,8 @@ function getChannelEncryptionStatus(name, item){
 }
 function resolveChannelEncryptionStatus(name, item){
   const stored = getStoredChannelEncryption(name, item);
-  if (stored) return { key: stored, ...ENCRYPTION_STATUS_META[stored], source: 'مدقق داخل الداتا' };
-  const packageText = [item && item.package, item && item.packageId, item && item.network, item && item.provider, item && item.source, item && item.sourceLastUpdated].filter(Boolean).join(' ');
-  const channelText = String(name || '');
-  const channelNorm = normalizeText(channelText);
-  const cats = (getChannelCategories(name, item) || []).map(normalizeText);
-  if (ENCRYPTION_FREE_CHANNEL_EXACT.some(x => normalizeText(x) === channelNorm)) return { key:'free', ...ENCRYPTION_STATUS_META.free, source:'اسم قناة مفتوحة معروف' };
-  if (containsAny(channelText, ENCRYPTION_PAY_CHANNEL_MARKERS)) return { key:'encrypted', ...ENCRYPTION_STATUS_META.encrypted, source:'اسم/باقة مدفوعة' };
-  if (containsAny(packageText, ENCRYPTION_PAY_PACKAGE_MARKERS)) return { key:'encrypted', ...ENCRYPTION_STATUS_META.encrypted, source:'باقة مشفرة/مدفوعة' };
-  if (containsAny(packageText, ENCRYPTION_FREE_PACKAGE_MARKERS)) return { key:'free', ...ENCRYPTION_STATUS_META.free, source:'باقة أو مصدر FTA' };
-  if (containsAny(packageText, ENCRYPTION_AMBIGUOUS_PACKAGE_MARKERS)) {
-    if (containsAny(channelText, ENCRYPTION_FREE_CHANNEL_MARKERS) || cats.some(c => ['radio','quran','islamic','christian'].includes(c))) return { key:'free', ...ENCRYPTION_STATUS_META.free, source:'قناة عامة ضمن باقة مختلطة' };
-    return { key:'unknown', ...ENCRYPTION_STATUS_META.unknown, source:'باقة مختلطة/غير مؤكدة' };
-  }
-  if (cats.some(c => ['radio','quran','islamic','christian'].includes(c))) return { key:'free', ...ENCRYPTION_STATUS_META.free, source:'تصنيف قناة مفتوحة غالباً' };
-  if (!String(item && item.package || '').trim()) return { key:'free', ...ENCRYPTION_STATUS_META.free, source:'لا توجد إشارة باقة مدفوعة' };
-  if (containsAny(channelText, ENCRYPTION_FREE_CHANNEL_MARKERS)) return { key:'free', ...ENCRYPTION_STATUS_META.free, source:'اسم قناة عامة/إخبارية' };
-  return { key:'unknown', ...ENCRYPTION_STATUS_META.unknown, source:'غير مؤكد' };
+  const key = stored || 'unknown';
+  return { key, ...ENCRYPTION_STATUS_META[key], source: key === 'unknown' ? 'لا يوجد تأكيد لحالة هذه القناة' : 'حالة مسجلة للقناة' };
 }
 function channelEncryptionBadgeHtml(name, item){
   const st = getChannelEncryptionStatus(name, item);
@@ -2689,11 +2668,12 @@ function channelChipHtml(name, item, extraClass){
 }
 
 
-// v7 service filter: all / free+unknown / encrypted / radio. TV option removed.
+// Filter each station by its own service and access status.
 const FREQUENCY_SERVICE_FILTER_LABELS = {
   all: 'الكل',
   free: 'قنوات مجانية / FTA',
   encrypted: 'قنوات مشفرة',
+  unknown: 'حالة التشفير غير مؤكدة',
   radio: 'راديو'
 };
 function getFrequencyServiceFilter(){
@@ -2709,11 +2689,11 @@ function channelLooksRadio(name, item){
   return containsAny(aliasText, ['radio','راديو','اذاعة','إذاعة','fm','am radio']);
 }
 function channelLooksDataOrFeed(name, item){
-  const text = [name, item && item.channel, item && item.package, item && item.packageId, item && item.source, item && item.notes].filter(Boolean).join(' ');
-  const n = normalizeText(text);
-  if (containsAny(n, ['data','feeds','feed','test card','testcard','beacon','internet','biss feed','occasional use','occasional','service id'])) return true;
-  if (/(^| )tp ?\d/i.test(n) || /(^| )transponder( |$)/i.test(n)) return true;
-  return false;
+  const categories = (getChannelCategories(name, item) || []).map(normalizeText);
+  if (categories.some(category => ['data','feed','feeds'].includes(category))) return true;
+  const text = normalizeText(name);
+  return /(?:^| )(?:data|feeds?|test card|testcard|beacon|occasional use|service id|transponder)(?: |$)/.test(text) ||
+    /(?:^| )tp ?\d/.test(text);
 }
 function channelServiceKind(name, item){
   if (channelLooksRadio(name, item)) return 'radio';
@@ -2725,10 +2705,8 @@ function frequencyServiceAllowsChannel(name, item, filter){
   if (f === 'all') return true;
   const kind = channelServiceKind(name, item);
   if (f === 'radio') return kind === 'radio';
-  if (f === 'free') {
-    const encKey = getChannelEncryptionStatus(name, item).key;
-    return kind === 'tv' && (encKey === 'free' || encKey === 'unknown');
-  }
+  if (f === 'unknown') return getChannelEncryptionStatus(name, item).key === 'unknown';
+  if (f === 'free') return kind === 'tv' && getChannelEncryptionStatus(name, item).key === 'free';
   if (f === 'encrypted') return kind === 'tv' && getChannelEncryptionStatus(name, item).key === 'encrypted';
   return true;
 }
