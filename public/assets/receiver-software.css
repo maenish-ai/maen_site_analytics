@@ -1,0 +1,34 @@
+#receiverSoftware [hidden] {
+  display: none !important;
+}
+
+#receiverSoftware .software-viewer-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .75rem;
+  margin-block-end: .5rem;
+}
+
+#receiverSoftware .software-viewer-name {
+  margin: 0;
+}
+
+#receiverSoftware .software-viewer-official {
+  margin-inline-start: auto;
+}
+
+#receiverSoftware .software-viewer-hint {
+  margin-block: .5rem .75rem;
+}
+
+#receiverSoftware .software-viewer iframe {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  height: clamp(22rem, 68vh, 54rem);
+  height: clamp(22rem, 68svh, 54rem);
+  border: 1px solid #ded9cd;
+  border-radius: 12px;
+  background: white;
+}
