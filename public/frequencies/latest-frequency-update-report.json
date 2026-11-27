@@ -1,21 +1,21 @@
 {
   "ok": true,
-  "generatedAt": "2026-11-26T15:05:37.509Z",
-  "updatedAt": "2026-11-26T15:05:36.529Z",
+  "generatedAt": "2026-11-27T14:58:13.080Z",
+  "updatedAt": "2026-11-27T14:58:12.108Z",
   "totalFrequencies": 4004,
   "removedCount": 0,
-  "candidateCount": 1619,
+  "candidateCount": 1618,
   "closedCandidateCount": 0,
   "closedConsensusCount": 0,
   "successfulSourceCount": 45,
   "sourcesChecked": 67,
   "sourcesFailed": 22,
   "changes": {
-    "updated": 204,
+    "updated": 203,
     "added": 0,
     "removed": 0,
     "reviewedOnly": 1415,
-    "channelNamesAdded": 19,
+    "channelNamesAdded": 10,
     "channelNamesRemoved": 0,
     "closedConsensusRemoved": 0,
     "closedConsensusChannelNamesRemoved": 0,
@@ -46,9 +46,9 @@
     {
       "group": "Arabsat / BADR",
       "frequencies": 255,
-      "channelEntries": 1132,
+      "channelEntries": 1146,
       "frequenciesObserved": 41,
-      "channelEntriesObserved": 696,
+      "channelEntriesObserved": 693,
       "respondingPublishers": [
         "dthsat.com",
         "kingofsat.net"
@@ -58,9 +58,9 @@
     {
       "group": "Astra",
       "frequencies": 659,
-      "channelEntries": 849,
-      "frequenciesObserved": 5,
-      "channelEntriesObserved": 54,
+      "channelEntries": 865,
+      "frequenciesObserved": 4,
+      "channelEntriesObserved": 63,
       "respondingPublishers": [
         "dthsat.com",
         "kingofsat.net"
@@ -92,7 +92,7 @@
     {
       "group": "Eutelsat 16E",
       "frequencies": 389,
-      "channelEntries": 824,
+      "channelEntries": 829,
       "frequenciesObserved": 11,
       "channelEntriesObserved": 281,
       "respondingPublishers": [
@@ -104,7 +104,7 @@
     {
       "group": "Eutelsat 36E",
       "frequencies": 421,
-      "channelEntries": 652,
+      "channelEntries": 653,
       "frequenciesObserved": 30,
       "channelEntriesObserved": 67,
       "respondingPublishers": [
@@ -116,7 +116,7 @@
     {
       "group": "Eutelsat 9E",
       "frequencies": 142,
-      "channelEntries": 579,
+      "channelEntries": 584,
       "frequenciesObserved": 19,
       "channelEntriesObserved": 266,
       "respondingPublishers": [
@@ -128,7 +128,7 @@
     {
       "group": "Hellas Sat",
       "frequencies": 296,
-      "channelEntries": 437,
+      "channelEntries": 438,
       "frequenciesObserved": 16,
       "channelEntriesObserved": 71,
       "respondingPublishers": [
@@ -140,9 +140,9 @@
     {
       "group": "Hot Bird",
       "frequencies": 392,
-      "channelEntries": 1177,
+      "channelEntries": 1189,
       "frequenciesObserved": 30,
-      "channelEntriesObserved": 501,
+      "channelEntriesObserved": 504,
       "respondingPublishers": [
         "dthsat.com",
         "kingofsat.net"
@@ -152,7 +152,7 @@
     {
       "group": "Intelsat",
       "frequencies": 292,
-      "channelEntries": 734,
+      "channelEntries": 737,
       "frequenciesObserved": 12,
       "channelEntriesObserved": 198,
       "respondingPublishers": [
@@ -164,7 +164,7 @@
     {
       "group": "Nilesat",
       "frequencies": 377,
-      "channelEntries": 1623,
+      "channelEntries": 1633,
       "frequenciesObserved": 16,
       "channelEntriesObserved": 221,
       "respondingPublishers": [
@@ -176,7 +176,7 @@
     {
       "group": "Türksat",
       "frequencies": 317,
-      "channelEntries": 478,
+      "channelEntries": 480,
       "frequenciesObserved": 10,
       "channelEntriesObserved": 80,
       "respondingPublishers": [
@@ -188,7 +188,7 @@
     {
       "group": "Yahsat",
       "frequencies": 79,
-      "channelEntries": 384,
+      "channelEntries": 388,
       "frequenciesObserved": 12,
       "channelEntriesObserved": 156,
       "respondingPublishers": [
@@ -199,7 +199,7 @@
     }
   ],
   "channelAccess": {
-    "observations": 7753,
+    "observations": 7756,
     "updated": 0,
     "conflictCount": 0,
     "conflicts": []
@@ -214,12 +214,12 @@
     {
       "satelliteGroup": "Arabsat / BADR",
       "frequencies": 255,
-      "services": 1146
+      "services": 1163
     },
     {
       "satelliteGroup": "Astra",
       "frequencies": 659,
-      "services": 865
+      "services": 873
     },
     {
       "satelliteGroup": "Azerspace",
@@ -234,47 +234,47 @@
     {
       "satelliteGroup": "Eutelsat 16E",
       "frequencies": 389,
-      "services": 829
+      "services": 834
     },
     {
       "satelliteGroup": "Eutelsat 36E",
       "frequencies": 421,
-      "services": 653
+      "services": 654
     },
     {
       "satelliteGroup": "Eutelsat 9E",
       "frequencies": 142,
-      "services": 584
+      "services": 589
     },
     {
       "satelliteGroup": "Hellas Sat",
       "frequencies": 296,
-      "services": 438
+      "services": 439
     },
     {
       "satelliteGroup": "Hot Bird",
       "frequencies": 392,
-      "services": 1189
+      "services": 1197
     },
     {
       "satelliteGroup": "Intelsat",
       "frequencies": 292,
-      "services": 737
+      "services": 740
     },
     {
       "satelliteGroup": "Nilesat",
       "frequencies": 377,
-      "services": 1633
+      "services": 1643
     },
     {
       "satelliteGroup": "Türksat",
       "frequencies": 317,
-      "services": 480
+      "services": 482
     },
     {
       "satelliteGroup": "Yahsat",
       "frequencies": 79,
-      "services": 388
+      "services": 392
     }
   ],
   "satelliteIdentityCounts": [
@@ -311,7 +311,7 @@
       "orbitalSlot": "26E",
       "satelliteName": "Arabsat / BADR position",
       "frequencies": 246,
-      "services": 1089
+      "services": 1106
     },
     {
       "satelliteGroup": "Astra",
@@ -367,7 +367,7 @@
       "orbitalSlot": "28.2E",
       "satelliteName": "Astra 2F",
       "frequencies": 2,
-      "services": 62
+      "services": 70
     },
     {
       "satelliteGroup": "Astra",
@@ -409,7 +409,7 @@
       "orbitalSlot": "16E",
       "satelliteName": "Eutelsat 16A",
       "frequencies": 389,
-      "services": 829
+      "services": 834
     },
     {
       "satelliteGroup": "Eutelsat 36E",
@@ -423,7 +423,7 @@
       "orbitalSlot": "36E",
       "satelliteName": "Eutelsat 36D / Express AMU1",
       "frequencies": 413,
-      "services": 628
+      "services": 629
     },
     {
       "satelliteGroup": "Eutelsat 36E",
@@ -437,14 +437,14 @@
       "orbitalSlot": "9E",
       "satelliteName": "Eutelsat 9B",
       "frequencies": 13,
-      "services": 243
+      "services": 247
     },
     {
       "satelliteGroup": "Eutelsat 9E",
       "orbitalSlot": "9E",
       "satelliteName": "Eutelsat 9B / Ka-Sat 9A",
       "frequencies": 129,
-      "services": 341
+      "services": 342
     },
     {
       "satelliteGroup": "Hellas Sat",
@@ -458,7 +458,7 @@
       "orbitalSlot": "39E",
       "satelliteName": "Hellas Sat 3",
       "frequencies": 4,
-      "services": 51
+      "services": 52
     },
     {
       "satelliteGroup": "Hellas Sat",
@@ -479,14 +479,14 @@
       "orbitalSlot": "13E",
       "satelliteName": "Hot Bird 13F/13G",
       "frequencies": 392,
-      "services": 1189
+      "services": 1197
     },
     {
       "satelliteGroup": "Intelsat",
       "orbitalSlot": "68.5E",
       "satelliteName": "Intelsat 20",
       "frequencies": 292,
-      "services": 737
+      "services": 740
     },
     {
       "satelliteGroup": "Nilesat",
@@ -507,7 +507,7 @@
       "orbitalSlot": "7W",
       "satelliteName": "Nilesat 201/301 + Eutelsat 7 West A",
       "frequencies": 217,
-      "services": 1086
+      "services": 1096
     },
     {
       "satelliteGroup": "Nilesat",
@@ -535,7 +535,7 @@
       "orbitalSlot": "42E",
       "satelliteName": "Türksat 4A",
       "frequencies": 12,
-      "services": 119
+      "services": 121
     },
     {
       "satelliteGroup": "Türksat",
@@ -556,7 +556,7 @@
       "orbitalSlot": "52.5E",
       "satelliteName": "Al Yah 1",
       "frequencies": 79,
-      "services": 388
+      "services": 392
     }
   ],
   "satellitePositionPolicy": "v5 merge identity = satelliteGroup + orbitalSlot + satelliteName + frequency + polarity + symbolRate. This prevents accidental merging when multiple physical satellites share one orbital position.",
